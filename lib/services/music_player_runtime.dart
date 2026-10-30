@@ -105,13 +105,17 @@ class PlaybackDependencies {
 
     // On Windows, respect the windowsOutputMode setting for exclusive output.
     bool exclusiveOutput = false;
+    String wasapiMode = 'shared';
     String? wasapiDeviceId;
     int targetSampleRate = 0;
     String targetSampleFormat = 'auto';
     String targetChannels = 'auto';
     bool exclusiveFallback = true;
     if (Platform.isWindows && settings != null) {
-      exclusiveOutput = settings.windowsOutputMode == 'exclusive';
+      wasapiMode = settings.windowsOutputMode;
+      exclusiveOutput = wasapiMode == 'exclusive' ||
+          wasapiMode == 'exclusive_event' ||
+          wasapiMode == 'exclusive_push';
       if (settings.windowsOutputDevice.isNotEmpty) {
         wasapiDeviceId = settings.windowsOutputDevice;
       }
@@ -124,6 +128,7 @@ class PlaybackDependencies {
     return MediaKitPlaybackDeck(
       playerId: playerId,
       exclusiveOutput: exclusiveOutput,
+      wasapiMode: wasapiMode,
       wasapiDeviceId: wasapiDeviceId,
       targetSampleRate: targetSampleRate,
       targetSampleFormat: targetSampleFormat,

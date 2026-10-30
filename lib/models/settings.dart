@@ -84,7 +84,8 @@ class AppSettings {
   final bool usbAllowFixedVolume;
   final bool dapExclusive;
 
-  /// Windows WASAPI output mode: 'shared', 'exclusive', or 'auto'.
+  /// Windows WASAPI output mode: 'shared', 'exclusive_event', or 'exclusive_push'.
+  /// For backward compatibility, 'exclusive' is treated as 'exclusive_event'.
   /// Only applies when using the internal player on Windows.
   final String windowsOutputMode;
 

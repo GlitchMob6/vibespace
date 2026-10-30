@@ -67,6 +67,8 @@ class MediaKitEngine implements MpvEngine {
       setProperty('gapless-audio', 'weak'),
       // Bypass pitch filter at 1.0x for bit-perfect output
       setProperty('audio-pitch-correction', 'no'),
+      // On Windows, strictly use WASAPI audio output engine
+      if (Platform.isWindows) setProperty('ao', 'wasapi'),
     ]);
   }
 
@@ -154,12 +156,18 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     required this.playerId,
     MpvEngine? engine,
     this.exclusiveOutput = false,
+    this.wasapiMode = 'shared',
     this.wasapiDeviceId,
     this.targetSampleRate = 0,
     this.targetSampleFormat = 'auto',
     this.targetChannels = 'auto',
     this.exclusiveFallback = true,
   }) : _engine = engine ?? debugEngineFactory?.call() ?? MediaKitEngine() {
+    if (exclusiveOutput && wasapiMode == 'shared') {
+      wasapiMode = 'exclusive_event';
+    } else if (wasapiMode.startsWith('exclusive')) {
+      exclusiveOutput = true;
+    }
     playbackEqualizer.addListener(_equalizerChanged);
     playbackOutputVolume.addListener(_outputVolumeChanged);
     _subscriptions.addAll([
@@ -189,6 +197,9 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   /// setting enables it; until then every deck shares the system mixer.
   bool exclusiveOutput;
 
+  /// WASAPI output mode: 'shared', 'exclusive_event', or 'exclusive_push'.
+  String wasapiMode;
+
   /// Specific WASAPI device ID to use for output. If null, uses system default.
   String? wasapiDeviceId;
 
@@ -207,13 +218,20 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   /// Update output settings dynamically for this deck.
   void updateOutputSettings({
     bool? exclusive,
+    String? wasapiMode,
     String? deviceId,
     int? sampleRate,
     String? sampleFormat,
     String? channels,
     bool? fallback,
   }) {
-    if (exclusive != null) exclusiveOutput = exclusive;
+    if (wasapiMode != null) {
+      this.wasapiMode = wasapiMode;
+      exclusiveOutput = wasapiMode.startsWith('exclusive');
+    } else if (exclusive != null) {
+      exclusiveOutput = exclusive;
+      this.wasapiMode = exclusive ? 'exclusive_event' : 'shared';
+    }
     if (deviceId != null) wasapiDeviceId = deviceId;
     if (sampleRate != null) targetSampleRate = sampleRate;
     if (sampleFormat != null) targetSampleFormat = sampleFormat;
@@ -341,7 +359,10 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   String? _requestedDeviceId;
   String? _activeDeviceId;
   bool _isFallbackDevice = false;
+  bool _isFallbackMode = false;
   bool _hasRetriedDeviceFallback = false;
+  String? _currentSource;
+  DateTime _lastRuntimeRecoveryTime = DateTime.fromMillisecondsSinceEpoch(0);
 
   @visibleForTesting
   String? get debugActiveDeviceId => _activeDeviceId;
@@ -448,9 +469,163 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       _log.w('mpv ${error.prefix}: ${error.text}');
       return;
     }
+    final isAoError = error.prefix.startsWith('ao') ||
+        error.text.toLowerCase().contains('audio driver') ||
+        error.text.toLowerCase().contains('audclnt_') ||
+        error.text.toLowerCase().contains('audio-device') ||
+        error.text.toLowerCase().contains('try unsetting it') ||
+        error.text.toLowerCase().contains('audio output initialization failed');
+    if ((isAoError || _isRecoveringRuntimeOutput) && Platform.isWindows && _state == PlaybackDeckState.playing) {
+      if (!_isRecoveringRuntimeOutput) {
+        _log.w('Runtime AO error during playback: ${error.text}. Recovering output...');
+        unawaited(_recoverRuntimeAudioOutput(error.text));
+      } else {
+        _log.w('mpv (during recovery) ${error.prefix}: ${error.text}');
+      }
+      return;
+    }
     final failure = MediaKitSourceException(error.text);
     _failure = AsyncError(failure, StackTrace.current);
     _states.addError(failure, _failure!.stackTrace);
+  }
+
+  bool _isRecoveringRuntimeOutput = false;
+  int _runtimeRecoveryAttempts = 0;
+
+  Future<void> _recoverRuntimeAudioOutput(String errorText) async {
+    if (_disposed || _isRecoveringRuntimeOutput) return;
+    final now = DateTime.now();
+    if (now.difference(_lastRuntimeRecoveryTime) < const Duration(milliseconds: 500)) {
+      return;
+    }
+    _lastRuntimeRecoveryTime = now;
+
+    if (_runtimeRecoveryAttempts >= 3) {
+      _log.e('Max runtime AO recovery attempts reached. Reporting error.');
+      final failure = MediaKitSourceException(errorText);
+      _failure = AsyncError(failure, StackTrace.current);
+      _states.addError(failure, _failure!.stackTrace);
+      return;
+    }
+    _isRecoveringRuntimeOutput = true;
+    _runtimeRecoveryAttempts++;
+    try {
+      final savedPos = await getCurrentPosition() ?? Duration.zero;
+      final savedSource = _currentSource;
+
+      // Step 2: Try Shared mode on current device
+      if (exclusiveOutput && exclusiveFallback) {
+        _log.i('Runtime recovery Step 2: Switching to Shared mode on current device');
+        _isFallbackMode = true;
+        exclusiveOutput = false;
+        await _engine.setProperty('audio-exclusive', 'no');
+        await _engine.setProperty('audio-samplerate', '0');
+        await _engine.setProperty('audio-format', '');
+        final effectiveDevice = _isFallbackDevice
+            ? 'auto (requested: $_requestedDeviceId)'
+            : (_activeDeviceId ?? wasapiDeviceId ?? 'auto');
+        windowsAudioStatus.value = WindowsAudioStatus(
+          reason: 'fallback',
+          mode: 'shared',
+          device: effectiveDevice,
+        );
+        if (savedSource != null && _state == PlaybackDeckState.playing) {
+          try {
+            await _engine.stop();
+            await _engine.open(savedSource);
+            if (savedPos > Duration.zero) {
+              await _engine.seek(savedPos);
+            }
+            await _engine.play();
+          } catch (e) {
+            _log.w('Could not auto-resume track after runtime AO recovery: $e');
+          }
+        }
+        return;
+      }
+      // Step 3: Try auto device in Shared mode
+      if (_activeDeviceId != 'auto') {
+        _log.i('Runtime recovery Step 3: Falling back to auto device');
+        _isFallbackDevice = true;
+        _activeDeviceId = 'auto';
+        exclusiveOutput = false;
+        await _engine.setProperty('audio-device', 'auto');
+        await _engine.setProperty('audio-exclusive', 'no');
+        await _engine.setProperty('audio-samplerate', '0');
+        await _engine.setProperty('audio-format', '');
+        windowsAudioStatus.value = WindowsAudioStatus(
+          reason: 'fallback',
+          mode: 'shared',
+          device: 'auto (fallback)',
+        );
+
+        // If stream halted or errored out, reload source at current position
+        if (savedSource != null && _state == PlaybackDeckState.playing) {
+          try {
+            await _engine.stop();
+            await _engine.open(savedSource);
+            if (savedPos > Duration.zero) {
+              await _engine.seek(savedPos);
+            }
+            await _engine.play();
+          } catch (e) {
+            _log.w('Could not auto-resume track after runtime AO recovery: $e');
+          }
+        }
+        return;
+      }
+      // Step 4: Fall back to another active physical device if auto is failing
+      try {
+        final deviceListStr = await _engine.getProperty('audio-device-list');
+        final devices = parseAudioDeviceList(deviceListStr);
+        final altDev = devices.firstWhere(
+          (d) =>
+              d['name'] != 'auto' &&
+              (d['name'] as String).startsWith('wasapi/') &&
+              !((d['name'] as String).toLowerCase().contains(_requestedDeviceId?.toLowerCase() ?? '___')),
+          orElse: () => const {},
+        );
+        if (altDev.isNotEmpty) {
+          final altId = altDev['name'] as String;
+          _log.i('Runtime recovery Step 4: Falling back to alternative device $altId');
+          _isFallbackDevice = true;
+          _activeDeviceId = altId;
+          exclusiveOutput = false;
+          await _engine.stop();
+          await _engine.setProperty('audio-device', altId);
+          await _engine.setProperty('audio-exclusive', 'no');
+          await _engine.setProperty('audio-samplerate', '0');
+          await _engine.setProperty('audio-format', '');
+          windowsAudioStatus.value = WindowsAudioStatus(
+            reason: 'fallback',
+            mode: 'shared',
+            device: '$altId (fallback)',
+          );
+          if (savedSource != null && _state == PlaybackDeckState.playing) {
+            try {
+              await _engine.open(savedSource);
+              if (savedPos > Duration.zero) {
+                await _engine.seek(savedPos);
+              }
+              await _engine.play();
+            } catch (e) {
+              _log.w('Could not auto-resume track on alternative device: $e');
+            }
+          }
+          return;
+        }
+      } catch (e) {
+        _log.w('Failed searching for alternative runtime fallback device: $e');
+      }
+      // If all fallbacks failed:
+      final failure = MediaKitSourceException(errorText);
+      _failure = AsyncError(failure, StackTrace.current);
+      _states.addError(failure, _failure!.stackTrace);
+    } catch (e, st) {
+      _log.e('Failed during runtime audio output recovery: $e', e, st);
+    } finally {
+      _isRecoveringRuntimeOutput = false;
+    }
   }
 
   void _finishLoad(String? error) {
@@ -471,12 +646,14 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
 
   @override
   Future<void> configureOutput() async {
+    _failure = null;
     _hasRetriedDeviceFallback = false;
     _requestedDeviceId = (wasapiDeviceId != null && wasapiDeviceId!.isNotEmpty)
         ? normalizeWasapiDeviceId(wasapiDeviceId!)
         : null;
     _activeDeviceId = null;
     _isFallbackDevice = false;
+    _isFallbackMode = false;
 
     // Apply target sample rate (0 = auto / source rate match)
     if (targetSampleRate > 0) {
@@ -497,6 +674,17 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       await _engine.setProperty('audio-channels', targetChannels);
     } else {
       await _engine.setProperty('audio-channels', 'auto');
+    }
+
+    // Tune audio buffer based on WASAPI mode:
+    // exclusive_push uses 0.2s for maximum jitter tolerance on DACs.
+    // exclusive_event uses 0.05s for minimal hardware latency.
+    if (wasapiMode == 'exclusive_push') {
+      await _engine.setProperty('audio-buffer', '0.2');
+    } else if (exclusiveOutput) {
+      await _engine.setProperty('audio-buffer', '0.05');
+    } else {
+      await _engine.setProperty('audio-buffer', '0.2');
     }
 
     if (_requestedDeviceId != null) {
@@ -558,10 +746,11 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       return;
     }
 
-    _log.i('Enabling WASAPI exclusive mode (device: $effectiveDevice)');
+    final modeLabel = wasapiMode == 'exclusive_push' ? 'exclusive_push' : 'exclusive_event';
+    _log.i('Enabling WASAPI $modeLabel mode (device: $effectiveDevice)');
     windowsAudioStatus.value = WindowsAudioStatus(
       reason: _isFallbackDevice ? 'fallback' : 'pending',
-      mode: 'exclusive',
+      mode: modeLabel,
       device: effectiveDevice,
     );
 
@@ -570,8 +759,12 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     if (result < 0) {
       _log.w('Failed to set audio-exclusive=yes (mpv error $result)');
       if (exclusiveFallback) {
-        _log.i('Falling back to shared mode due to exclusive mode property failure');
+        _log.i('Step 2: Falling back to shared mode on $effectiveDevice due to exclusive mode rejection');
+        _isFallbackMode = true;
+        exclusiveOutput = false;
         await _engine.setProperty('audio-exclusive', 'no');
+        await _engine.setProperty('audio-samplerate', '0');
+        await _engine.setProperty('audio-format', '');
         windowsAudioStatus.value = WindowsAudioStatus(
           reason: 'fallback',
           mode: 'shared',
@@ -580,7 +773,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       } else {
         windowsAudioStatus.value = WindowsAudioStatus(
           reason: 'failed',
-          mode: 'exclusive',
+          mode: modeLabel,
           device: effectiveDevice,
         );
       }
@@ -593,11 +786,25 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       _log.i('audio-exclusive property: $exclusiveStatus');
       if (exclusiveStatus != 'yes') {
         _log.w('Exclusive mode not active, got: $exclusiveStatus');
-        windowsAudioStatus.value = WindowsAudioStatus(
-          reason: 'fallback',
-          mode: 'shared',
-          device: effectiveDevice,
-        );
+        if (exclusiveFallback) {
+          _log.i('Step 2: Falling back to shared mode on $effectiveDevice');
+          _isFallbackMode = true;
+          exclusiveOutput = false;
+          await _engine.setProperty('audio-exclusive', 'no');
+          await _engine.setProperty('audio-samplerate', '0');
+          await _engine.setProperty('audio-format', '');
+          windowsAudioStatus.value = WindowsAudioStatus(
+            reason: 'fallback',
+            mode: 'shared',
+            device: effectiveDevice,
+          );
+        } else {
+          windowsAudioStatus.value = WindowsAudioStatus(
+            reason: 'failed',
+            mode: modeLabel,
+            device: effectiveDevice,
+          );
+        }
         return;
       }
     } catch (e) {
@@ -606,7 +813,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
 
     windowsAudioStatus.value = WindowsAudioStatus(
       reason: _isFallbackDevice ? 'fallback' : 'active',
-      mode: 'exclusive',
+      mode: modeLabel,
       device: effectiveDevice,
     );
   }
@@ -657,6 +864,8 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   }) => _load(path, requiresDsd: requiresDsd);
 
   Future<void> _load(String source, {bool requiresDsd = false}) async {
+    _currentSource = source;
+    _hasRetriedDeviceFallback = false;
     await stop();
     final token = ++_token;
     final loaded = Completer<String?>();
@@ -678,37 +887,136 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     if (error != null) {
       final isAudioError = error.contains('ao') ||
           error.toLowerCase().contains('audio') ||
-          error.toLowerCase().contains('wasapi');
+          error.toLowerCase().contains('wasapi') ||
+          error.contains('AUDCLNT_');
 
       if (isAudioError && !_hasRetriedDeviceFallback) {
         _hasRetriedDeviceFallback = true;
-        _log.w(
-          'Audio driver initialization failed ($error). '
-          'Retrying with fallback audio configuration...',
-        );
-        await _engine.stop();
-        if (_activeDeviceId != 'auto') {
-          _isFallbackDevice = true;
-          _activeDeviceId = 'auto';
-          await _engine.setProperty('audio-device', 'auto');
-        }
+
+        // Step 2: If exclusive mode failed on requested device, try shared mode on same device first
         if (exclusiveOutput && exclusiveFallback) {
-          _log.i('Falling back from exclusive to shared mode after audio driver error');
+          _log.w(
+            'Audio driver initialization failed ($error). '
+            'Step 2: Retrying with Shared mode on current device...',
+          );
+          _isFallbackMode = true;
+          exclusiveOutput = false;
+          await _engine.stop();
           await _engine.setProperty('audio-exclusive', 'no');
+          await _engine.setProperty('audio-samplerate', '0');
+          await _engine.setProperty('audio-format', '');
+
+          final retryShared = Completer<String?>();
+          _pendingLoad = retryShared;
+          try {
+            await _engine.open(source);
+            error = await retryShared.future.timeout(
+              _loadTimeout,
+              onTimeout: () => 'Timed out retrying with Shared mode',
+            );
+          } finally {
+            if (identical(_pendingLoad, retryShared)) _pendingLoad = null;
+          }
+          if (_disposed || token != _token) return;
+
+          if (error == null) {
+            final effectiveDevice = _isFallbackDevice
+                ? 'auto (requested: $_requestedDeviceId)'
+                : (_activeDeviceId ?? wasapiDeviceId ?? 'auto');
+            windowsAudioStatus.value = WindowsAudioStatus(
+              reason: 'fallback',
+              mode: 'shared',
+              device: effectiveDevice,
+            );
+          }
         }
 
-        final retryLoaded = Completer<String?>();
-        _pendingLoad = retryLoaded;
-        try {
-          await _engine.open(source);
-          error = await retryLoaded.future.timeout(
-            _loadTimeout,
-            onTimeout: () => 'Timed out retrying with fallback audio device',
+        // Step 3: If still failing (or initial attempt was shared), fall back to auto in shared mode
+        if (error != null) {
+          _log.w(
+            'Device initialization failed ($error). '
+            'Step 3: Retrying with system default (auto) in Shared mode...',
           );
-        } finally {
-          if (identical(_pendingLoad, retryLoaded)) _pendingLoad = null;
+          _isFallbackDevice = true;
+          _activeDeviceId = 'auto';
+          exclusiveOutput = false;
+          await _engine.stop();
+          await _engine.setProperty('audio-device', 'auto');
+          await _engine.setProperty('audio-exclusive', 'no');
+          await _engine.setProperty('audio-samplerate', '0');
+          await _engine.setProperty('audio-format', '');
+
+          final retryAuto = Completer<String?>();
+          _pendingLoad = retryAuto;
+          try {
+            await _engine.open(source);
+            error = await retryAuto.future.timeout(
+              _loadTimeout,
+              onTimeout: () => 'Timed out retrying with fallback audio device',
+            );
+          } finally {
+            if (identical(_pendingLoad, retryAuto)) _pendingLoad = null;
+          }
+          if (_disposed || token != _token) return;
+
+          if (error == null) {
+            windowsAudioStatus.value = WindowsAudioStatus(
+              reason: 'fallback',
+              mode: 'shared',
+              device: 'auto (fallback)',
+            );
+          }
         }
-        if (_disposed || token != _token) return;
+
+        // Step 4: If auto also failed or was the failing device, try another active physical output device
+        if (error != null) {
+          try {
+            final deviceListStr = await _engine.getProperty('audio-device-list');
+            final devices = parseAudioDeviceList(deviceListStr);
+            final altDev = devices.firstWhere(
+              (d) =>
+                  d['name'] != 'auto' &&
+                  (d['name'] as String).startsWith('wasapi/') &&
+                  !((d['name'] as String).toLowerCase().contains(_requestedDeviceId?.toLowerCase() ?? '___')),
+              orElse: () => const {},
+            );
+            if (altDev.isNotEmpty) {
+              final altId = altDev['name'] as String;
+              _log.w('Step 4: Auto device failed ($error). Retrying with alternative device: $altId...');
+              _isFallbackDevice = true;
+              _activeDeviceId = altId;
+              exclusiveOutput = false;
+              await _engine.stop();
+              await _engine.setProperty('audio-device', altId);
+              await _engine.setProperty('audio-exclusive', 'no');
+              await _engine.setProperty('audio-samplerate', '0');
+              await _engine.setProperty('audio-format', '');
+
+              final retryAlt = Completer<String?>();
+              _pendingLoad = retryAlt;
+              try {
+                await _engine.open(source);
+                error = await retryAlt.future.timeout(
+                  _loadTimeout,
+                  onTimeout: () => 'Timed out retrying with alternative audio device',
+                );
+              } finally {
+                if (identical(_pendingLoad, retryAlt)) _pendingLoad = null;
+              }
+              if (_disposed || token != _token) return;
+
+              if (error == null) {
+                windowsAudioStatus.value = WindowsAudioStatus(
+                  reason: 'fallback',
+                  mode: 'shared',
+                  device: '$altId (fallback)',
+                );
+              }
+            }
+          } catch (e) {
+            _log.w('Failed searching for alternative audio fallback device: $e');
+          }
+        }
       }
     }
 
@@ -721,11 +1029,13 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
           : (_activeDeviceId ?? wasapiDeviceId);
       windowsAudioStatus.value = WindowsAudioStatus(
         reason: 'failed',
-        mode: exclusiveOutput ? 'exclusive' : 'shared',
+        mode: exclusiveOutput ? wasapiMode : 'shared',
         device: effectiveDevice,
       );
       throw MediaKitSourceException(error);
     }
+    // Reset runtime recovery counter on successful load
+    _runtimeRecoveryAttempts = 0;
     // Source loaded successfully, check if exclusive mode is actually active
     if (exclusiveOutput) {
       await _verifyExclusiveMode();
@@ -743,6 +1053,8 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       _log.i('Exclusive mode verification: audio-exclusive=$exclusiveStatus');
       if (exclusiveStatus != 'yes') {
         _log.w('Exclusive mode was requested but not achieved; falling back to shared mode');
+        exclusiveOutput = false;
+        await _engine.setProperty('audio-exclusive', 'no');
         final effectiveDevice = _isFallbackDevice
             ? 'auto (requested: $_requestedDeviceId)'
             : (_activeDeviceId ?? wasapiDeviceId);
@@ -784,24 +1096,26 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
 
       // 3. Determine actual exclusive mode
       String actualMode = 'shared';
-      String reason = 'active';
+      String reason = (_isFallbackDevice || _isFallbackMode) ? 'fallback' : 'active';
       if (exclusiveOutput) {
         try {
           final exclusiveStatus = await _engine.getProperty('audio-exclusive');
           if (exclusiveStatus == 'yes') {
-            actualMode = 'exclusive';
-            reason = 'active';
+            actualMode = wasapiMode == 'exclusive_push' ? 'exclusive_push' : 'exclusive_event';
+            reason = _isFallbackDevice ? 'fallback' : 'active';
           } else {
             actualMode = 'shared';
             reason = 'fallback';
+            _isFallbackMode = true;
           }
         } catch (_) {
           actualMode = 'shared';
           reason = 'fallback';
+          _isFallbackMode = true;
         }
       } else {
         actualMode = 'shared';
-        reason = 'active';
+        reason = (_isFallbackDevice || _isFallbackMode) ? 'fallback' : 'active';
       }
 
       // 4. Bit-perfect analysis
@@ -811,7 +1125,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       final bool isRateMatching = (srcSampleRate != null &&
           outSampleRate != null &&
           srcSampleRate == outSampleRate);
-      final bool isExclusive = (actualMode == 'exclusive');
+      final bool isExclusive = actualMode.startsWith('exclusive');
 
       final bool isBitPerfect = isExclusive &&
           isVolume100 &&
@@ -898,6 +1212,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   Future<void> resume() async {
     final failure = _failure;
     if (failure != null) {
+      _failure = null;
       Error.throwWithStackTrace(failure.error, failure.stackTrace);
     }
     await _engine.play();
@@ -922,6 +1237,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     _finishLoad(null);
     await _engine.stop();
     _duration = null;
+    _failure = null;
     _setState(PlaybackDeckState.stopped);
     windowsAudioStatus.value = const WindowsAudioStatus();
   }

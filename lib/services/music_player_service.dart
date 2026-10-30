@@ -229,46 +229,77 @@ class MusicPlayerHandler extends BaseAudioHandler
     }
   }
 
+  bool _isReinitializingAudioOutput = false;
+  Future<void>? _pendingAudioOutputReinit;
+
   Future<void> _reinitializeWindowsAudioOutput() async {
     if (!Platform.isWindows || _disposed) return;
     final deck = _player;
     if (deck is! MediaKitPlaybackDeck) return;
 
-    final settings = _settings;
-    deck.updateOutputSettings(
-      exclusive: settings.windowsOutputMode == 'exclusive',
-      deviceId: settings.windowsOutputDevice,
-      sampleRate: settings.windowsOutputSampleRate,
-      sampleFormat: settings.windowsOutputSampleFormat,
-      channels: settings.windowsOutputChannels,
-      fallback: settings.windowsExclusiveFallback,
-    );
+    if (_isReinitializingAudioOutput) {
+      _pendingAudioOutputReinit ??= _reinitializeWindowsAudioOutput();
+      return;
+    }
+    _isReinitializingAudioOutput = true;
+    try {
+      final settings = _settings;
+      final isExclusiveMode = settings.windowsOutputMode == 'exclusive' ||
+          settings.windowsOutputMode == 'exclusive_event' ||
+          settings.windowsOutputMode == 'exclusive_push';
 
-    final wasPlaying =
-        _player.state == PlaybackDeckState.playing || playbackState.value.playing;
-    final currentIndex = _index;
+      deck.updateOutputSettings(
+        exclusive: isExclusiveMode,
+        wasapiMode: settings.windowsOutputMode,
+        deviceId: settings.windowsOutputDevice,
+        sampleRate: settings.windowsOutputSampleRate,
+        sampleFormat: settings.windowsOutputSampleFormat,
+        channels: settings.windowsOutputChannels,
+        fallback: settings.windowsExclusiveFallback,
+      );
 
-    if (currentIndex >= 0 && currentIndex < _media.length && _sourceReady) {
-      final currentPos =
-          await _player.getCurrentPosition() ?? playbackState.value.position;
-      await _serializeSourceChange(() async {
+      _log.i(
+        'Applying dynamic Windows audio output configuration: mode=${settings.windowsOutputMode}, device=${settings.windowsOutputDevice}, rate=${settings.windowsOutputSampleRate}',
+      );
+
+      final currentIndex = _index;
+      final wasPlaying =
+          _player.state == PlaybackDeckState.playing || playbackState.value.playing;
+      final wasPaused = _player.state == PlaybackDeckState.paused;
+      final wasActive = (wasPlaying || wasPaused) &&
+          currentIndex >= 0 &&
+          currentIndex < _media.length &&
+          _sourceReady;
+
+      if (wasActive) {
+        final currentPos =
+            await _player.getCurrentPosition() ?? playbackState.value.position;
         _log.i(
-          'Reinitializing Windows audio output at position ${currentPos.inSeconds}s (wasPlaying: $wasPlaying)',
+          'Re-opening active stream to apply WASAPI mode safely without device collision at ${currentPos.inSeconds}s',
         );
-        await deck.configureOutput();
+        // Cleanly stop so Windows Core Audio releases the IAudioClient exclusive lock
+        await _player.stop();
         if (_disposed) return;
         await _playIndex(
           currentIndex,
           recordHistory: false,
           startPosition: currentPos,
         );
-        if (!wasPlaying) {
-          await deck.pause();
-          _broadcastState(playerState: PlaybackDeckState.paused);
+        if (wasPaused && !_disposed) {
+          await _player.pause();
         }
-      });
-    } else {
-      await deck.configureOutput();
+      } else {
+        await deck.configureOutput();
+      }
+    } catch (e) {
+      _log.w('Failed during Windows audio output reconfiguration: $e');
+    } finally {
+      _isReinitializingAudioOutput = false;
+      final pending = _pendingAudioOutputReinit;
+      if (pending != null) {
+        _pendingAudioOutputReinit = null;
+        unawaited(pending);
+      }
     }
   }
 
@@ -1390,29 +1421,44 @@ class MusicPlayerHandler extends BaseAudioHandler
     unawaited(_autoplay.fill());
     final media = _media[index];
     _switchingGeneration = generation;
-    await _player.cancelPreparation();
-    await _serializeSourceChange(() async {
-      try {
-        if (!_isCurrentPlayRequest(generation, media)) return;
-        await _autoMix.cancel();
-        if (!_isCurrentPlayRequest(generation, media)) return;
-        // Retire the audible source before publishing another song's title.
-        await _player.stop();
-        if (!_isCurrentPlayRequest(generation, media)) return;
-        await _loadIndex(
-          generation,
-          media,
-          recordHistory: recordHistory,
-          startPosition: startPosition,
-        );
-      } finally {
-        if (_switchingGeneration == generation) _switchingGeneration = 0;
-      }
-    });
+    try {
+      await _player.cancelPreparation();
+      await _serializeSourceChange(() async {
+        try {
+          if (!_isCurrentPlayRequest(generation, media)) return;
+          await _autoMix.cancel();
+          if (!_isCurrentPlayRequest(generation, media)) return;
+          // Retire the audible source before publishing another song's title.
+          await _player.stop();
+          if (!_isCurrentPlayRequest(generation, media)) return;
+          await _loadIndex(
+            generation,
+            media,
+            recordHistory: recordHistory,
+            startPosition: startPosition,
+          );
+        } finally {
+          if (_switchingGeneration == generation) _switchingGeneration = 0;
+        }
+      });
+    } catch (error) {
+      if (_switchingGeneration == generation) _switchingGeneration = 0;
+      rethrow;
+    }
   }
 
   Future<void> _serializeSourceChange(Future<void> Function() action) {
-    final operation = _sourceChangeTail.then((_) => action());
+    if (Zone.current[#inSourceChange] == true) {
+      // Already inside a serialized source change. Run directly without re-queuing
+      // behind our own uncompleted future to prevent permanent self-deadlock.
+      return action();
+    }
+    final operation = _sourceChangeTail.then((_) {
+      return runZoned(
+        () => action(),
+        zoneValues: {#inSourceChange: true},
+      );
+    });
     // A failed operation must not poison later transport requests.
     _sourceChangeTail = operation.catchError((Object _) {});
     return operation;
@@ -1568,32 +1614,57 @@ class MusicPlayerHandler extends BaseAudioHandler
           playbackLease = null;
         }
       } catch (directError) {
-        if (directError is UsbOutputUnavailable ||
+        if (Platform.isWindows &&
+            (directError.toString().contains('audio') ||
+                directError.toString().contains('MediaKitSourceException'))) {
+          _log.w(
+            'Windows audio output failure ($directError); retrying with safe default output...',
+          );
+          try {
+            final deck = _player;
+            if (deck is MediaKitPlaybackDeck) {
+              deck.updateOutputSettings(
+                deviceId: 'auto',
+                wasapiMode: 'shared',
+                sampleRate: 0,
+                sampleFormat: 'auto',
+                exclusive: false,
+              );
+            }
+            await _player.configureOutput();
+            if (!_isCurrentPlayRequest(generation, media)) return;
+            await _startResolvedSource(resolved, generation, media, startAt);
+          } catch (fallbackError) {
+            _log.e('Windows safe audio fallback also failed: $fallbackError');
+            rethrow;
+          }
+        } else if (directError is UsbOutputUnavailable ||
             playbackLease == null ||
             !_isCurrentPlayRequest(generation, media)) {
           rethrow;
+        } else {
+          await PlatformBridge.closeContentUriPlaybackLease(playbackLease.token);
+          playbackLease = null;
+          _log.w(
+            'Direct SAF playback unavailable; using bounded local fallback: '
+            '$directError',
+          );
+          final fallback = await _resolveSource(media);
+          if (fallback == null || !_isCurrentPlayRequest(generation, media)) {
+            rethrow;
+          }
+          resolved = fallback;
+          usingLocalSafCopy = true;
+          normalizationVolume = await _normalizationVolumeFor(
+            fallback,
+            cacheKey: media.source,
+          );
+          if (!_isCurrentPlayRequest(generation, media)) return;
+          await _player.setVolume(normalizationVolume);
+          if (!_isCurrentPlayRequest(generation, media)) return;
+          _normalizationVolume = normalizationVolume;
+          await _startResolvedSource(fallback, generation, media, startAt);
         }
-        await PlatformBridge.closeContentUriPlaybackLease(playbackLease.token);
-        playbackLease = null;
-        _log.w(
-          'Direct SAF playback unavailable; using bounded local fallback: '
-          '$directError',
-        );
-        final fallback = await _resolveSource(media);
-        if (fallback == null || !_isCurrentPlayRequest(generation, media)) {
-          rethrow;
-        }
-        resolved = fallback;
-        usingLocalSafCopy = true;
-        normalizationVolume = await _normalizationVolumeFor(
-          fallback,
-          cacheKey: media.source,
-        );
-        if (!_isCurrentPlayRequest(generation, media)) return;
-        await _player.setVolume(normalizationVolume);
-        if (!_isCurrentPlayRequest(generation, media)) return;
-        _normalizationVolume = normalizationVolume;
-        await _startResolvedSource(fallback, generation, media, startAt);
       }
       if (!_isCurrentPlayRequest(generation, media)) return;
       _sourceReady = true;

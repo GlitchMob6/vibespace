@@ -193,20 +193,27 @@ class _WindowsAudioOutputPageState
                       SegmentedButton<String>(
                         segments: const [
                           ButtonSegment<String>(
-                            value: 'exclusive',
-                            label: Text('WASAPI Exclusive'),
-                            icon: Icon(Icons.star),
+                            value: 'shared',
+                            label: Text('Shared'),
+                            icon: Icon(Icons.tune),
                           ),
                           ButtonSegment<String>(
-                            value: 'shared',
-                            label: Text('WASAPI Shared'),
-                            icon: Icon(Icons.tune),
+                            value: 'exclusive_event',
+                            label: Text('Exclusive (Event)'),
+                            icon: Icon(Icons.bolt),
+                          ),
+                          ButtonSegment<String>(
+                            value: 'exclusive_push',
+                            label: Text('Exclusive (Push)'),
+                            icon: Icon(Icons.waves),
                           ),
                         ],
                         selected: {
-                          settings.windowsOutputMode == 'exclusive'
-                              ? 'exclusive'
-                              : 'shared'
+                          switch (settings.windowsOutputMode) {
+                            'exclusive_push' => 'exclusive_push',
+                            'exclusive' || 'exclusive_event' => 'exclusive_event',
+                            _ => 'shared',
+                          }
                         },
                         onSelectionChanged: (selected) {
                           ref
@@ -216,9 +223,14 @@ class _WindowsAudioOutputPageState
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        settings.windowsOutputMode == 'exclusive'
-                          ? 'Exclusive mode communicates directly with the audio hardware, bypassing Windows audio mixing, resampling, and DSP effects for raw, bit-perfect playback.'
-                          : 'Shared mode routes through Windows Audio Engine (WASAPI Shared), mixing audio with other applications and notification sounds.',
+                        switch (settings.windowsOutputMode) {
+                          'exclusive_push' =>
+                            'Exclusive Push: Direct hardware access with buffered streaming. Maximizes DAC compatibility and prevents audio dropouts on sensitive USB endpoints.',
+                          'exclusive' || 'exclusive_event' =>
+                            'Exclusive Event: Event-driven hardware rendering with ultra-low latency. Directly feeds DAC endpoint buffers for raw, bit-perfect playback.',
+                          _ =>
+                            'Shared Mode: Routes through the Windows Audio Engine (WASAPI Shared), mixing audio with other applications and notification sounds.',
+                        },
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -368,7 +380,7 @@ class _WindowsAudioOutputPageState
       valueListenable: windowsAudioStatus,
       builder: (context, status, _) {
         final isBitPerfect = status.isBitPerfect;
-        final isExclusive = status.mode == 'exclusive';
+        final isExclusive = status.mode.startsWith('exclusive');
 
         return Card(
           elevation: 2,
@@ -435,7 +447,11 @@ class _WindowsAudioOutputPageState
                           Text(
                             isBitPerfect
                                 ? 'BIT-PERFECT'
-                                : (isExclusive ? 'EXCLUSIVE' : 'SHARED MIXER'),
+                                : (isExclusive
+                                    ? (status.mode == 'exclusive_push'
+                                        ? 'EXCLUSIVE (PUSH)'
+                                        : 'EXCLUSIVE (EVENT)')
+                                    : 'SHARED MIXER'),
                             style: theme.textTheme.labelSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: isBitPerfect

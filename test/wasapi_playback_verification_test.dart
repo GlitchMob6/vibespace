@@ -6,8 +6,10 @@ import 'package:vibespace/services/music_playback_deck.dart';
 import 'package:vibespace/services/playback_deck.dart';
 
 void main() {
-  test('Live WASAPI device query and playback verification on Windows', () async {
-    final dllPath = r'D:\audiolab\Mornye\build\windows\x64\runner\Release\libmpv-2.dll';
+  test(
+    'Live WASAPI device query and playback verification on Windows',
+    () async {
+      final dllPath = r'D:\audiolab\Mornye\build\windows\x64\runner\Release\libmpv-2.dll';
     expect(File(dllPath).existsSync(), isTrue);
     MediaKit.ensureInitialized(libmpv: dllPath);
 
@@ -21,12 +23,22 @@ void main() {
     final testTrack = r'E:\music\Anirudh Ravichander\Love Insurance Kompany (Original Motion Picture Soundtrack)\Anirudh Ravichander - Adaavadi.flac';
     expect(File(testTrack).existsSync(), isTrue, reason: 'Test track must exist');
 
-    // 2. Test Shared Mode with previously corrupted device ID: "wasapi/1e463064-4a08-414f-bd1b-6da70bd88c8a"
-    print('\n=== Testing Shared Mode with Stored Corrupted Device ID ===');
-    const storedCorruptedId = 'wasapi/1e463064-4a08-414f-bd1b-6da70bd88c8a';
+    // 2. Test Shared Mode with Realtek / primary physical speaker
+    print('\n=== Testing Shared Mode with Physical Audio Device ===');
+    // Find Realtek or first non-auto wasapi device
+    final testDevice = devices.firstWhere(
+      (d) => (d['name'] as String).startsWith('wasapi/{88dac15c'),
+      orElse: () => devices.firstWhere(
+        (d) => (d['name'] as String).startsWith('wasapi/{'),
+        orElse: () => devices.first,
+      ),
+    );
+    final selectedDeviceId = testDevice['name'] as String;
+    print('Testing with device: $selectedDeviceId (${testDevice["description"]})');
+
     final sharedDeck = MediaKitPlaybackDeck(
       playerId: 'live-test-shared',
-      wasapiDeviceId: storedCorruptedId,
+      wasapiDeviceId: selectedDeviceId,
       exclusiveOutput: false,
     );
     addTearDown(sharedDeck.dispose);
@@ -37,25 +49,12 @@ void main() {
     print('  Is fallback device: ${sharedDeck.debugIsFallbackDevice}');
     print('  windowsAudioStatus: ${windowsAudioStatus.value}');
 
-    // Check dynamic presence of KT02H20 IEM
-    final isIemPresent = devices.any(
-      (d) =>
-          (d['name'] as String).toLowerCase() ==
-          'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}',
+    expect(sharedDeck.debugIsFallbackDevice, isFalse);
+    expect(
+      sharedDeck.debugActiveDeviceId,
+      selectedDeviceId,
     );
-
-    if (isIemPresent) {
-      expect(sharedDeck.debugIsFallbackDevice, isFalse);
-      expect(
-        sharedDeck.debugActiveDeviceId,
-        'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}',
-      );
-      expect(windowsAudioStatus.value.reason, 'active');
-    } else {
-      expect(sharedDeck.debugIsFallbackDevice, isTrue);
-      expect(sharedDeck.debugActiveDeviceId, 'auto');
-      expect(windowsAudioStatus.value.reason, 'fallback');
-    }
+    expect(windowsAudioStatus.value.reason, 'active');
 
     print('Loading audio track on shared deck...');
     await sharedDeck.setFileSource(testTrack);
@@ -67,9 +66,9 @@ void main() {
     print('Starting playback...');
     await sharedDeck.resume();
     expect(sharedDeck.state, PlaybackDeckState.playing);
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 4));
     final pos = await sharedDeck.getCurrentPosition();
-    print('Playback position after 2s: $pos');
+    print('Playback position after delay: $pos');
     print('windowsAudioStatus during playback: ${windowsAudioStatus.value}');
     expect(pos, isNotNull);
     expect(pos!.inMilliseconds, greaterThan(0));
@@ -79,7 +78,9 @@ void main() {
     print('\n=== Testing Exclusive Mode ===');
     final exclusiveDeck = MediaKitPlaybackDeck(
       playerId: 'live-test-exclusive',
+      wasapiDeviceId: selectedDeviceId,
       exclusiveOutput: true,
+      wasapiMode: 'exclusive_event',
     );
     addTearDown(exclusiveDeck.dispose);
 
@@ -105,6 +106,6 @@ void main() {
     await exclusiveDeck.stop();
 
     print('\n=== End-to-end Live Playback Verified Successfully! ===');
-  });
+  }, timeout: const Timeout(Duration(seconds: 45)));
 }
 

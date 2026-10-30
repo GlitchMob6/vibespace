@@ -133,6 +133,8 @@ class SettingsNotifier extends Notifier<AppSettings> {
   static const Set<String> _windowsOutputModeValues = {
     'shared',
     'exclusive',
+    'exclusive_event',
+    'exclusive_push',
     'auto',
   };
 
