@@ -1,12 +1,12 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:ffi' show Abi;
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/constants/app_info.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/constants/app_info.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('UpdateChecker');
 

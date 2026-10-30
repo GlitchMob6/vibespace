@@ -1,27 +1,27 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_ui/material_ui.dart' as material_ui;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mornye/constants/app_info.dart';
-import 'package:mornye/screens/main_shell.dart';
-import 'package:mornye/screens/setup_screen.dart';
-import 'package:mornye/screens/tutorial_screen.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/providers/equalizer_provider.dart';
-import 'package:mornye/services/app_navigation_service.dart';
-import 'package:mornye/services/app_orientation.dart';
-import 'package:mornye/theme/dynamic_color_wrapper.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/l10n/supported_locales.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/app_snack_bar.dart';
-import 'package:mornye/widgets/desktop/desktop_shortcuts.dart';
-import 'package:mornye/widgets/desktop/library_drop_target.dart';
-import 'package:mornye/widgets/mornye_glass_preparation.dart';
-import 'package:mornye/widgets/playback_feedback.dart';
+import 'package:vibespace/constants/app_info.dart';
+import 'package:vibespace/screens/main_shell.dart';
+import 'package:vibespace/screens/setup_screen.dart';
+import 'package:vibespace/screens/tutorial_screen.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/providers/equalizer_provider.dart';
+import 'package:vibespace/services/app_navigation_service.dart';
+import 'package:vibespace/services/app_orientation.dart';
+import 'package:vibespace/theme/dynamic_color_wrapper.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/l10n/supported_locales.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/app_snack_bar.dart';
+import 'package:vibespace/widgets/desktop/desktop_shortcuts.dart';
+import 'package:vibespace/widgets/desktop/library_drop_target.dart';
+import 'package:vibespace/widgets/mornye_glass_preparation.dart';
+import 'package:vibespace/widgets/playback_feedback.dart';
 
 String initialLocationForAppState({
   required bool isFirstLaunch,

@@ -1,20 +1,20 @@
-import 'dart:ui' show ImageFilter;
+﻿import 'dart:ui' show ImageFilter;
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:material_3_expressive/material_3_expressive.dart'
     show M3EShapeKind;
 import 'package:share_plus/share_plus.dart' show ShareParams, SharePlus, XFile;
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/cover_palette.dart';
-import 'package:mornye/utils/lyrics_parser.dart';
-import 'package:mornye/utils/widget_capture.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/app_shape.dart';
-import 'package:mornye/widgets/expressive_button.dart';
-import 'package:mornye/widgets/player_artwork.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/cover_palette.dart';
+import 'package:vibespace/utils/lyrics_parser.dart';
+import 'package:vibespace/utils/widget_capture.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/app_shape.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
+import 'package:vibespace/widgets/player_artwork.dart';
 
 /// Story-sized lyric cards stay short, like quoting a song rather than
 /// reproducing its lyrics.

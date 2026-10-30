@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 /// Keeps touch-first tablets on the bottom navigation used by phones. A rail
 /// is reserved for genuinely desktop-width windows; the old 600dp threshold

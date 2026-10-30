@@ -1,10 +1,10 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/utils/synced_lyrics_scroll.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/utils/synced_lyrics_scroll.dart';
 
 /// Playback controls the fill; a gentle pulse accompanies instrumental gaps.
 class LyricGapIndicator extends ConsumerStatefulWidget {

@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart' show CupertinoIcons;
+﻿import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 /// Builds a horizontal list that scrolls with [controller].
 typedef DesktopScrollArrowsBuilder =

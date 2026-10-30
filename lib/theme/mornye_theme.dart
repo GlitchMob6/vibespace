@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
+﻿import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mornye/models/theme_settings.dart';
-import 'package:mornye/theme/app_tokens.dart';
+import 'package:vibespace/models/theme_settings.dart';
+import 'package:vibespace/theme/app_tokens.dart';
 
 /// Flutter counterpart of Mornye's iPhone visual system. Reference values come
 /// from AccentColor.colorset, Components.swift, PlayerViews.swift and Motion.md

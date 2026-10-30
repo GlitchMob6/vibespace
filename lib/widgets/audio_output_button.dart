@@ -1,10 +1,10 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
 
 /// Uses the system's real audio routes and keeps native discovery in native UI.
 class AudioOutputButton extends StatefulWidget {

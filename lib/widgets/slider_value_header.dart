@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
 
 /// The title row above a settings slider, with the slider's current value.
 ///

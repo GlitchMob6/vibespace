@@ -1,14 +1,14 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mornye/services/discord_artwork_resolver.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/secure_storage_options.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/services/discord_artwork_resolver.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/secure_storage_options.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 enum DiscordPresenceStatus {
   disabled,

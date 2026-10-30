@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/artist_concert.dart';
-import 'package:mornye/screens/concert_detail_screen.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/widgets/album_detail_header.dart';
-import 'package:mornye/widgets/app_shape.dart';
-import 'package:mornye/widgets/cached_cover_image.dart';
-import 'package:mornye/widgets/animation_utils.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/artist_concert.dart';
+import 'package:vibespace/screens/concert_detail_screen.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/widgets/album_detail_header.dart';
+import 'package:vibespace/widgets/app_shape.dart';
+import 'package:vibespace/widgets/cached_cover_image.dart';
+import 'package:vibespace/widgets/animation_utils.dart';
 
 class ArtistConcertsScreen extends StatefulWidget {
   const ArtistConcertsScreen({

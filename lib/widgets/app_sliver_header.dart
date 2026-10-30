@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/app_bar_layout.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/app_bar_layout.dart';
 
 /// The collapsing header used by every top-level tab and every settings-style
 /// sub-page.

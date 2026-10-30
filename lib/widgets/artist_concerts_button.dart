@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/artist_concert.dart';
-import 'package:mornye/screens/artist_concerts_screen.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/animation_utils.dart';
-import 'package:mornye/widgets/expressive_button.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/artist_concert.dart';
+import 'package:vibespace/screens/artist_concerts_screen.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/animation_utils.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
 
 class ArtistConcertsButton extends StatelessWidget {
   const ArtistConcertsButton({

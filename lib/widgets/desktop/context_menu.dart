@@ -1,14 +1,14 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart' show kPrimaryButton;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/theme/mornye_icons.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/desktop/desktop_selection.dart';
-import 'package:mornye/widgets/mornye_context_menu.dart';
+import 'package:vibespace/theme/mornye_icons.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/desktop/desktop_selection.dart';
+import 'package:vibespace/widgets/mornye_context_menu.dart';
 
 /// One row of a desktop context menu. Use `Icons.*`; Mornye swaps in the
 /// Cupertino glyph.

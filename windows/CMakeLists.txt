@@ -3,7 +3,7 @@ project(mornye LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
-set(BINARY_NAME "mornye")
+set(BINARY_NAME "vibespace")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.
@@ -55,6 +55,15 @@ include(flutter/generated_plugins.cmake)
 if(TARGET permission_handler_windows_plugin)
   target_compile_definitions(permission_handler_windows_plugin PRIVATE
     "_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS")
+endif()
+
+# audioplayers_windows uses C++20 coroutines; MSVC 14.29 (VS2019) requires /await
+# or the deprecation silenced. This plugin targets cxx_std_20 but the old toolchain
+# emits C1189 without /await. Silence the error for the build to proceed.
+if(TARGET audioplayers_windows_plugin)
+  target_compile_definitions(audioplayers_windows_plugin PRIVATE
+    "_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS")
+  target_compile_options(audioplayers_windows_plugin PRIVATE "/await")
 endif()
 
 

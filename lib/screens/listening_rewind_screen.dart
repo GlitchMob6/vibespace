@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' show ImageFilter;
 
@@ -10,24 +10,24 @@ import 'package:intl/intl.dart';
 import 'package:material_3_expressive/material_3_expressive.dart'
     show M3EShapeKind;
 import 'package:share_plus/share_plus.dart' show ShareParams, SharePlus, XFile;
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/listening_rewind_provider.dart';
-import 'package:mornye/services/listening_rewind.dart';
-import 'package:mornye/theme/app_motion.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/widget_capture.dart';
-import 'package:mornye/widgets/app_action_button.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/app_content_card.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
-import 'package:mornye/widgets/app_shape.dart';
-import 'package:mornye/widgets/player_artwork.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/listening_rewind_provider.dart';
+import 'package:vibespace/services/listening_rewind.dart';
+import 'package:vibespace/theme/app_motion.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/widget_capture.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/app_content_card.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
+import 'package:vibespace/widgets/app_shape.dart';
+import 'package:vibespace/widgets/player_artwork.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
-export 'package:mornye/providers/listening_rewind_provider.dart';
+export 'package:vibespace/providers/listening_rewind_provider.dart';
 
 part 'listening_rewind_story.dart';
 part 'listening_rewind_slides.dart';

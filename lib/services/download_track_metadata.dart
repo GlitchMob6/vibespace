@@ -1,9 +1,9 @@
-import 'package:mornye/models/track.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/int_utils.dart';
-import 'package:mornye/utils/isrc_utils.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/utils/string_utils.dart';
+﻿import 'package:vibespace/models/track.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/int_utils.dart';
+import 'package:vibespace/utils/isrc_utils.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 /// Shared preparation before either queue chooses folders, filenames or tags.
 Future<Track> enrichIncompleteDownloadTrack(

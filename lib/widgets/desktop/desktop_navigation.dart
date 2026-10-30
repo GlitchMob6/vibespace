@@ -1,25 +1,25 @@
-import 'dart:ui' show lerpDouble;
+﻿import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/library_collections_provider.dart';
-import 'package:mornye/providers/user_profile_provider.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
-import 'package:mornye/services/user_profile_store.dart';
-import 'package:mornye/theme/app_motion.dart';
-import 'package:mornye/theme/material_expressive.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/desktop/desktop_commands.dart';
-import 'package:mornye/widgets/desktop/desktop_inspector.dart';
-import 'package:mornye/widgets/desktop/desktop_now_playing.dart';
-import 'package:mornye/widgets/desktop/desktop_player_bar.dart';
-import 'package:mornye/widgets/desktop/desktop_window.dart';
-import 'package:mornye/widgets/profile_avatar.dart';
-import 'package:mornye/widgets/no_scrollbars.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/library_collections_provider.dart';
+import 'package:vibespace/providers/user_profile_provider.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
+import 'package:vibespace/services/user_profile_store.dart';
+import 'package:vibespace/theme/app_motion.dart';
+import 'package:vibespace/theme/material_expressive.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/desktop/desktop_commands.dart';
+import 'package:vibespace/widgets/desktop/desktop_inspector.dart';
+import 'package:vibespace/widgets/desktop/desktop_now_playing.dart';
+import 'package:vibespace/widgets/desktop/desktop_player_bar.dart';
+import 'package:vibespace/widgets/desktop/desktop_window.dart';
+import 'package:vibespace/widgets/profile_avatar.dart';
+import 'package:vibespace/widgets/no_scrollbars.dart';
 
 /// Window width at which the Material rail shows labels beside its icons.
 const double desktopExpandedRailBreakpoint = 1200;

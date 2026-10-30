@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/widgets/cached_cover_image.dart';
-import 'package:mornye/widgets/desktop/desktop_selection.dart';
-import 'package:mornye/widgets/desktop/track_table.dart';
-import 'package:mornye/widgets/track_card.dart';
-import 'package:mornye/widgets/track_collection_quick_actions.dart';
-import 'package:mornye/widgets/track_list_tile.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/widgets/cached_cover_image.dart';
+import 'package:vibespace/widgets/desktop/desktop_selection.dart';
+import 'package:vibespace/widgets/desktop/track_table.dart';
+import 'package:vibespace/widgets/track_card.dart';
+import 'package:vibespace/widgets/track_collection_quick_actions.dart';
+import 'package:vibespace/widgets/track_list_tile.dart';
 
 /// The desktop song table for album, playlist and folder [Track] lists, in
 /// place of

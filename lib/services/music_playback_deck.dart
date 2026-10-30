@@ -1,18 +1,22 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_equalizer.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_equalizer.dart';
 
 final _log = AppLogger('AudioOutput');
 
 /// Only verified native playback reports active. File metadata alone never does.
 final usbAudioStatus = ValueNotifier<UsbAudioStatus>(const UsbAudioStatus());
+
+/// Active status of Windows WASAPI output.
+final windowsAudioStatus =
+    ValueNotifier<WindowsAudioStatus>(const WindowsAudioStatus());
 
 class UsbOutputUnavailable extends StateError {
   UsbOutputUnavailable(super.message);
@@ -69,6 +73,32 @@ class UsbAudioStatus {
   final int? bitDepth;
   final String transport;
   final String driver;
+}
+
+/// Status of Windows WASAPI output mode.
+class WindowsAudioStatus {
+  const WindowsAudioStatus({
+    this.reason = 'idle',
+    this.mode = 'shared',
+    this.device,
+    this.sampleRate,
+    this.bitDepth,
+    this.transport = 'pcm',
+    this.driver = 'wasapi',
+  });
+
+  final String reason; // 'idle', 'active', 'pending', 'failed', 'fallback'
+  final String mode; // 'shared' or 'exclusive'
+  final String? device;
+  final int? sampleRate;
+  final int? bitDepth;
+  final String transport;
+  final String driver;
+
+  @override
+  String toString() =>
+      'WindowsAudioStatus(reason: $reason, mode: $mode, device: $device, '
+      'sampleRate: $sampleRate, bitDepth: $bitDepth, transport: $transport, driver: $driver)';
 }
 
 final AudioContext _musicAudioContext = AudioContext(

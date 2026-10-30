@@ -1,19 +1,19 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:mornye/theme/app_motion.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/desktop/detail_header.dart'
+import 'package:vibespace/theme/app_motion.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/desktop/detail_header.dart'
     show desktopDetailBottomInset;
-import 'package:mornye/widgets/mornye_chrome.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/expressive_button.dart';
-import 'package:mornye/widgets/expressive_icon_button.dart';
-import 'package:mornye/l10n/l10n.dart';
+import 'package:vibespace/widgets/mornye_chrome.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
+import 'package:vibespace/widgets/expressive_icon_button.dart';
+import 'package:vibespace/l10n/l10n.dart';
 
 /// Hosts selection bars above the shell navigation while keeping modal routes
 /// above the bar. A raw entry in the root [Overlay] stays above routes pushed

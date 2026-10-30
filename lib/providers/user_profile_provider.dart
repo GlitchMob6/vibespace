@@ -1,8 +1,8 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/services/user_profile_store.dart';
+import 'package:vibespace/services/user_profile_store.dart';
 
 final userProfileStoreProvider = Provider<UserProfileStore>(
   (ref) => UserProfileStore(),

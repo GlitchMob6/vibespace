@@ -1,8 +1,8 @@
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/models/extension.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/services/platform_bridge.dart';
+﻿import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/models/extension.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/services/platform_bridge.dart';
 
 class LocalTrackRedownloadResolution {
   final LocalLibraryItem localItem;

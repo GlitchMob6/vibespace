@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -6,7 +6,7 @@ import 'dart:ui' as ui;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 class UserProfile {
   const UserProfile({this.name = '', this.photoPath});

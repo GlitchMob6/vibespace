@@ -9,6 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   desktop_drop
   dynamic_color
   ffmpeg_kit_flutter_new_audio
+  flutter_local_notifications_windows
   flutter_secure_storage_windows
   media_kit_libs_windows_audio
   permission_handler_windows
@@ -19,7 +20,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
   dart_smb2
-  flutter_local_notifications_windows
   jni
   smtc_windows
 )

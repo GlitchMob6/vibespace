@@ -1,12 +1,12 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/desktop/desktop_inspector.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/desktop/desktop_inspector.dart';
 
-export 'package:mornye/widgets/desktop/desktop_inspector.dart'
+export 'package:vibespace/widgets/desktop/desktop_inspector.dart'
     show DesktopInspectorPanel, toggleDesktopInspector;
 
 /// App-wide desktop commands. Each one has one keyboard shortcut, mirrored in

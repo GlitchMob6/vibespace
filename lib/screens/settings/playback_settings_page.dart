@@ -1,27 +1,28 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/music_playback_deck.dart';
-import 'package:mornye/services/music_player_service.dart'
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/music_playback_deck.dart';
+import 'package:vibespace/services/music_player_service.dart'
     show resetAutoplayLearning;
-import 'package:mornye/screens/listening_statistics_screen.dart';
-import 'package:mornye/screens/equalizer_screen.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/widgets/animation_utils.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_sliver_header.dart';
-import 'package:mornye/widgets/beta_badge.dart';
-import 'package:mornye/widgets/player_volume_control.dart';
-import 'package:mornye/widgets/settings_group.dart';
-import 'package:mornye/widgets/discord_presence_settings.dart';
-import 'package:mornye/widgets/automix_settings.dart';
-import 'package:mornye/widgets/music_haptics_settings.dart';
-import 'package:mornye/widgets/playback_normalization_settings.dart';
+import 'package:vibespace/services/media_kit_playback_deck.dart';
+import 'package:vibespace/screens/listening_statistics_screen.dart';
+import 'package:vibespace/screens/equalizer_screen.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/widgets/animation_utils.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_sliver_header.dart';
+import 'package:vibespace/widgets/beta_badge.dart';
+import 'package:vibespace/widgets/player_volume_control.dart';
+import 'package:vibespace/widgets/settings_group.dart';
+import 'package:vibespace/widgets/discord_presence_settings.dart';
+import 'package:vibespace/widgets/automix_settings.dart';
+import 'package:vibespace/widgets/music_haptics_settings.dart';
+import 'package:vibespace/widgets/playback_normalization_settings.dart';
 
 class PlaybackSettingsPage extends ConsumerStatefulWidget {
   const PlaybackSettingsPage({super.key});
@@ -480,9 +481,77 @@ class _PlaybackSettingsPageState extends ConsumerState<PlaybackSettingsPage> {
               ),
             ),
           const SliverToBoxAdapter(child: SizedBox(height: 32)),
-          SliverToBoxAdapter(
-            child: SettingsSectionHeader(title: context.l10n.listeningStats),
-          ),
+          if (Platform.isWindows)
+            SliverToBoxAdapter(
+              child: SettingsSectionHeader(
+                title: 'Windows Audio Output (WASAPI)',
+              ),
+            ),
+          if (Platform.isWindows)
+            SliverToBoxAdapter(
+              child: SettingsGroup(
+                connected: true,
+                children: [
+                  ValueListenableBuilder<WindowsAudioStatus>(
+                    valueListenable: windowsAudioStatus,
+                    builder: (context, status, _) => Column(
+                      children: [
+                        SettingsItem(
+                          icon: Icons.audio_file,
+                          title: 'WASAPI Output Mode',
+                          subtitle: 'Current mode: ${status.mode.toUpperCase()} (${status.reason})'
+                              '${status.sampleRate != null ? '\n${status.bitDepth}-bit PCM · ${(status.sampleRate! / 1000).toStringAsFixed(1)} kHz' : ''}',
+                          trailing: DropdownButton<String>(
+                            value: settings.windowsOutputMode,
+                            items: const [
+                              DropdownMenuItem(value: 'shared', child: Text('Shared (Default)')),
+                              DropdownMenuItem(value: 'exclusive', child: Text('Exclusive (Bit-perfect)')),
+                              DropdownMenuItem(value: 'auto', child: Text('Auto')),
+                            ],
+                            onChanged: (value) {
+                              if (value != null) {
+                                ref.read(settingsProvider.notifier).setWindowsOutputMode(value);
+                              }
+                            },
+                          ),
+                        ),
+                        FutureBuilder<List<Map<String, dynamic>>>(
+                          future: MediaKitPlaybackDeck.queryWASAPIDevices(),
+                          builder: (context, snapshot) {
+                            final devices = snapshot.data ?? [];
+                            return SettingsItem(
+                              icon: Icons.speaker,
+                              title: 'Output Device',
+                              subtitle: settings.windowsOutputDevice.isEmpty
+                                  ? 'System Default'
+                                  : settings.windowsOutputDevice,
+                              trailing: DropdownButton<String>(
+                                value: settings.windowsOutputDevice.isEmpty ? '' : settings.windowsOutputDevice,
+                                items: [
+                                  const DropdownMenuItem(value: '', child: Text('System Default')),
+                                  for (final device in devices)
+                                    DropdownMenuItem(
+                                      value: device['name']?.toString() ?? '',
+                                      child: Text(device['description']?.toString() ?? device['name']?.toString() ?? 'Device'),
+                                    ),
+                                ],
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    ref.read(settingsProvider.notifier).setWindowsOutputDevice(value);
+                                  }
+                                },
+                              ),
+                              showDivider: false,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          const SliverToBoxAdapter(child: SizedBox(height: 32)),
           SliverToBoxAdapter(
             child: SettingsGroup(
               children: [

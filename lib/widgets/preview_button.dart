@@ -1,12 +1,12 @@
-import 'package:audio_service/audio_service.dart';
+﻿import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/preview_player_provider.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/preview_player_provider.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
 
 class PreviewButton extends ConsumerWidget {
   final Track track;

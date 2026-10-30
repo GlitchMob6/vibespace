@@ -1,11 +1,11 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:ffmpeg_kit_flutter_new_audio/media_information.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mornye/models/ffmpeg_models.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/ffmpeg_models.dart';
+import 'package:vibespace/utils/logger.dart';
 import 'package:path/path.dart' as p;
 
 final _log = AppLogger('FFmpeg');

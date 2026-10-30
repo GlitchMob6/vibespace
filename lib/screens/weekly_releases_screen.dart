@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/weekly_releases_provider.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/clickable_metadata.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
-import 'package:mornye/widgets/app_refresh_indicator.dart';
-import 'package:mornye/widgets/app_sliver_header.dart';
-import 'package:mornye/widgets/cached_cover_image.dart';
-import 'package:mornye/widgets/error_card.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/weekly_releases_provider.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/clickable_metadata.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
+import 'package:vibespace/widgets/app_refresh_indicator.dart';
+import 'package:vibespace/widgets/app_sliver_header.dart';
+import 'package:vibespace/widgets/cached_cover_image.dart';
+import 'package:vibespace/widgets/error_card.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 class WeeklyReleasesScreen extends ConsumerStatefulWidget {
   const WeeklyReleasesScreen({super.key});

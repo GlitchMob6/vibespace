@@ -1,10 +1,10 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/widgets/app_snack_bar.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/widgets/app_snack_bar.dart';
 
 /// Receives transient playback feedback across all foreground app routes.
 class PlaybackFeedback extends ConsumerStatefulWidget {

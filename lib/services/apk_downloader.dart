@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('ApkDownloader');
 

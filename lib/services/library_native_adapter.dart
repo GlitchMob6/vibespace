@@ -1,15 +1,15 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:mornye/services/library_cleanup.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/library_schema.dart';
-import 'package:mornye/services/sqlite_helpers.dart' as sqlite;
-import 'package:mornye/services/sqlite_native_snapshot.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/utils/native_platform_name.dart';
+import 'package:vibespace/services/library_cleanup.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/library_schema.dart';
+import 'package:vibespace/services/sqlite_helpers.dart' as sqlite;
+import 'package:vibespace/services/sqlite_native_snapshot.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/utils/native_platform_name.dart';
 
 typedef NativeLibraryJobRunner =
     Future<Map<String, dynamic>> Function(

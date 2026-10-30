@@ -1,13 +1,13 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/constants/app_info.dart';
-import 'package:mornye/services/backend/backend_channel.dart';
-import 'package:mornye/services/backend/ffi_backend_transport.dart';
-import 'package:mornye/services/backend/native_backend_transport.dart';
-import 'package:mornye/services/ffmpeg_desktop.dart';
+import 'package:vibespace/constants/app_info.dart';
+import 'package:vibespace/services/backend/backend_channel.dart';
+import 'package:vibespace/services/backend/ffi_backend_transport.dart';
+import 'package:vibespace/services/backend/native_backend_transport.dart';
+import 'package:vibespace/services/ffmpeg_desktop.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Error code of calls made while the desktop library cannot be loaded.

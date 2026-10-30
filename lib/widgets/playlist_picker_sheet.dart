@@ -1,21 +1,21 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/library_collections_provider.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/widgets/app_action_button.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
-import 'package:mornye/widgets/app_text_field.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
-import 'package:mornye/widgets/expressive_button.dart';
-import 'package:mornye/widgets/cached_cover_image.dart';
-import 'package:mornye/widgets/mornye_chrome.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/library_collections_provider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
+import 'package:vibespace/widgets/app_text_field.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
+import 'package:vibespace/widgets/cached_cover_image.dart';
+import 'package:vibespace/widgets/mornye_chrome.dart';
 
 final _log = AppLogger('PlaylistPicker');
 

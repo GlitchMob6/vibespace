@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/utils/artist_utils.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/screens/settings/metadata_provider_priority_page.dart';
-import 'package:mornye/screens/settings/metadata_separator_settings_page.dart';
-import 'package:mornye/widgets/settings_group.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_sliver_header.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/utils/artist_utils.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/screens/settings/metadata_provider_priority_page.dart';
+import 'package:vibespace/screens/settings/metadata_separator_settings_page.dart';
+import 'package:vibespace/widgets/settings_group.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_sliver_header.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
 
 class MetadataSettingsPage extends ConsumerWidget {
   const MetadataSettingsPage({super.key});

@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:mornye/services/backend/backend_channel.dart';
-import 'package:mornye/services/backend/method_channel_backend.dart';
+import 'package:vibespace/services/backend/backend_channel.dart';
+import 'package:vibespace/services/backend/method_channel_backend.dart';
 
 /// Logging transport is independent of the bridge whose calls it records.
 class NativeLogSource {

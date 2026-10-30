@@ -1,30 +1,30 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/library_browse_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/screens/downloaded_album_screen.dart';
-import 'package:mornye/screens/listening_rewind_screen.dart';
-import 'package:mornye/screens/local_album_screen.dart';
-import 'package:mornye/services/album_completeness.dart';
-import 'package:mornye/services/downloaded_embedded_cover_resolver.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/app_refresh_indicator.dart';
-import 'package:mornye/widgets/app_search_field.dart';
-import 'package:mornye/widgets/app_sliver_header.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/app_snack_bar.dart';
-import 'package:mornye/widgets/desktop/context_menu.dart';
-import 'package:mornye/widgets/desktop/hover_play_button.dart';
-import 'package:mornye/widgets/cached_cover_image.dart';
-import 'package:mornye/widgets/local_library_artwork_builder.dart';
-import 'package:mornye/widgets/library_search_results.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/library_browse_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/screens/downloaded_album_screen.dart';
+import 'package:vibespace/screens/listening_rewind_screen.dart';
+import 'package:vibespace/screens/local_album_screen.dart';
+import 'package:vibespace/services/album_completeness.dart';
+import 'package:vibespace/services/downloaded_embedded_cover_resolver.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/app_refresh_indicator.dart';
+import 'package:vibespace/widgets/app_search_field.dart';
+import 'package:vibespace/widgets/app_sliver_header.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/app_snack_bar.dart';
+import 'package:vibespace/widgets/desktop/context_menu.dart';
+import 'package:vibespace/widgets/desktop/hover_play_button.dart';
+import 'package:vibespace/widgets/cached_cover_image.dart';
+import 'package:vibespace/widgets/local_library_artwork_builder.dart';
+import 'package:vibespace/widgets/library_search_results.dart';
 
 enum MornyeLibraryPage { overview, albums, artists }
 

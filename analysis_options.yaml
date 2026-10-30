@@ -22,6 +22,10 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
+    # Enable null-aware elements in collection literals (?expression syntax)
+    # Required by flutter_local_notifications_windows
+    experimental:
+      null-aware-elements: true
 linter:
   rules:
     always_declare_return_types: true

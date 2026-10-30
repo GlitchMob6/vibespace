@@ -1,1 +1,1 @@
-export 'package:mornye/controllers/collapsing_header_scroll_mixin.dart';
+﻿export 'package:vibespace/controllers/collapsing_header_scroll_mixin.dart';

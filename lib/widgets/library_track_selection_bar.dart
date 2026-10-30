@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/app_action_button.dart';
-import 'package:mornye/widgets/selection_action_button.dart';
-import 'package:mornye/widgets/selection_bottom_bar.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
+import 'package:vibespace/widgets/selection_action_button.dart';
+import 'package:vibespace/widgets/selection_bottom_bar.dart';
 
 /// Shared Library toolbar for playlist/queue actions and audio file operations.
 /// FLAC upgrade applies only to eligible local selections.

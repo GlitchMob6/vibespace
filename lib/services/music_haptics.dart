@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -9,10 +9,10 @@ import 'package:ffmpeg_kit_flutter_new_audio/return_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/audio_analysis_jobs.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/logger.dart' show AppLogger;
+import 'package:vibespace/services/audio_analysis_jobs.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/logger.dart' show AppLogger;
 
 const musicHapticsSampleRate = 4000;
 const _hop = 40; // 10 ms frames.

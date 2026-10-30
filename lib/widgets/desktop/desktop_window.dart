@@ -1,10 +1,10 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 /// Overrides [desktopTitleBarInContent] in tests.
 bool? debugDesktopTitleBarInContentOverride;

@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io' show Platform;
 import 'dart:math' as math;
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:mornye/models/equalizer_settings.dart';
-import 'package:mornye/services/media_kit_audio_filters.dart';
-import 'package:mornye/services/music_playback_deck.dart'
-    show UsbDsdUnavailable;
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_equalizer.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/equalizer_settings.dart';
+import 'package:vibespace/services/media_kit_audio_filters.dart';
+import 'package:vibespace/services/music_playback_deck.dart'
+    show UsbDsdUnavailable, windowsAudioStatus, WindowsAudioStatus;
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_equalizer.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('MediaKitDeck');
 
@@ -47,18 +49,25 @@ abstract interface class MpvEngine {
 class MediaKitEngine implements MpvEngine {
   MediaKitEngine()
     : _player = NativePlayer(
-        configuration: const PlayerConfiguration(title: 'Mornye'),
+        configuration: const PlayerConfiguration(title: 'VibeSpace'),
       ) {
     _configured = Future.wait([
-      // Names the PulseAudio and PipeWire stream. The app applies ReplayGain
-      // itself, so mpv's stays at its default (off).
-      setProperty('audio-client-name', 'Mornye'),
+      // Names the audio client stream across platform mixers
+      setProperty('audio-client-name', 'VibeSpace'),
       // media_kit caches streams on disk, which fails where the cache folder
       // is not writable and reports a load error. Memory is enough for audio.
       setProperty('cache-on-disk', 'no'),
       // Room for an equalizer preamp of +12 dB applied through the volume
       // when the libmpv build has no volume filter.
       setProperty('volume-max', '200'),
+      // Sidecar .lrc files are handled by the Flutter UI, not mpv subtitle decoder.
+      setProperty('sub-auto', 'no'),
+      // Prefer high-precision 32-bit float internal audio processing (AIMP-equivalent)
+      setProperty('audio-format', 'float'),
+      // Keep hardware audio stream open across track boundaries for gapless transitions
+      setProperty('gapless-audio', 'yes'),
+      // Bypass pitch filter at 1.0x for bit-perfect output
+      setProperty('audio-pitch-correction', 'no'),
     ]);
   }
 
@@ -146,6 +155,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     required this.playerId,
     MpvEngine? engine,
     this.exclusiveOutput = false,
+    this.wasapiDeviceId,
   }) : _engine = engine ?? debugEngineFactory?.call() ?? MediaKitEngine() {
     playbackEqualizer.addListener(_equalizerChanged);
     playbackOutputVolume.addListener(_outputVolumeChanged);
@@ -175,8 +185,15 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   /// Exclusive output (WASAPI exclusive, CoreAudio hog mode). A later output
   /// setting enables it; until then every deck shares the system mixer.
   final bool exclusiveOutput;
+
+  /// Specific WASAPI device ID to use for output. If null, uses system default.
+  final String? wasapiDeviceId;
+
   final String playerId;
   final MpvEngine _engine;
+
+  /// Getter to expose the current exclusiveOutput value for status reporting.
+  bool get isExclusive => exclusiveOutput;
 
   static bool? _available;
 
@@ -204,6 +221,74 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     }();
   }
 
+  static final _unbracedWasapiGuidRegex = RegExp(
+    r'^wasapi/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$',
+  );
+
+  /// Normalizes a WASAPI device ID, restoring braces if they were stripped previously.
+  /// E.g. "wasapi/1e463064-4a08-414f-bd1b-6da70bd88c8a" -> "wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}"
+  static String normalizeWasapiDeviceId(String deviceId) {
+    final trimmed = deviceId.trim();
+    final match = _unbracedWasapiGuidRegex.firstMatch(trimmed);
+    if (match != null) {
+      return 'wasapi/{${match.group(1)}}';
+    }
+    return trimmed;
+  }
+
+  /// Parses mpv's audio-device-list output safely using jsonDecode.
+  /// mpv returns a JSON array: [{"name": "wasapi/{...}", "description": "..."}, ...]
+  static List<Map<String, dynamic>> parseAudioDeviceList(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty || trimmed == '[]') return [];
+
+    try {
+      final decoded = jsonDecode(trimmed);
+      if (decoded is List) {
+        final result = <Map<String, dynamic>>[];
+        for (final item in decoded) {
+          if (item is Map) {
+            final name = item['name']?.toString() ?? '';
+            final description = item['description']?.toString() ?? name;
+            if (name.isNotEmpty) {
+              result.add({'name': name, 'description': description});
+            }
+          }
+        }
+        return result;
+      }
+    } catch (_) {
+      // Fallback below if not valid JSON
+    }
+
+    // Fallback for non-JSON comma-separated device names
+    return trimmed
+        .split(',')
+        .map((name) => {'name': name.trim(), 'description': name.trim()})
+        .where((d) => (d['name'] as String).isNotEmpty)
+        .toList();
+  }
+
+  /// Queries available WASAPI audio devices and their capabilities.
+  /// Returns a list of device info maps, or empty list on non-Windows platforms.
+  static Future<List<Map<String, dynamic>>> queryWASAPIDevices() async {
+    if (!Platform.isWindows) return [];
+
+    // Create a temporary engine to query devices
+    final tempEngine = MediaKitEngine();
+    try {
+      await tempEngine.setProperty('ao', 'wasapi');
+      final deviceListStr = await tempEngine.getProperty('audio-device-list');
+      _log.i('WASAPI device list: $deviceListStr');
+      return parseAudioDeviceList(deviceListStr);
+    } catch (e) {
+      _log.w('Failed to query WASAPI devices: $e');
+      return [];
+    } finally {
+      await tempEngine.dispose();
+    }
+  }
+
   static const _loadTimeout = Duration(seconds: 20);
 
   final _states = StreamController<PlaybackDeckState>.broadcast();
@@ -220,6 +305,17 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   bool _disposed = false;
   double _gain = 1;
   int? _sampleRate;
+
+  String? _requestedDeviceId;
+  String? _activeDeviceId;
+  bool _isFallbackDevice = false;
+  bool _hasRetriedDeviceFallback = false;
+
+  @visibleForTesting
+  String? get debugActiveDeviceId => _activeDeviceId;
+
+  @visibleForTesting
+  bool get debugIsFallbackDevice => _isFallbackDevice;
 
   /// The `af` value libmpv accepted last, null when unknown.
   String? _appliedSpec;
@@ -275,10 +371,19 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
 
   // Errors that stop the current source. Decoder errors are often a single
   // damaged frame and playback continues.
-  static bool _isSourceError(MpvLogError error) =>
-      const {'file', 'stream', 'ao', 'cplayer'}.contains(error.prefix) ||
-      error.prefix.startsWith('demux') ||
-      error.prefix.startsWith('stream');
+  static bool _isSourceError(MpvLogError error) {
+    // External .lrc or subtitle parsing failures must never abort audio playback
+    final lower = error.text.toLowerCase();
+    if (lower.contains('.lrc') ||
+        lower.contains('subtitle') ||
+        lower.contains('sub-file')) {
+      return false;
+    }
+    return const {'file', 'stream', 'ao', 'cplayer'}.contains(error.prefix) ||
+        error.prefix.startsWith('ao') ||
+        error.prefix.startsWith('demux') ||
+        error.prefix.startsWith('stream');
+  }
 
   void _onError(MpvLogError error) {
     if (_disposed) return;
@@ -334,9 +439,113 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
 
   @override
   Future<void> configureOutput() async {
-    if (exclusiveOutput) {
-      await _engine.setProperty('audio-exclusive', 'yes');
+    _hasRetriedDeviceFallback = false;
+    _requestedDeviceId = (wasapiDeviceId != null && wasapiDeviceId!.isNotEmpty)
+        ? normalizeWasapiDeviceId(wasapiDeviceId!)
+        : null;
+    _activeDeviceId = null;
+    _isFallbackDevice = false;
+
+    if (_requestedDeviceId != null) {
+      _log.i('Configuring output for requested WASAPI device: $_requestedDeviceId');
+      bool isAvailable = false;
+      try {
+        final deviceListStr = await _engine.getProperty('audio-device-list');
+        final devices = parseAudioDeviceList(deviceListStr);
+        if (devices.isNotEmpty) {
+          isAvailable = devices.any(
+            (d) =>
+                (d['name'] as String).toLowerCase() ==
+                _requestedDeviceId!.toLowerCase(),
+          );
+        } else {
+          // If the list is empty (e.g. before initial probe), attempt setting requested device
+          isAvailable = true;
+        }
+      } catch (e) {
+        _log.w('Could not query audio-device-list: $e');
+        isAvailable = true;
+      }
+
+      if (isAvailable) {
+        final deviceResult = await _engine.setProperty('audio-device', _requestedDeviceId!);
+        if (deviceResult >= 0) {
+          _activeDeviceId = _requestedDeviceId;
+          _isFallbackDevice = false;
+        } else {
+          _log.w('Setting audio-device=$_requestedDeviceId failed ($deviceResult), falling back to auto');
+          await _engine.setProperty('audio-device', 'auto');
+          _activeDeviceId = 'auto';
+          _isFallbackDevice = true;
+        }
+      } else {
+        _log.w('Requested WASAPI device "$_requestedDeviceId" is not currently present. Falling back to auto.');
+        await _engine.setProperty('audio-device', 'auto');
+        _activeDeviceId = 'auto';
+        _isFallbackDevice = true;
+      }
+    } else {
+      await _engine.setProperty('audio-device', 'auto');
+      _activeDeviceId = 'auto';
+      _isFallbackDevice = false;
     }
+
+    final effectiveDevice = _isFallbackDevice
+        ? 'auto (requested: $_requestedDeviceId)'
+        : (_activeDeviceId ?? wasapiDeviceId);
+
+    if (!exclusiveOutput) {
+      _log.i('Using WASAPI shared mode (device: $effectiveDevice)');
+      windowsAudioStatus.value = WindowsAudioStatus(
+        reason: _isFallbackDevice ? 'fallback' : 'active',
+        mode: 'shared',
+        device: effectiveDevice,
+      );
+      return;
+    }
+
+    _log.i('Enabling WASAPI exclusive mode (device: $effectiveDevice)');
+    windowsAudioStatus.value = WindowsAudioStatus(
+      reason: _isFallbackDevice ? 'fallback' : 'pending',
+      mode: 'exclusive',
+      device: effectiveDevice,
+    );
+
+    // Try to enable exclusive mode
+    final result = await _engine.setProperty('audio-exclusive', 'yes');
+    if (result < 0) {
+      _log.w('Failed to set audio-exclusive=yes (mpv error $result)');
+      windowsAudioStatus.value = WindowsAudioStatus(
+        reason: 'failed',
+        mode: 'exclusive',
+        device: effectiveDevice,
+      );
+      // Fallback to shared mode will be handled in _load
+      return;
+    }
+
+    // Verify exclusive mode was actually achieved by checking the property
+    try {
+      final exclusiveStatus = await _engine.getProperty('audio-exclusive');
+      _log.i('audio-exclusive property: $exclusiveStatus');
+      if (exclusiveStatus != 'yes') {
+        _log.w('Exclusive mode not active, got: $exclusiveStatus');
+        windowsAudioStatus.value = WindowsAudioStatus(
+          reason: 'fallback',
+          mode: 'shared',
+          device: effectiveDevice,
+        );
+        return;
+      }
+    } catch (e) {
+      _log.w('Failed to verify exclusive mode: $e');
+    }
+
+    windowsAudioStatus.value = WindowsAudioStatus(
+      reason: _isFallbackDevice ? 'fallback' : 'active',
+      mode: 'exclusive',
+      device: effectiveDevice,
+    );
   }
 
   // mpv's volume is cubic: 100 * cbrt(linear gain). The equalizer gain may
@@ -399,11 +608,146 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       if (identical(_pendingLoad, loaded)) _pendingLoad = null;
     }
     if (_disposed || token != _token) return;
+
+    if (error != null) {
+      final isAudioError = error.contains('ao') ||
+          error.toLowerCase().contains('audio') ||
+          error.toLowerCase().contains('wasapi');
+
+      if (isAudioError && _activeDeviceId != 'auto' && !_hasRetriedDeviceFallback) {
+        _hasRetriedDeviceFallback = true;
+        _isFallbackDevice = true;
+        _activeDeviceId = 'auto';
+        _log.w(
+          'Audio driver initialization failed on device "$_requestedDeviceId" ($error). '
+          'Retrying once with audio-device=auto fallback...',
+        );
+        await _engine.stop();
+        await _engine.setProperty('audio-device', 'auto');
+
+        final retryLoaded = Completer<String?>();
+        _pendingLoad = retryLoaded;
+        try {
+          await _engine.open(source);
+          error = await retryLoaded.future.timeout(
+            _loadTimeout,
+            onTimeout: () => 'Timed out retrying with fallback audio device',
+          );
+        } finally {
+          if (identical(_pendingLoad, retryLoaded)) _pendingLoad = null;
+        }
+        if (_disposed || token != _token) return;
+      }
+    }
+
     if (error != null) {
       await _engine.stop();
       // libmpv converts DSD to PCM when its FFmpeg build has the decoder.
       if (requiresDsd) throw UsbDsdUnavailable();
+      final effectiveDevice = _isFallbackDevice
+          ? 'auto (requested: $_requestedDeviceId)'
+          : (_activeDeviceId ?? wasapiDeviceId);
+      windowsAudioStatus.value = WindowsAudioStatus(
+        reason: 'failed',
+        mode: exclusiveOutput ? 'exclusive' : 'shared',
+        device: effectiveDevice,
+      );
       throw MediaKitSourceException(error);
+    }
+    // Source loaded successfully, check if exclusive mode is actually active
+    if (exclusiveOutput) {
+      await _verifyExclusiveMode();
+    }
+    // Query actual audio parameters
+    await _updateAudioStatus();
+  }
+
+  /// Verifies if exclusive mode is actually active after source load.
+  /// If exclusive mode failed, explicitly falls back to shared mode and reports it.
+  Future<void> _verifyExclusiveMode() async {
+    if (_disposed) return;
+    try {
+      final exclusiveStatus = await _engine.getProperty('audio-exclusive');
+      _log.i('Exclusive mode verification: audio-exclusive=$exclusiveStatus');
+      if (exclusiveStatus != 'yes') {
+        _log.w('Exclusive mode was requested but not achieved; falling back to shared mode');
+        final effectiveDevice = _isFallbackDevice
+            ? 'auto (requested: $_requestedDeviceId)'
+            : (_activeDeviceId ?? wasapiDeviceId);
+        windowsAudioStatus.value = WindowsAudioStatus(
+          reason: 'fallback',
+          mode: 'shared',
+          device: effectiveDevice,
+        );
+        // Don't throw - playback continues in shared mode, but status reflects actual mode
+      }
+    } catch (e) {
+      _log.w('Failed to verify exclusive mode: $e');
+    }
+  }
+
+  Future<void> _updateAudioStatus() async {
+    if (_disposed) return;
+    try {
+      final sampleRateStr = await _engine.getProperty('audio-params/samplerate');
+      final formatStr = await _engine.getProperty('audio-params/format');
+      final sampleRate = int.tryParse(sampleRateStr);
+      // Parse format string like "s16le", "f32le" to bit depth
+      int? bitDepth;
+      if (formatStr.contains('16')) {
+        bitDepth = 16;
+      } else if (formatStr.contains('24')) {
+        bitDepth = 24;
+      } else if (formatStr.contains('32')) {
+        bitDepth = 32;
+      } else if (formatStr.contains('64')) {
+        bitDepth = 64;
+      }
+
+      // Determine actual mode: check if exclusive mode was requested but not achieved
+      String actualMode;
+      String reason;
+      if (exclusiveOutput) {
+        try {
+          final exclusiveStatus = await _engine.getProperty('audio-exclusive');
+          if (exclusiveStatus == 'yes') {
+            actualMode = 'exclusive';
+            reason = 'active';
+          } else {
+            actualMode = 'shared';
+            reason = 'fallback';
+          }
+        } catch (_) {
+          actualMode = 'shared';
+          reason = 'fallback';
+        }
+      } else {
+        actualMode = 'shared';
+        reason = 'active';
+      }
+
+      final effectiveDevice = _isFallbackDevice
+          ? 'auto (requested: $_requestedDeviceId)'
+          : (_activeDeviceId ?? wasapiDeviceId);
+
+      windowsAudioStatus.value = WindowsAudioStatus(
+        reason: _isFallbackDevice ? 'fallback' : reason,
+        mode: actualMode,
+        device: effectiveDevice,
+        sampleRate: sampleRate,
+        bitDepth: bitDepth,
+        transport: formatStr,
+      );
+    } catch (e) {
+      _log.w('Failed to query audio parameters: $e');
+      final effectiveDevice = _isFallbackDevice
+          ? 'auto (requested: $_requestedDeviceId)'
+          : (_activeDeviceId ?? wasapiDeviceId);
+      windowsAudioStatus.value = WindowsAudioStatus(
+        reason: _isFallbackDevice ? 'fallback' : 'active',
+        mode: exclusiveOutput ? 'exclusive' : 'shared',
+        device: effectiveDevice,
+      );
     }
   }
 
@@ -441,6 +785,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     await _engine.stop();
     _duration = null;
     _setState(PlaybackDeckState.stopped);
+    windowsAudioStatus.value = const WindowsAudioStatus();
   }
 
   @override

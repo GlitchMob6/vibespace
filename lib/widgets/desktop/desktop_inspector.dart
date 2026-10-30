@@ -1,25 +1,25 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/controllers/player_metadata_controller.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/theme/app_motion.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/playback_seek_preview.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/desktop/desktop_window.dart'
+import 'package:vibespace/controllers/player_metadata_controller.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/theme/app_motion.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/playback_seek_preview.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/desktop/desktop_window.dart'
     show desktopWindowFullScreen;
-import 'package:mornye/widgets/mornye_player_background.dart';
-import 'package:mornye/widgets/mornye_player_queue.dart';
-import 'package:mornye/widgets/player_lyrics_section.dart';
-import 'package:mornye/widgets/player_queue_sheet.dart';
-import 'package:mornye/widgets/no_scrollbars.dart';
+import 'package:vibespace/widgets/mornye_player_background.dart';
+import 'package:vibespace/widgets/mornye_player_queue.dart';
+import 'package:vibespace/widgets/player_lyrics_section.dart';
+import 'package:vibespace/widgets/player_queue_sheet.dart';
+import 'package:vibespace/widgets/no_scrollbars.dart';
 
 /// A panel of the desktop trailing inspector.
 enum DesktopInspectorPanel { lyrics, upNext }

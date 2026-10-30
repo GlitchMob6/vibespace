@@ -1,17 +1,17 @@
-import 'package:flutter/cupertino.dart';
+﻿import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/services/hires_check_service.dart';
-import 'package:mornye/services/audio_analysis_jobs.dart';
-import 'package:mornye/services/network_audio_analysis_input.dart';
-import 'package:mornye/theme/mornye_icons.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_action_button.dart';
-import 'package:mornye/widgets/app_content_card.dart';
-import 'package:mornye/widgets/settings_group.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
-import 'package:mornye/widgets/expressive_button.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/services/hires_check_service.dart';
+import 'package:vibespace/services/audio_analysis_jobs.dart';
+import 'package:vibespace/services/network_audio_analysis_input.dart';
+import 'package:vibespace/theme/mornye_icons.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
+import 'package:vibespace/widgets/app_content_card.dart';
+import 'package:vibespace/widgets/settings_group.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
 
 /// On-demand sampled spectrum and bit-depth analysis for one FLAC/WAV file.
 class HiResCheckCard extends StatefulWidget {

@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mornye/theme/mornye_icons.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_action_button.dart';
-import 'package:mornye/widgets/app_checkbox.dart';
-import 'package:mornye/widgets/app_text_field.dart';
+import 'package:vibespace/theme/mornye_icons.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
+import 'package:vibespace/widgets/app_checkbox.dart';
+import 'package:vibespace/widgets/app_text_field.dart';
 import '../l10n/app_localizations.dart';
-import 'package:mornye/services/batch_metadata_re_enrich.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/services/batch_metadata_re_enrich.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 Future<ReEnrichFieldSelection?> showReEnrichFieldDialog(
   BuildContext context, {

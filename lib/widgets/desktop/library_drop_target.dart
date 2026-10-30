@@ -1,15 +1,15 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/local_library_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/theme/mornye_icons.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/audio_format_utils.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/local_library_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/theme/mornye_icons.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/audio_format_utils.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 /// The folders a drop adds to the Library: dropped folders, and the folders
 /// that hold dropped music files. Other files are ignored, and a folder

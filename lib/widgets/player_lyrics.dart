@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:collection';
 import 'dart:ui' show BoxHeightStyle, ImageFilter;
 
@@ -9,21 +9,21 @@ import 'package:flutter/services.dart' show HapticFeedback;
 import 'package:flutter/rendering.dart'
     show OverflowBoxFit, RenderAbstractViewport, ScrollDirection;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/runtime_profile_provider.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/lyrics_parser.dart';
-import 'package:mornye/utils/lyrics_timeline.dart';
-import 'package:mornye/utils/synced_lyrics_scroll.dart';
-import 'package:mornye/widgets/aligned_lyric_pronunciation.dart';
-import 'package:mornye/widgets/lyric_supplement_transition.dart';
-import 'package:mornye/widgets/lyric_scroll_motion.dart';
-import 'package:mornye/widgets/lyric_gap_indicator.dart';
-import 'package:mornye/widgets/mornye_player_slider.dart';
-import 'package:mornye/widgets/lyrics_text_scale.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/runtime_profile_provider.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/lyrics_parser.dart';
+import 'package:vibespace/utils/lyrics_timeline.dart';
+import 'package:vibespace/utils/synced_lyrics_scroll.dart';
+import 'package:vibespace/widgets/aligned_lyric_pronunciation.dart';
+import 'package:vibespace/widgets/lyric_supplement_transition.dart';
+import 'package:vibespace/widgets/lyric_scroll_motion.dart';
+import 'package:vibespace/widgets/lyric_gap_indicator.dart';
+import 'package:vibespace/widgets/mornye_player_slider.dart';
+import 'package:vibespace/widgets/lyrics_text_scale.dart';
 
 part 'player_lyrics_line_style.dart';
 part 'player_lyrics_word_sweep.dart';

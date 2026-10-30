@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
-import 'package:mornye/models/download_item.dart';
+import 'package:vibespace/models/download_item.dart';
 
 typedef DownloadQueueSavedItem = ({DownloadItem? item, String? payload});
 

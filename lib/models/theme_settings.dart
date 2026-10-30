@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 const String kThemeModeKey = 'theme_mode';
 const String kUseDynamicColorKey = 'use_dynamic_color';

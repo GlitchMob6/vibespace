@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
-import 'package:mornye/l10n/l10n.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
+import 'package:vibespace/l10n/l10n.dart';
 
 /// Shared discard-unsaved-changes confirmation dialog used by priority /
 /// selection settings pages.

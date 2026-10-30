@@ -1,5 +1,5 @@
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/services/library_database.dart';
+﻿import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/services/library_database.dart';
 
 /// Field group keys understood by the native re-enrich backend.
 class ReEnrichFields {

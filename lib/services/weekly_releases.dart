@@ -1,8 +1,8 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/models/library_collections.dart';
-import 'package:mornye/utils/string_utils.dart';
+import 'package:vibespace/models/library_collections.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 class WeeklyRelease {
   const WeeklyRelease({

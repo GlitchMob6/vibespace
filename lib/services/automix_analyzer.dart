@@ -1,14 +1,14 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/audio_analysis_jobs.dart';
-import 'package:mornye/services/automix_analysis.dart';
-import 'package:mornye/services/ffmpeg_support.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/services/audio_analysis_jobs.dart';
+import 'package:vibespace/services/automix_analysis.dart';
+import 'package:vibespace/services/ffmpeg_support.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/logger.dart';
 
 /// Only short head/tail windows are decoded. Summaries are bounded in memory;
 /// raw PCM is deleted immediately and is never added to the user's library.

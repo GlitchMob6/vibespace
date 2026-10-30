@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart' show CupertinoIcons;
+﻿import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
-import 'package:mornye/theme/mornye_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
 
 /// [CupertinoIcons.arrow_right] that points the other way in right-to-left
 /// layouts, as the chevrons [CupertinoIcons.back] and

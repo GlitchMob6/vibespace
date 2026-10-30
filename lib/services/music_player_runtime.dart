@@ -1,30 +1,30 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/services/app_state_database.dart';
-import 'package:mornye/services/autoplay_personalization.dart';
-import 'package:mornye/services/discord_presence_service.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/services/listening_statistics.dart';
-import 'package:mornye/services/media_kit_playback_deck.dart';
-import 'package:mornye/services/media_session_desktop.dart';
-import 'package:mornye/services/music_playback_deck.dart';
-import 'package:mornye/services/music_player_service.dart';
-import 'package:mornye/services/network_metadata_service.dart';
-import 'package:mornye/services/network_storage_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_notification.dart';
-import 'package:mornye/services/playback_output_volume.dart';
-import 'package:mornye/services/player_widget_service.dart';
-import 'package:mornye/services/source_deletion_events.dart';
-import 'package:mornye/services/system_volume_service.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/services/app_state_database.dart';
+import 'package:vibespace/services/autoplay_personalization.dart';
+import 'package:vibespace/services/discord_presence_service.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/services/listening_statistics.dart';
+import 'package:vibespace/services/media_kit_playback_deck.dart';
+import 'package:vibespace/services/media_session_desktop.dart';
+import 'package:vibespace/services/music_playback_deck.dart';
+import 'package:vibespace/services/music_player_service.dart';
+import 'package:vibespace/services/network_metadata_service.dart';
+import 'package:vibespace/services/network_storage_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_notification.dart';
+import 'package:vibespace/services/playback_output_volume.dart';
+import 'package:vibespace/services/player_widget_service.dart';
+import 'package:vibespace/services/source_deletion_events.dart';
+import 'package:vibespace/services/system_volume_service.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('MusicPlayerRuntime');
 
@@ -40,6 +40,7 @@ class PlaybackDependencies {
     this.resolveNetworkSource = _resolveNetworkSource,
     this.initializeHandler = _initializeAudioHandler,
     this.createPersonalization = AutoplayPersonalization.new,
+    this.settings,
     AppStateDatabase? sessionDatabase,
     LibraryDatabase? libraryDatabase,
     ListeningRecorder? recorder,
@@ -58,10 +59,10 @@ class PlaybackDependencies {
        _isIOS = isIOS,
        _isAndroid = isAndroid;
 
-  final PlaybackDeck Function(String playerId) createDeck;
+  final PlaybackDeck Function(String playerId, {AppSettings? settings}) createDeck;
 
   /// The search and catalog preview player.
-  final PlaybackDeck Function(String playerId) createPreviewDeck;
+  final PlaybackDeck Function(String playerId, {AppSettings? settings}) createPreviewDeck;
   final Future<AudioSession> Function() audioSession;
   final Future<Map<String, dynamic>> Function(String, {String? displayName})
   readMetadata;
@@ -71,6 +72,10 @@ class PlaybackDependencies {
   initializeHandler;
   final MethodChannel notificationChannel;
   final AutoplayPersonalization Function() createPersonalization;
+
+  /// Settings used to configure deck creation (e.g., windowsOutputMode).
+  final AppSettings? settings;
+
   final AppStateDatabase? _sessionDatabase;
   final LibraryDatabase? _libraryDatabase;
   final ListeningRecorder? _recorder;
@@ -92,17 +97,37 @@ class PlaybackDependencies {
 
   // Windows and Linux play through libmpv. Without the library they fall
   // back to audioplayers, which has no equalizer there.
-  static PlaybackDeck _createDeck(String playerId) =>
-      playbackEngine == PlaybackEngine.mediaKit &&
-          MediaKitPlaybackDeck.isAvailable
-      ? MediaKitPlaybackDeck(playerId: playerId)
-      : AudioplayersPlaybackDeck(playerId: playerId);
+  static PlaybackDeck _createDeck(String playerId, {AppSettings? settings}) {
+    if (playbackEngine != PlaybackEngine.mediaKit ||
+        !MediaKitPlaybackDeck.isAvailable) {
+      return AudioplayersPlaybackDeck(playerId: playerId);
+    }
+
+    // On Windows, respect the windowsOutputMode setting for exclusive output.
+    bool exclusiveOutput = false;
+    String? wasapiDeviceId;
+    if (Platform.isWindows && settings != null) {
+      exclusiveOutput = settings.windowsOutputMode == 'exclusive';
+      // 'auto' defaults to false (shared) for now; device capability detection
+      // will be added in Phase 2 to determine if exclusive mode is viable.
+      if (settings.windowsOutputDevice.isNotEmpty) {
+        wasapiDeviceId = settings.windowsOutputDevice;
+      }
+    }
+
+    return MediaKitPlaybackDeck(
+      playerId: playerId,
+      exclusiveOutput: exclusiveOutput,
+      wasapiDeviceId: wasapiDeviceId,
+    );
+  }
 
   // Previews follow the in-app volume on desktop. Mobile previews keep
   // playing without the equalizer.
-  static PlaybackDeck _createPreviewDeck(String playerId) => isDesktopPlatform
-      ? _createDeck(playerId)
-      : AudioplayersPlaybackDeck(playerId: playerId, equalizerAvailable: false);
+  static PlaybackDeck _createPreviewDeck(String playerId, {AppSettings? settings}) =>
+      isDesktopPlatform
+          ? _createDeck(playerId, settings: settings)
+          : AudioplayersPlaybackDeck(playerId: playerId, equalizerAvailable: false);
   static Future<AudioSession> _getAudioSession() => AudioSession.instance;
   static Future<Map<String, dynamic>> _readNetworkMetadata(String source) =>
       NetworkMetadataService.instance.read(source);
@@ -133,8 +158,9 @@ class PlaybackDependencies {
 class MusicPlayerRuntime {
   MusicPlayerRuntime({
     AppSettings settings = const AppSettings(),
-    this.dependencies = const PlaybackDependencies(),
-  }) : _settings = settings;
+    PlaybackDependencies? dependencies,
+  }) : _settings = settings,
+       dependencies = dependencies ?? PlaybackDependencies(settings: settings);
 
   final PlaybackDependencies dependencies;
   AutoplayPersonalization? _personalization;
@@ -171,6 +197,9 @@ class MusicPlayerRuntime {
   void configure(AppSettings settings) {
     final previous = _settings;
     _settings = settings;
+    // Update dependencies with new settings for deck recreation if needed.
+    // Note: This requires dependencies to be mutable or recreated.
+    // For now, we rely on the deck being recreated on next playback.
     _handler?.applySettings(previous);
   }
 

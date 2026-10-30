@@ -1,5 +1,5 @@
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/artist_utils.dart';
+﻿import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/artist_utils.dart';
 
 class CrossExtensionShareResult {
   final String extensionId;

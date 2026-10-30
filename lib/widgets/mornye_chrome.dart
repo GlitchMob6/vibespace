@@ -1,15 +1,15 @@
-import 'dart:ui' show ImageFilter;
+﻿import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
-import 'package:mornye/providers/runtime_profile_provider.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/mornye_selection_pill.dart';
-import 'package:mornye/widgets/mornye_liquid_backdrop.dart';
-import 'package:mornye/widgets/mornye_squircle_border.dart';
-import 'package:mornye/widgets/animation_utils.dart';
+import 'package:vibespace/providers/runtime_profile_provider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/mornye_selection_pill.dart';
+import 'package:vibespace/widgets/mornye_liquid_backdrop.dart';
+import 'package:vibespace/widgets/mornye_squircle_border.dart';
+import 'package:vibespace/widgets/animation_utils.dart';
 
 class MornyeSegmentedControl extends ConsumerWidget {
   const MornyeSegmentedControl({

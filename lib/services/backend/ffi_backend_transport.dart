@@ -1,9 +1,9 @@
-import 'dart:ffi';
+﻿import 'dart:ffi';
 import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mornye/services/backend/native_backend_transport.dart';
+import 'package:vibespace/services/backend/native_backend_transport.dart';
 import 'package:path/path.dart' as p;
 
 /// Absolute library path that takes precedence over the bundled location.

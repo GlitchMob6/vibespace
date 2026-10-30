@@ -1,17 +1,17 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
-import 'package:mornye/models/library_collections.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/services/library_collections_database.dart';
-import 'package:mornye/services/library_collections_hydration.dart';
-import 'package:mornye/services/collection_track_batch.dart';
-import 'package:mornye/services/playlist_cover_store.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/library_collections.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/services/library_collections_database.dart';
+import 'package:vibespace/services/library_collections_hydration.dart';
+import 'package:vibespace/services/collection_track_batch.dart';
+import 'package:vibespace/services/playlist_cover_store.dart';
+import 'package:vibespace/utils/logger.dart';
 
-export 'package:mornye/models/library_collections.dart';
+export 'package:vibespace/models/library_collections.dart';
 
 final _log = AppLogger('LibraryCollections');
 

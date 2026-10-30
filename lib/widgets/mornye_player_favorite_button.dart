@@ -1,11 +1,11 @@
-import 'package:audio_service/audio_service.dart';
+﻿import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/library_collections_provider.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/widgets/mornye_playback_button.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/library_collections_provider.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/widgets/mornye_playback_button.dart';
 
 class MornyePlayerFavoriteButton extends ConsumerStatefulWidget {
   const MornyePlayerFavoriteButton({

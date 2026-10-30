@@ -1,19 +1,19 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/models/extension.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/extension_storage_service.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/providers/settings_provider.dart';
+import 'package:vibespace/models/extension.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/extension_storage_service.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/providers/settings_provider.dart';
 
-export 'package:mornye/models/extension.dart';
+export 'package:vibespace/models/extension.dart';
 
 part 'extension_provider_priority.dart';
 

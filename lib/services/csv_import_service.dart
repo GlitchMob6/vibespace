@@ -1,14 +1,14 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
-import 'package:mornye/models/track.dart';
-import 'package:mornye/services/m3u_playlist_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/services/m3u_playlist_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/logger.dart';
 
 List<Track> _parsePlaylistInBackground(Map<String, dynamic> request) {
   final content = utf8.decode(request['bytes'] as Uint8List);

@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/theme/app_motion.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/material_expressive.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/desktop/track_table.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/theme/app_motion.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/material_expressive.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/desktop/track_table.dart';
 
 /// Wraps a child in a staggered fade-in + slide-up animation.
 ///

@@ -1,9 +1,9 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/equalizer_settings.dart';
-import 'package:mornye/services/media_kit_playback_deck.dart';
-import 'package:mornye/services/music_playback_deck.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_equalizer.dart';
+﻿import 'package:flutter_test/flutter_test.dart';
+import 'package:vibespace/models/equalizer_settings.dart';
+import 'package:vibespace/services/media_kit_playback_deck.dart';
+import 'package:vibespace/services/music_playback_deck.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_equalizer.dart';
 
 import 'support/fake_mpv_engine.dart';
 
@@ -306,5 +306,148 @@ void main() {
     await deck.dispose();
     expect(playbackEqualizerError.value, isNull);
     expect(engine.disposed, isTrue);
+  });
+
+  group('WASAPI Device Management & Fallback', () {
+    test('parseAudioDeviceList parses JSON array from mpv and preserves GUID braces', () {
+      const json =
+          '[{"name":"wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}","description":"IEMs (KT02H20 HIFI Audio)"},{"name":"auto","description":"Autoselect device"}]';
+      final devices = MediaKitPlaybackDeck.parseAudioDeviceList(json);
+      expect(devices, hasLength(2));
+      expect(devices[0]['name'], 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}');
+      expect(devices[0]['description'], 'IEMs (KT02H20 HIFI Audio)');
+      expect(devices[1]['name'], 'auto');
+    });
+
+    test('parseAudioDeviceList handles empty and fallback formats safely', () {
+      expect(MediaKitPlaybackDeck.parseAudioDeviceList(''), isEmpty);
+      expect(MediaKitPlaybackDeck.parseAudioDeviceList('[]'), isEmpty);
+
+      final fallback = MediaKitPlaybackDeck.parseAudioDeviceList('Speakers, Headphones');
+      expect(fallback, hasLength(2));
+      expect(fallback[0]['name'], 'Speakers');
+      expect(fallback[1]['name'], 'Headphones');
+    });
+
+    test('normalizeWasapiDeviceId repairs unbraced GUIDs and preserves valid IDs', () {
+      expect(
+        MediaKitPlaybackDeck.normalizeWasapiDeviceId('wasapi/1e463064-4a08-414f-bd1b-6da70bd88c8a'),
+        'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}',
+      );
+      expect(
+        MediaKitPlaybackDeck.normalizeWasapiDeviceId('wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}'),
+        'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}',
+      );
+      expect(MediaKitPlaybackDeck.normalizeWasapiDeviceId('auto'), 'auto');
+      expect(MediaKitPlaybackDeck.normalizeWasapiDeviceId(''), '');
+    });
+
+    test('configureOutput selects requested device when present in device list', () async {
+      final customEngine = FakeMpvEngine();
+      customEngine.properties['audio-device-list'] =
+          '[{"name":"wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}","description":"IEMs (KT02H20 HIFI Audio)"}]';
+
+      final customDeck = MediaKitPlaybackDeck(
+        playerId: 'mpv-iem',
+        engine: customEngine,
+        wasapiDeviceId: 'wasapi/1e463064-4a08-414f-bd1b-6da70bd88c8a', // Unbraced, should be normalized
+      );
+      addTearDown(customDeck.dispose);
+
+      await customDeck.configureOutput();
+
+      expect(customEngine.properties['audio-device'], 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}');
+      expect(customDeck.debugActiveDeviceId, 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}');
+      expect(customDeck.debugIsFallbackDevice, isFalse);
+      expect(windowsAudioStatus.value.reason, 'active');
+      expect(windowsAudioStatus.value.device, 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}');
+    });
+
+    test('configureOutput falls back to auto when requested device is absent', () async {
+      final customEngine = FakeMpvEngine();
+      customEngine.properties['audio-device-list'] =
+          '[{"name":"wasapi/{different-guid}","description":"Speakers"}]';
+
+      final customDeck = MediaKitPlaybackDeck(
+        playerId: 'mpv-iem-missing',
+        engine: customEngine,
+        wasapiDeviceId: 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}',
+      );
+      addTearDown(customDeck.dispose);
+
+      await customDeck.configureOutput();
+
+      expect(customEngine.properties['audio-device'], 'auto');
+      expect(customDeck.debugActiveDeviceId, 'auto');
+      expect(customDeck.debugIsFallbackDevice, isTrue);
+      expect(windowsAudioStatus.value.reason, 'fallback');
+      expect(
+        windowsAudioStatus.value.device,
+        'auto (requested: wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a})',
+      );
+    });
+
+    test('configureOutput defaults to auto when no device is specified', () async {
+      await deck.configureOutput();
+      expect(engine.properties['audio-device'], 'auto');
+      expect(deck.debugActiveDeviceId, 'auto');
+      expect(deck.debugIsFallbackDevice, isFalse);
+      expect(windowsAudioStatus.value.reason, 'active');
+      expect(windowsAudioStatus.value.device, 'auto');
+    });
+
+    test('_load retries once with audio-device=auto when audio driver fails on selected device', () async {
+      final retryEngine = FakeMpvEngine();
+      retryEngine.properties['audio-device-list'] =
+          '[{"name":"wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}","description":"IEMs"}]';
+
+      // Fail with ao error when audio-device is not auto
+      retryEngine.openErrorCallback = (source) {
+        if (retryEngine.properties['audio-device'] != 'auto') {
+          return (prefix: 'ao', text: "Failed to initialize audio driver 'wasapi'");
+        }
+        return null; // Succeed when auto
+      };
+
+      final retryDeck = MediaKitPlaybackDeck(
+        playerId: 'mpv-retry',
+        engine: retryEngine,
+        wasapiDeviceId: 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}',
+      );
+      addTearDown(retryDeck.dispose);
+
+      await retryDeck.configureOutput();
+      expect(retryEngine.properties['audio-device'], 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}');
+
+      // setFileSource should succeed thanks to automatic single retry with audio-device=auto
+      await retryDeck.setFileSource('/music/test.flac');
+
+      expect(retryEngine.properties['audio-device'], 'auto');
+      expect(retryDeck.debugIsFallbackDevice, isTrue);
+      expect(windowsAudioStatus.value.reason, 'fallback');
+      expect(
+        windowsAudioStatus.value.device,
+        'auto (requested: wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a})',
+      );
+      expect(await retryDeck.getDuration(), const Duration(seconds: 90));
+    });
+
+    test('_load does not retry if the error is a regular non-audio source failure', () async {
+      final customEngine = FakeMpvEngine();
+      customEngine.openError = (prefix: 'cplayer', text: 'Failed to recognize file');
+
+      final customDeck = MediaKitPlaybackDeck(
+        playerId: 'mpv-non-audio-fail',
+        engine: customEngine,
+        wasapiDeviceId: 'wasapi/{1e463064-4a08-414f-bd1b-6da70bd88c8a}',
+      );
+      addTearDown(customDeck.dispose);
+
+      await expectLater(
+        customDeck.setFileSource('/bad.file'),
+        throwsA(isA<MediaKitSourceException>()),
+      );
+      expect(customDeck.debugIsFallbackDevice, isFalse);
+    });
   });
 }

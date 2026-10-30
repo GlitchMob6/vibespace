@@ -1,7 +1,7 @@
-import 'dart:io';
+﻿import 'dart:io';
 
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/network_audio_analysis_input.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/network_audio_analysis_input.dart';
 
 class HiResOriginalRestoreException implements Exception {
   const HiResOriginalRestoreException(this.backupPath, this.cause);

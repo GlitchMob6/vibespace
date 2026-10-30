@@ -1,10 +1,10 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:mornye/services/album_completeness.dart';
-import 'package:mornye/services/library_database_models.dart';
-import 'package:mornye/services/library_schema.dart';
-import 'package:mornye/services/library_file_sizes.dart';
-import 'package:mornye/services/sqlite_helpers.dart' as sqlite;
-import 'package:mornye/utils/library_format_filters.dart';
+﻿import 'package:sqflite/sqflite.dart';
+import 'package:vibespace/services/album_completeness.dart';
+import 'package:vibespace/services/library_database_models.dart';
+import 'package:vibespace/services/library_schema.dart';
+import 'package:vibespace/services/library_file_sizes.dart';
+import 'package:vibespace/services/sqlite_helpers.dart' as sqlite;
+import 'package:vibespace/utils/library_format_filters.dart';
 
 String confirmedMissingLyricsSqlPredicate({
   required String hasLyricsExpr,

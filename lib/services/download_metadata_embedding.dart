@@ -1,19 +1,19 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:math';
 
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/metadata_separators.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/models/extension.dart';
-import 'package:mornye/services/download_metadata_resolver.dart';
-import 'package:mornye/services/ffmpeg_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/replaygain_service.dart';
-import 'package:mornye/utils/artist_utils.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/utils/lyrics_metadata_helper.dart';
-import 'package:mornye/utils/string_utils.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/metadata_separators.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/models/extension.dart';
+import 'package:vibespace/services/download_metadata_resolver.dart';
+import 'package:vibespace/services/ffmpeg_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/replaygain_service.dart';
+import 'package:vibespace/utils/artist_utils.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/utils/lyrics_metadata_helper.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 /// Embeds tags into a local working file; the queue owns publication and state.
 class DownloadMetadataEmbedding {

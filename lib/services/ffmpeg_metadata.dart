@@ -1,16 +1,16 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-import 'package:mornye/services/audio_metadata_mapper.dart';
-import 'package:mornye/services/ffmpeg_models.dart';
-import 'package:mornye/services/ffmpeg_support.dart';
-import 'package:mornye/services/id3v23_lyrics.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/artist_utils.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/services/audio_metadata_mapper.dart';
+import 'package:vibespace/services/ffmpeg_models.dart';
+import 'package:vibespace/services/ffmpeg_support.dart';
+import 'package:vibespace/services/id3v23_lyrics.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/artist_utils.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('FFmpeg');
 

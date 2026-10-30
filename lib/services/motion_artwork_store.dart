@@ -1,16 +1,16 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/ffmpeg_service.dart';
-import 'package:mornye/services/ffmpeg_support.dart';
-import 'package:mornye/services/motion_artwork_download.dart';
-import 'package:mornye/services/motion_artwork_proxy.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/utils/string_utils.dart';
+import 'package:vibespace/services/ffmpeg_service.dart';
+import 'package:vibespace/services/ffmpeg_support.dart';
+import 'package:vibespace/services/motion_artwork_download.dart';
+import 'package:vibespace/services/motion_artwork_proxy.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 typedef MotionArtworkAlbum = ({String album, String artist});
 

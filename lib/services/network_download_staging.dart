@@ -1,10 +1,10 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/network_storage_service.dart';
+import 'package:vibespace/services/network_storage_service.dart';
 
 /// Durable, per-queue-item handoff. A failed upload retains the finalized audio
 /// and its original destination even if settings change before Retry.

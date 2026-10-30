@@ -1,6 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/motion_artwork_store.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/motion_artwork_store.dart';
 
 typedef PlayerArtworkAlbum = ({String album, String artist});
 

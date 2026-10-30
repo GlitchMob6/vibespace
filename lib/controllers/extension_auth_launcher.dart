@@ -1,17 +1,17 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/services/app_navigation_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/extension_session_callback.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
-import 'package:mornye/widgets/expressive_button.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/services/app_navigation_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/extension_session_callback.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _log = AppLogger('ExtensionAuthLauncher');

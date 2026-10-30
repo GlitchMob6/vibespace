@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart' show CupertinoIcons;
+﻿import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/download_item.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/app_progress_indicator.dart';
-import 'package:mornye/widgets/player_artwork.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/download_item.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/app_progress_indicator.dart';
+import 'package:vibespace/widgets/player_artwork.dart';
 
 /// Downloads that are waiting, running or finalizing, in queue order.
 List<DownloadItem> activeDesktopDownloads(List<DownloadItem> items) => [

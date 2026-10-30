@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' show AppExitResponse;
@@ -6,9 +6,9 @@ import 'dart:ui' show AppExitResponse;
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/constants/app_info.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/constants/app_info.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/logger.dart';
 
 /// Desktop crash and log handling (desktop design 6.6), without telemetry:
 /// rotating log files in `<app support>/logs`, a "session running" marker

@@ -1,14 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/services/history_database.dart';
-import 'package:mornye/services/music_player_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/logger.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/services/history_database.dart';
+import 'package:vibespace/services/music_player_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('PlaybackProvider');
 

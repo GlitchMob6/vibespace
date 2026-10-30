@@ -1,12 +1,12 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service_platform_interface/audio_service_platform_interface.dart';
 import 'package:audio_service_platform_interface/no_op_audio_service.dart';
 import 'package:dbus/dbus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('Mpris');
 

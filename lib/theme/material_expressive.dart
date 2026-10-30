@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:material_3_expressive/material_3_expressive.dart';
 import 'package:material_ui/material_ui.dart' as material_ui;
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/skip_autofocus.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/skip_autofocus.dart';
 
 /// Motion-heavy expressive controls use their static Material counterpart when
 /// the OS requests reduced motion. Mornye owns its own component system.

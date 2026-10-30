@@ -1,7 +1,7 @@
-import 'dart:collection';
+﻿import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:mornye/models/track.dart';
+import 'package:vibespace/models/track.dart';
 
 /// Shared identity for catalog, downloaded, and local playlist entries.
 String libraryTrackCollectionKey({

@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:mornye/models/track.dart';
+﻿import 'package:json_annotation/json_annotation.dart';
+import 'package:vibespace/models/track.dart';
 
 part 'download_item.g.dart';
 

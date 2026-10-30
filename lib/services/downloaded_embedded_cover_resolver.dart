@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
@@ -6,8 +6,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/file_access.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/file_access.dart';
 
 class _EmbeddedCoverCacheEntry {
   final String previewPath;

@@ -1,15 +1,15 @@
-import 'package:audio_service/audio_service.dart';
+﻿import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:mornye/controllers/player_metadata_controller.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/theme/app_motion.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/isrc_utils.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/mornye_player_details_sheet.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/controllers/player_metadata_controller.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/theme/app_motion.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/isrc_utils.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/mornye_player_details_sheet.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 Future<void> showPlayerDetailsSheet(
   BuildContext context,

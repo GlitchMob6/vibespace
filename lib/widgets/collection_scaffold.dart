@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/widgets/desktop/detail_header.dart';
-import 'package:mornye/widgets/album_detail_header.dart';
-import 'package:mornye/widgets/selection_bottom_bar.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/widgets/desktop/detail_header.dart';
+import 'package:vibespace/widgets/album_detail_header.dart';
+import 'package:vibespace/widgets/selection_bottom_bar.dart';
 
 /// Shared shell for every track-collection screen: album, playlist, local
 /// album, downloaded album and library folders.

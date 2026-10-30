@@ -1,4 +1,4 @@
-import 'package:mornye/utils/artist_utils.dart';
+﻿import 'package:vibespace/utils/artist_utils.dart';
 
 /// Pure metadata-key conversion used by the different audio containers.
 ///

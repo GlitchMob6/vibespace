@@ -4,12 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:mornye/constants/app_info.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/verification_notification.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/string_utils.dart';
+import 'package:vibespace/constants/app_info.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/verification_notification.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -168,6 +168,14 @@ class NotificationService {
       linux: linuxSettings,
       windows: windowsSettings,
     );
+
+    if (Platform.isWindows) {
+      try {
+        FlutterLocalNotificationsPlatform.instance;
+      } catch (_) {
+        FlutterLocalNotificationsWindows.registerWith();
+      }
+    }
 
     await _notifications.initialize(
       settings: initSettings,

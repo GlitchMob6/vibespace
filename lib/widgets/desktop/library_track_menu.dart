@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/unified_library_item.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/widgets/desktop/context_menu.dart';
-import 'package:mornye/widgets/playlist_picker_sheet.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/unified_library_item.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/widgets/desktop/context_menu.dart';
+import 'package:vibespace/widgets/playlist_picker_sheet.dart';
 
 /// Context menu groups for library files (downloaded or scanned), acting on
 /// [items]: the selection the menu was opened on.

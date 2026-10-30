@@ -1,14 +1,14 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mornye/services/network_storage_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/source_deletion_events.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/ios_container_paths.dart';
-import 'package:mornye/utils/mime_utils.dart';
+import 'package:vibespace/services/network_storage_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/source_deletion_events.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/ios_container_paths.dart';
+import 'package:vibespace/utils/mime_utils.dart';
 
 /// Whether the queue should run its iOS output-directory path-shape check
 /// (which can replace [outputDir] with the default Documents folder when the

@@ -1,8 +1,8 @@
-import 'dart:io';
+﻿import 'dart:io';
 
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/string_utils.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 final RegExp _lrcDisplayTimestampPattern = RegExp(
   r'^\[\d{1,3}:\d{1,2}(?:[.:]\d{1,3})?\]',

@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
@@ -6,8 +6,8 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/update_checker.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/services/update_checker.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('DesktopUpdater');
 

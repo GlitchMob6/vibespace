@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/models/app_crash_report.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/logger.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vibespace/models/app_crash_report.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/logger.dart';
 
 final appCrashProvider =
     AsyncNotifierProvider<AppCrashNotifier, AppCrashReport?>(

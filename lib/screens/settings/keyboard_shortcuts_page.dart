@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_sliver_header.dart';
-import 'package:mornye/widgets/desktop/desktop_commands.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_sliver_header.dart';
+import 'package:vibespace/widgets/desktop/desktop_commands.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 /// Lists the desktop keyboard shortcuts, read from the same bindings the app
 /// registers, so the page cannot drift from what the keys do.

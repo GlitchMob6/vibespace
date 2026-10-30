@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/local_library_provider.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/clickable_metadata.dart';
-import 'package:mornye/controllers/local_playback.dart';
-import 'package:mornye/widgets/audio_quality_badges.dart';
-import 'package:mornye/widgets/track_card.dart';
-import 'package:mornye/widgets/in_library_badge.dart';
-import 'package:mornye/widgets/preview_button.dart';
-import 'package:mornye/widgets/track_collection_quick_actions.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/local_library_provider.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/clickable_metadata.dart';
+import 'package:vibespace/controllers/local_playback.dart';
+import 'package:vibespace/widgets/audio_quality_badges.dart';
+import 'package:vibespace/widgets/track_card.dart';
+import 'package:vibespace/widgets/in_library_badge.dart';
+import 'package:vibespace/widgets/preview_button.dart';
+import 'package:vibespace/widgets/track_collection_quick_actions.dart';
 
 /// Track row shared by the album and playlist screens. Tap offers another
 /// download when quality variants are enabled, otherwise it plays the local

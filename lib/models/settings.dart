@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mornye/models/automix_options.dart';
-import 'package:mornye/models/metadata_separators.dart';
-import 'package:mornye/utils/artist_utils.dart';
+import 'package:vibespace/models/automix_options.dart';
+import 'package:vibespace/models/metadata_separators.dart';
+import 'package:vibespace/utils/artist_utils.dart';
 
 part 'settings.g.dart';
 
@@ -83,6 +83,15 @@ class AppSettings {
   final bool usbDsdOverPcm;
   final bool usbAllowFixedVolume;
   final bool dapExclusive;
+
+  /// Windows WASAPI output mode: 'shared', 'exclusive', or 'auto'.
+  /// Only applies when using the internal player on Windows.
+  final String windowsOutputMode;
+
+  /// Windows WASAPI output device ID. Empty string means system default.
+  /// Only applies when using the internal player on Windows.
+  final String windowsOutputDevice;
+
   final bool autoplay;
   final bool autoplayPersonalization;
   final bool musicHaptics;
@@ -227,6 +236,8 @@ class AppSettings {
     this.usbDsdOverPcm = false,
     this.usbAllowFixedVolume = false,
     this.dapExclusive = false,
+    this.windowsOutputMode = 'exclusive',
+    this.windowsOutputDevice = '',
     this.autoplay = false,
     this.autoplayPersonalization = true,
     this.musicHaptics = false,
@@ -349,6 +360,8 @@ class AppSettings {
     bool? usbDsdOverPcm,
     bool? usbAllowFixedVolume,
     bool? dapExclusive,
+    String? windowsOutputMode,
+    String? windowsOutputDevice,
     bool? autoplay,
     bool? autoplayPersonalization,
     bool? musicHaptics,
@@ -466,6 +479,8 @@ class AppSettings {
       usbDsdOverPcm: usbDsdOverPcm ?? this.usbDsdOverPcm,
       usbAllowFixedVolume: usbAllowFixedVolume ?? this.usbAllowFixedVolume,
       dapExclusive: dapExclusive ?? this.dapExclusive,
+      windowsOutputMode: windowsOutputMode ?? this.windowsOutputMode,
+      windowsOutputDevice: windowsOutputDevice ?? this.windowsOutputDevice,
       autoplay: autoplay ?? this.autoplay,
       autoplayPersonalization:
           autoplayPersonalization ?? this.autoplayPersonalization,

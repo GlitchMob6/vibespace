@@ -1,21 +1,21 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/metadata_separators.dart';
-import 'package:mornye/models/automix_options.dart';
-import 'package:mornye/constants/app_info.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/folder_path_template.dart';
-import 'package:mornye/services/secure_storage_options.dart';
-import 'package:mornye/utils/artist_utils.dart';
-import 'package:mornye/utils/audio_format_utils.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/metadata_separators.dart';
+import 'package:vibespace/models/automix_options.dart';
+import 'package:vibespace/constants/app_info.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/folder_path_template.dart';
+import 'package:vibespace/services/secure_storage_options.dart';
+import 'package:vibespace/utils/artist_utils.dart';
+import 'package:vibespace/utils/audio_format_utils.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/logger.dart';
 
 const _settingsKey = 'app_settings';
 const _settingsCorruptBackupKey = 'app_settings_corrupt_backup';
@@ -129,6 +129,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
     1000,
     1500,
     2000,
+  };
+  static const Set<String> _windowsOutputModeValues = {
+    'shared',
+    'exclusive',
+    'auto',
   };
 
   final Future<SharedPreferences> Function() _loadPreferences;
@@ -761,6 +766,17 @@ class SettingsNotifier extends Notifier<AppSettings> {
       dapExclusive: enabled,
       usbDirect: enabled ? false : null,
     );
+    _saveSettings();
+  }
+
+  void setWindowsOutputMode(String mode) {
+    if (!_windowsOutputModeValues.contains(mode)) return;
+    state = state.copyWith(windowsOutputMode: mode);
+    _saveSettings();
+  }
+
+  void setWindowsOutputDevice(String deviceId) {
+    state = state.copyWith(windowsOutputDevice: deviceId);
     _saveSettings();
   }
 

@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/widgets/discard_changes_dialog.dart';
-import 'package:mornye/widgets/settings_group.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/expressive_button.dart';
-import 'package:mornye/widgets/app_sliver_header.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/widgets/discard_changes_dialog.dart';
+import 'package:vibespace/widgets/settings_group.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
+import 'package:vibespace/widgets/app_sliver_header.dart';
 
 class DownloadFallbackExtensionsPage extends ConsumerStatefulWidget {
   const DownloadFallbackExtensionsPage({super.key});

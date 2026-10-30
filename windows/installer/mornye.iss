@@ -1,4 +1,4 @@
-; Inno Setup 6 script for the per-user Mornye installer.
+; Inno Setup 6 script for the per-user VibeSpace installer.
 ;
 ; Built by scripts/package_windows.ps1, which passes:
 ;   /DAppVersion=5.3.0          display version (release tag without "v")
@@ -7,12 +7,12 @@
 ;   /DArch=x64 or arm64
 ;   /DOutputDir=<path> /DOutputBaseName=<file name without .exe>
 ;
-; Installs to %LOCALAPPDATA%\Programs\Mornye without elevation, adds a Start
-; Menu shortcut (desktop shortcut optional), registers the mornye:// URL
-; protocol under HKCU\Software\Classes and closes a running Mornye before
+; Installs to %LOCALAPPDATA%\Programs\VibeSpace without elevation, adds a Start
+; Menu shortcut (desktop shortcut optional), registers the vibespace:// URL
+; protocol under HKCU\Software\Classes and closes a running VibeSpace before
 ; replacing files. The in-app updater runs the installer with
 ;   /SILENT /SP- /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /RELAUNCH=1
-; and /RELAUNCH=1 starts Mornye again once a silent install finishes.
+; and /RELAUNCH=1 starts VibeSpace again once a silent install finishes.
 
 #ifndef AppVersion
   #error AppVersion is required
@@ -30,11 +30,11 @@
   #define OutputDir "."
 #endif
 #ifndef OutputBaseName
-  #define OutputBaseName "Mornye-setup"
+  #define OutputBaseName "VibeSpace-setup"
 #endif
 
-#define AppName "Mornye"
-#define AppExe "mornye.exe"
+#define AppName "VibeSpace"
+#define AppExe "vibespace.exe"
 #define AppUserModelId "com.zarz.mornye"
 #define AppUrl "https://github.com/mornyeapp/Mornye"
 
@@ -95,10 +95,10 @@ Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: 
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: "{#AppUserModelId}"; Tasks: desktopicon
 
 [Registry]
-Root: HKCU; Subkey: "Software\Classes\mornye"; ValueType: string; ValueName: ""; ValueData: "URL:{#AppName} Protocol"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\Classes\mornye"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
-Root: HKCU; Subkey: "Software\Classes\mornye\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"",0"
-Root: HKCU; Subkey: "Software\Classes\mornye\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%1"""
+Root: HKCU; Subkey: "Software\Classes\vibescape"; ValueType: string; ValueName: ""; ValueData: "URL:{#AppName} Protocol"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\vibescape"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCU; Subkey: "Software\Classes\vibescape\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"",0"
+Root: HKCU; Subkey: "Software\Classes\vibescape\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%1"""
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent

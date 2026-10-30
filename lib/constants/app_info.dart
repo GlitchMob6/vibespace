@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 class AppInfo {
   static const String version = '5.2.6';
@@ -18,7 +18,7 @@ class AppInfo {
     return desktop ?? isDesktopPlatform ? '$version (beta)' : version;
   }
 
-  static const String appName = 'Mornye';
+  static const String appName = 'VibeSpace';
   static const String license = 'LGPL-3.0-only';
   static const String copyright = '© 2026 Zarz Eleutherius';
 

@@ -1,8 +1,8 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_output_volume.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_output_volume.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 import 'package:volume_controller/volume_controller.dart';
 
 /// The volume plugin owns one listener. Share it between background playback

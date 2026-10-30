@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -6,38 +6,39 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:flutter/widgets.dart'
     show AppLifecycleState, WidgetsBinding, WidgetsBindingObserver;
-import 'package:mornye/services/playback_notification.dart';
+import 'package:vibespace/services/playback_notification.dart';
 import 'package:audio_session/audio_session.dart'
     show
         AudioDevice,
         AudioSession,
         AudioSessionConfiguration,
         AudioInterruptionType;
-import 'package:mornye/services/listening_statistics.dart' show ListeningTrack;
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/services/sqlite_helpers.dart' show normalizeLookupText;
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/playback_normalization.dart';
-import 'package:mornye/services/playback_automation.dart';
-import 'package:mornye/services/playback_session_writer.dart';
-import 'package:mornye/services/content_uri_playback_cache.dart';
-import 'package:mornye/services/music_player_runtime.dart';
-import 'package:mornye/services/music_playback_deck.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/automix_analysis.dart';
-import 'package:mornye/services/automix_phase_lock.dart';
-import 'package:mornye/services/autoplay_personalization.dart';
-import 'package:mornye/services/automix_analyzer.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/services/automix_effect_renderer.dart';
-import 'package:mornye/services/automix_status.dart';
-import 'package:mornye/services/music_haptics.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/int_utils.dart';
-import 'package:mornye/utils/playback_artwork.dart';
-import 'package:mornye/services/downloaded_embedded_cover_resolver.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/services/playable_media.dart';
+import 'package:vibespace/services/listening_statistics.dart' show ListeningTrack;
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/services/sqlite_helpers.dart' show normalizeLookupText;
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/playback_normalization.dart';
+import 'package:vibespace/services/playback_automation.dart';
+import 'package:vibespace/services/playback_session_writer.dart';
+import 'package:vibespace/services/content_uri_playback_cache.dart';
+import 'package:vibespace/services/music_player_runtime.dart';
+import 'package:vibespace/services/music_playback_deck.dart'
+    show UsbOutputUnavailable, WindowsAudioStatus, windowsAudioStatus;
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/automix_analysis.dart';
+import 'package:vibespace/services/automix_phase_lock.dart';
+import 'package:vibespace/services/autoplay_personalization.dart';
+import 'package:vibespace/services/automix_analyzer.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/services/automix_effect_renderer.dart';
+import 'package:vibespace/services/automix_status.dart';
+import 'package:vibespace/services/music_haptics.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/int_utils.dart';
+import 'package:vibespace/utils/playback_artwork.dart';
+import 'package:vibespace/services/downloaded_embedded_cover_resolver.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/services/playable_media.dart';
 
 export 'music_player_runtime.dart';
 export 'playable_media.dart';
@@ -60,6 +61,7 @@ class PlaybackProcessing {
     required this.normalizationGain,
     required this.direct,
     required this.autoMixRate,
+    this.windowsAudioStatus,
   });
 
   /// Linear volume from ReplayGain normalization; 1 when none applies.
@@ -70,6 +72,9 @@ class PlaybackProcessing {
 
   /// AutoMix tempo matching; 1 outside a transition.
   final double autoMixRate;
+
+  /// Active Windows WASAPI status when running on Windows.
+  final WindowsAudioStatus? windowsAudioStatus;
 }
 
 /// Refreshes gain tags after a successful file update, including SAF copies.
@@ -239,7 +244,10 @@ class MusicPlayerHandler extends BaseAudioHandler
       onError: (error) =>
           _log.w('Failed to update persisted playback session: $error'),
     );
-    _player = _dependencies.createDeck('music-player');
+    _player = _dependencies.createDeck(
+      'music-player',
+      settings: _settings,
+    );
     _normalizationCache = PlaybackNormalizationCache(
       readMetadata: _dependencies.readMetadata,
       onReadError: (error) =>
@@ -920,6 +928,7 @@ class MusicPlayerHandler extends BaseAudioHandler
     normalizationGain: _normalizationVolume,
     direct: _player.isDirect,
     autoMixRate: _autoMix.rate,
+    windowsAudioStatus: Platform.isWindows ? windowsAudioStatus.value : null,
   );
 
   /// Re-applies normalization to the playing track when the setting flips.

@@ -1,1 +1,1 @@
-export 'package:mornye/controllers/clickable_metadata.dart';
+﻿export 'package:vibespace/controllers/clickable_metadata.dart';

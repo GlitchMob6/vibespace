@@ -1,28 +1,28 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart' show CupertinoButton;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mornye/controllers/player_metadata_controller.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/equalizer_settings.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/services/audio_route_info.dart';
-import 'package:mornye/services/music_playback_deck.dart';
-import 'package:mornye/services/music_player_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/services/playback_equalizer.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/int_utils.dart';
-import 'package:mornye/utils/string_utils.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/audio_analysis_widget.dart';
-import 'package:mornye/widgets/expressive_button.dart';
-import 'package:mornye/widgets/hires_check_card.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/controllers/player_metadata_controller.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/equalizer_settings.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/services/audio_route_info.dart';
+import 'package:vibespace/services/music_playback_deck.dart';
+import 'package:vibespace/services/music_player_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/services/playback_equalizer.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/int_utils.dart';
+import 'package:vibespace/utils/string_utils.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/audio_analysis_widget.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
+import 'package:vibespace/widgets/hires_check_card.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 /// Technical details of the playing track, from the file through the
 /// processing chain to the output device.

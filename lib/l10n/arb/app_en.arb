@@ -6621,7 +6621,9 @@
   "@shareSheetLinkCopied": {
     "description": "Snackbar after copying a cross-service link",
     "placeholders": {
-      "service": {}
+      "service": {
+        "type": "String"
+      }
     }
   },
   "libraryPlayback": "Playback",

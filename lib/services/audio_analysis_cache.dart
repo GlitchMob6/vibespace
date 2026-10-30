@@ -1,12 +1,12 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/services/audio_analysis_models.dart';
-import 'package:mornye/services/network_audio_analysis_input.dart';
-import 'package:mornye/services/platform_bridge.dart';
+import 'package:vibespace/services/audio_analysis_models.dart';
+import 'package:vibespace/services/network_audio_analysis_input.dart';
+import 'package:vibespace/services/platform_bridge.dart';
 
 /// On-disk analysis bundles: `{key}.json`, `{key}.png` and `{key}_ch{n}.png`
 /// in `audio_analysis_cache` under the application support directory. The

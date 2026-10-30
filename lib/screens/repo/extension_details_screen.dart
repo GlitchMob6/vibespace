@@ -1,19 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/widgets/app_snack_bar.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/widgets/app_snack_bar.dart';
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/repo_provider.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/theme/mornye_icons.dart';
-import 'package:mornye/widgets/extension_repo_card.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
-import 'package:mornye/widgets/expressive_button.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/repo_provider.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/theme/mornye_icons.dart';
+import 'package:vibespace/widgets/extension_repo_card.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
 
 class ExtensionDetailsScreen extends ConsumerStatefulWidget {
   final RepoExtension extension;

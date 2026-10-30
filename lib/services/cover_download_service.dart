@@ -1,10 +1,10 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/string_utils.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 class SavedCoverResult {
   final String fileName;

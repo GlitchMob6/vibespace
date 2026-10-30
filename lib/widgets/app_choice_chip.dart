@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
+﻿import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_3_expressive/material_3_expressive.dart';
-import 'package:mornye/theme/material_expressive.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_icon.dart';
+import 'package:vibespace/theme/material_expressive.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_icon.dart';
 
 /// A single tonal selection inside a sheet, without a second glass layer.
 class AppChoiceChip extends StatelessWidget {

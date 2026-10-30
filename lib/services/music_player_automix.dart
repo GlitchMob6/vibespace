@@ -127,6 +127,7 @@ class _MusicAutoMix {
       pins.add(nextPath);
       deck = handler._dependencies.createDeck(
         'music-mix-$generation-${DateTime.now().microsecondsSinceEpoch}',
+        settings: handler._settings,
       );
       handler._listenToPlayer(deck);
       await deck.configureOutput();
@@ -175,6 +176,7 @@ class _MusicAutoMix {
         if (effectTail != null) {
           effectDeck = handler._dependencies.createDeck(
             'music-effect-$generation-${DateTime.now().microsecondsSinceEpoch}',
+            settings: handler._settings,
           );
           handler._listenToPlayer(effectDeck);
           try {

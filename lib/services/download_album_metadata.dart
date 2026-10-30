@@ -1,7 +1,7 @@
-import 'package:mornye/models/track.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/utils/string_utils.dart';
+﻿import 'package:vibespace/models/track.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 final _log = AppLogger('DownloadAlbumMetadata');
 

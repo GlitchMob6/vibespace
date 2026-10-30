@@ -1,11 +1,11 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/user_profile_provider.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/user_profile_provider.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
 
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({

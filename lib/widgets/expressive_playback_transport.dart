@@ -1,11 +1,11 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:material_3_expressive/material_3_expressive.dart';
-import 'package:mornye/theme/app_motion.dart';
-import 'package:mornye/theme/material_expressive.dart';
-import 'package:mornye/widgets/app_icon.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
+import 'package:vibespace/theme/app_motion.dart';
+import 'package:vibespace/theme/material_expressive.dart';
+import 'package:vibespace/widgets/app_icon.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
 
 /// Material 3 Expressive previous / play-pause / next row.
 ///

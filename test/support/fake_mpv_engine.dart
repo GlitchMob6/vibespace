@@ -1,6 +1,6 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:mornye/services/media_kit_playback_deck.dart';
+import 'package:vibespace/services/media_kit_playback_deck.dart';
 
 /// An in-memory libmpv for `MediaKitPlaybackDeck` tests on any host.
 class FakeMpvEngine implements MpvEngine {
@@ -17,6 +17,7 @@ class FakeMpvEngine implements MpvEngine {
   /// Duration reported when a source opens, or an error line instead.
   Duration? openDuration = const Duration(seconds: 90);
   MpvLogError? openError;
+  MpvLogError? Function(String source)? openErrorCallback;
   bool rejectFilters = false;
   bool disposed = false;
 
@@ -33,7 +34,8 @@ class FakeMpvEngine implements MpvEngine {
   Future<void> open(String source) async {
     calls.add(['open', source]);
     scheduleMicrotask(() {
-      if (openError case final error?) {
+      final error = openErrorCallback?.call(source) ?? openError;
+      if (error != null) {
         errorEvents.add(error);
       } else if (openDuration case final value?) {
         durationEvents.add(value);

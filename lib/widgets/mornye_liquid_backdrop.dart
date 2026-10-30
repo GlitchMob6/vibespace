@@ -1,8 +1,8 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
-import 'package:mornye/theme/mornye_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
 
 /// A bounded package lens without a captured-screen view or a touch ticker.
 class MornyeLiquidBackdrop extends StatelessWidget {

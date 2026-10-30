@@ -1,0 +1,23 @@
+name: flutter_secure_storage_windows
+description: Windows implementation of flutter_secure_storage
+version: 4.2.2
+homepage: https://github.com/it-nomads/flutter_secure_storage
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.19.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_secure_storage_platform_interface: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      windows:
+        pluginClass: FlutterSecureStorageWindowsPlugin

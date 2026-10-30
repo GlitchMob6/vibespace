@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:mornye/theme/app_tokens.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/app_action_button.dart';
-import 'package:mornye/widgets/expressive_button.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:vibespace/theme/app_tokens.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
 
 /// Responsive rows shared by selection-mode action buttons.
 class SelectionActionGrid extends StatelessWidget {

@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mornye/models/album_track_order.dart';
-import 'package:mornye/models/download_history.dart';
-import 'package:mornye/providers/playback_provider.dart';
-import 'package:mornye/services/history_database.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/theme/mornye_icons.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/models/album_track_order.dart';
+import 'package:vibespace/models/download_history.dart';
+import 'package:vibespace/providers/playback_provider.dart';
+import 'package:vibespace/services/history_database.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/theme/mornye_icons.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 /// A play button that appears over artwork while the pointer is on it, on
 /// desktop. Place it in the artwork's [Stack]; it fills the stack to track

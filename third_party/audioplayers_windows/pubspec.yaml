@@ -1,0 +1,25 @@
+name: audioplayers_windows
+description: Windows implementation of audioplayers, a Flutter plugin to play multiple audio files simultaneously
+version: 4.4.1
+homepage: https://github.com/bluefireteam/audioplayers
+repository: https://github.com/bluefireteam/audioplayers/tree/master/packages/audioplayers_windows
+
+environment:
+  sdk: ^3.0.0
+  flutter: ">=3.10.0"
+
+flutter:
+  plugin:
+    platforms:
+      windows:
+        pluginClass: AudioplayersWindowsPlugin
+
+dependencies:
+  audioplayers_platform_interface: ^7.0.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pigeon: ^9.0.0

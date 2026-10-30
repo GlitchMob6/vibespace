@@ -1,23 +1,23 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/app_icon_button.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
-import 'package:mornye/widgets/expressive_button.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/app_icon_button.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/download_history_provider.dart';
-import 'package:mornye/providers/local_library_provider.dart';
-import 'package:mornye/services/downloaded_embedded_cover_resolver.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/utils/duplicate_cleanup_policy.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/widgets/audio_quality_badges.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/download_history_provider.dart';
+import 'package:vibespace/providers/local_library_provider.dart';
+import 'package:vibespace/services/downloaded_embedded_cover_resolver.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/utils/duplicate_cleanup_policy.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/widgets/audio_quality_badges.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 final duplicateReviewGroupsLoaderProvider =
     Provider<Future<List<IsrcDuplicateGroup>> Function()>(

@@ -1,9 +1,9 @@
-import 'dart:io';
+﻿import 'dart:io';
 
-import 'package:mornye/services/ffmpeg_service.dart';
-import 'package:mornye/services/metadata_cover_resources.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/artist_utils.dart';
+import 'package:vibespace/services/ffmpeg_service.dart';
+import 'package:vibespace/services/metadata_cover_resources.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/artist_utils.dart';
 
 enum MetadataSaveFailure {
   backend,

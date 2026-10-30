@@ -1,18 +1,18 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/services/backend/backend_channel.dart';
-import 'package:mornye/services/desktop_diagnostics.dart';
-import 'package:mornye/services/download_request_payload.dart';
-import 'package:mornye/utils/audio_format_utils.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/hash_utils.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/services/backend/backend_channel.dart';
+import 'package:vibespace/services/desktop_diagnostics.dart';
+import 'package:vibespace/services/download_request_payload.dart';
+import 'package:vibespace/utils/audio_format_utils.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/hash_utils.dart';
+import 'package:vibespace/utils/logger.dart';
 
 part 'platform_bridge/bridge_codec.dart';
 part 'platform_bridge/bridge_events.dart';

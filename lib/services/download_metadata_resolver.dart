@@ -1,11 +1,11 @@
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/models/extension.dart';
-import 'package:mornye/services/download_album_metadata.dart';
-import 'package:mornye/services/download_track_metadata.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/utils/string_utils.dart';
+﻿import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/models/extension.dart';
+import 'package:vibespace/services/download_album_metadata.dart';
+import 'package:vibespace/services/download_track_metadata.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/utils/string_utils.dart';
 
 class DownloadMetadataLookup {
   final Track track;

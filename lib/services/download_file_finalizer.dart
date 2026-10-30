@@ -1,11 +1,11 @@
-import 'dart:io';
+﻿import 'dart:io';
 
-import 'package:mornye/models/download_result.dart';
-import 'package:mornye/services/download_saf_file_replacer.dart';
-import 'package:mornye/services/ffmpeg_models.dart';
-import 'package:mornye/utils/audio_conversion_utils.dart';
-import 'package:mornye/utils/audio_format_utils.dart';
-import 'package:mornye/utils/file_access.dart';
+import 'package:vibespace/models/download_result.dart';
+import 'package:vibespace/services/download_saf_file_replacer.dart';
+import 'package:vibespace/services/ffmpeg_models.dart';
+import 'package:vibespace/utils/audio_conversion_utils.dart';
+import 'package:vibespace/utils/audio_format_utils.dart';
+import 'package:vibespace/utils/file_access.dart';
 
 typedef DecryptDownloadFile =
     Future<String?> Function({
