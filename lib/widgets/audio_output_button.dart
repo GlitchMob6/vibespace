@@ -1,9 +1,10 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/screens/settings/windows_audio_output_page.dart';
 import 'package:vibespace/widgets/app_icon_button.dart';
 
 /// Uses the system's real audio routes and keeps native discovery in native UI.
@@ -106,6 +107,20 @@ class _AudioOutputButtonState extends State<AudioOutputButton> {
           color: widget.color,
           icon: const Icon(Icons.speaker_group_outlined),
           onPressed: _showAndroidPicker,
+        );
+      case TargetPlatform.windows:
+        return AppIconButton(
+          tooltip: 'Windows Audio Output',
+          color: widget.color,
+          icon: const Icon(Icons.speaker_group_outlined),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => const WindowsAudioOutputPage(),
+              ),
+            );
+          },
         );
       default:
         return const SizedBox.shrink();

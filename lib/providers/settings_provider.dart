@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show listEquals;
@@ -777,6 +777,26 @@ class SettingsNotifier extends Notifier<AppSettings> {
 
   void setWindowsOutputDevice(String deviceId) {
     state = state.copyWith(windowsOutputDevice: deviceId);
+    _saveSettings();
+  }
+
+  void setWindowsOutputSampleRate(int rate) {
+    state = state.copyWith(windowsOutputSampleRate: rate);
+    _saveSettings();
+  }
+
+  void setWindowsOutputSampleFormat(String format) {
+    state = state.copyWith(windowsOutputSampleFormat: format);
+    _saveSettings();
+  }
+
+  void setWindowsOutputChannels(String channels) {
+    state = state.copyWith(windowsOutputChannels: channels);
+    _saveSettings();
+  }
+
+  void setWindowsExclusiveFallback(bool fallback) {
+    state = state.copyWith(windowsExclusiveFallback: fallback);
     _saveSettings();
   }
 

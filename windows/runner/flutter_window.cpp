@@ -10,6 +10,7 @@
 #include <variant>
 
 #include "flutter/generated_plugin_registrant.h"
+#include "windows_audio_device_manager.h"
 
 namespace {
 
@@ -73,6 +74,8 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+  vibespace::WindowsAudioDeviceManager::Register(
+      flutter_controller_->engine()->messenger(), GetHandle());
   window_channel_ =
       std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
           flutter_controller_->engine()->messenger(), "com.zarz.mornye/window",
@@ -109,6 +112,10 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
   // Give Flutter, including plugins, an opportunity to handle window messages.
+  if (auto* audio_mgr = vibespace::WindowsAudioDeviceManager::GetInstance()) {
+    audio_mgr->HandleWindowMessage(message, wparam, lparam);
+  }
+
   if (flutter_controller_) {
     std::optional<LRESULT> result =
         flutter_controller_->HandleTopLevelWindowProc(hwnd, message, wparam,

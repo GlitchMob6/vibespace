@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
@@ -106,19 +106,29 @@ class PlaybackDependencies {
     // On Windows, respect the windowsOutputMode setting for exclusive output.
     bool exclusiveOutput = false;
     String? wasapiDeviceId;
+    int targetSampleRate = 0;
+    String targetSampleFormat = 'auto';
+    String targetChannels = 'auto';
+    bool exclusiveFallback = true;
     if (Platform.isWindows && settings != null) {
       exclusiveOutput = settings.windowsOutputMode == 'exclusive';
-      // 'auto' defaults to false (shared) for now; device capability detection
-      // will be added in Phase 2 to determine if exclusive mode is viable.
       if (settings.windowsOutputDevice.isNotEmpty) {
         wasapiDeviceId = settings.windowsOutputDevice;
       }
+      targetSampleRate = settings.windowsOutputSampleRate;
+      targetSampleFormat = settings.windowsOutputSampleFormat;
+      targetChannels = settings.windowsOutputChannels;
+      exclusiveFallback = settings.windowsExclusiveFallback;
     }
 
     return MediaKitPlaybackDeck(
       playerId: playerId,
       exclusiveOutput: exclusiveOutput,
       wasapiDeviceId: wasapiDeviceId,
+      targetSampleRate: targetSampleRate,
+      targetSampleFormat: targetSampleFormat,
+      targetChannels: targetChannels,
+      exclusiveFallback: exclusiveFallback,
     );
   }
 

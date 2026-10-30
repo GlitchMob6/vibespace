@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -25,6 +25,7 @@ import 'package:vibespace/services/music_player_runtime.dart';
 import 'package:vibespace/services/music_playback_deck.dart'
     show UsbOutputUnavailable, WindowsAudioStatus, windowsAudioStatus;
 import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/media_kit_playback_deck.dart';
 import 'package:vibespace/services/automix_analysis.dart';
 import 'package:vibespace/services/automix_phase_lock.dart';
 import 'package:vibespace/services/autoplay_personalization.dart';
@@ -213,6 +214,61 @@ class MusicPlayerHandler extends BaseAudioHandler
         previous.autoplayPersonalization != settings.autoplayPersonalization ||
         previous.localLibraryEnabled != settings.localLibraryEnabled) {
       _autoplay.updateMode();
+    }
+    if (Platform.isWindows) {
+      if (previous.windowsOutputMode != settings.windowsOutputMode ||
+          previous.windowsOutputDevice != settings.windowsOutputDevice ||
+          previous.windowsOutputSampleRate != settings.windowsOutputSampleRate ||
+          previous.windowsOutputSampleFormat !=
+              settings.windowsOutputSampleFormat ||
+          previous.windowsOutputChannels != settings.windowsOutputChannels ||
+          previous.windowsExclusiveFallback !=
+              settings.windowsExclusiveFallback) {
+        unawaited(_reinitializeWindowsAudioOutput());
+      }
+    }
+  }
+
+  Future<void> _reinitializeWindowsAudioOutput() async {
+    if (!Platform.isWindows || _disposed) return;
+    final deck = _player;
+    if (deck is! MediaKitPlaybackDeck) return;
+
+    final settings = _settings;
+    deck.updateOutputSettings(
+      exclusive: settings.windowsOutputMode == 'exclusive',
+      deviceId: settings.windowsOutputDevice,
+      sampleRate: settings.windowsOutputSampleRate,
+      sampleFormat: settings.windowsOutputSampleFormat,
+      channels: settings.windowsOutputChannels,
+      fallback: settings.windowsExclusiveFallback,
+    );
+
+    final wasPlaying =
+        _player.state == PlaybackDeckState.playing || playbackState.value.playing;
+    final currentIndex = _index;
+
+    if (currentIndex >= 0 && currentIndex < _media.length && _sourceReady) {
+      final currentPos =
+          await _player.getCurrentPosition() ?? playbackState.value.position;
+      await _serializeSourceChange(() async {
+        _log.i(
+          'Reinitializing Windows audio output at position ${currentPos.inSeconds}s (wasPlaying: $wasPlaying)',
+        );
+        await deck.configureOutput();
+        if (_disposed) return;
+        await _playIndex(
+          currentIndex,
+          recordHistory: false,
+          startPosition: currentPos,
+        );
+        if (!wasPlaying) {
+          await deck.pause();
+          _broadcastState(playerState: PlaybackDeckState.paused);
+        }
+      });
+    } else {
+      await deck.configureOutput();
     }
   }
 

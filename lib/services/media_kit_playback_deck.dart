@@ -62,10 +62,9 @@ class MediaKitEngine implements MpvEngine {
       setProperty('volume-max', '200'),
       // Sidecar .lrc files are handled by the Flutter UI, not mpv subtitle decoder.
       setProperty('sub-auto', 'no'),
-      // Prefer high-precision 32-bit float internal audio processing (AIMP-equivalent)
-      setProperty('audio-format', 'float'),
-      // Keep hardware audio stream open across track boundaries for gapless transitions
-      setProperty('gapless-audio', 'yes'),
+      // Keep hardware audio stream open when track sample rates match,
+      // but reinitialize hardware audio device when track sample rate changes
+      setProperty('gapless-audio', 'weak'),
       // Bypass pitch filter at 1.0x for bit-perfect output
       setProperty('audio-pitch-correction', 'no'),
     ]);
@@ -156,6 +155,10 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     MpvEngine? engine,
     this.exclusiveOutput = false,
     this.wasapiDeviceId,
+    this.targetSampleRate = 0,
+    this.targetSampleFormat = 'auto',
+    this.targetChannels = 'auto',
+    this.exclusiveFallback = true,
   }) : _engine = engine ?? debugEngineFactory?.call() ?? MediaKitEngine() {
     playbackEqualizer.addListener(_equalizerChanged);
     playbackOutputVolume.addListener(_outputVolumeChanged);
@@ -184,10 +187,39 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
 
   /// Exclusive output (WASAPI exclusive, CoreAudio hog mode). A later output
   /// setting enables it; until then every deck shares the system mixer.
-  final bool exclusiveOutput;
+  bool exclusiveOutput;
 
   /// Specific WASAPI device ID to use for output. If null, uses system default.
-  final String? wasapiDeviceId;
+  String? wasapiDeviceId;
+
+  /// Target output sample rate (0 = match source / no forced resampling).
+  int targetSampleRate;
+
+  /// Target output sample format ('auto', 's16', 's24', 's32', 'float').
+  String targetSampleFormat;
+
+  /// Target output channels ('auto', 'stereo').
+  String targetChannels;
+
+  /// Whether to automatically fall back to shared mode if exclusive mode fails.
+  bool exclusiveFallback;
+
+  /// Update output settings dynamically for this deck.
+  void updateOutputSettings({
+    bool? exclusive,
+    String? deviceId,
+    int? sampleRate,
+    String? sampleFormat,
+    String? channels,
+    bool? fallback,
+  }) {
+    if (exclusive != null) exclusiveOutput = exclusive;
+    if (deviceId != null) wasapiDeviceId = deviceId;
+    if (sampleRate != null) targetSampleRate = sampleRate;
+    if (sampleFormat != null) targetSampleFormat = sampleFormat;
+    if (channels != null) targetChannels = channels;
+    if (fallback != null) exclusiveFallback = fallback;
+  }
 
   final String playerId;
   final MpvEngine _engine;
@@ -446,6 +478,27 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     _activeDeviceId = null;
     _isFallbackDevice = false;
 
+    // Apply target sample rate (0 = auto / source rate match)
+    if (targetSampleRate > 0) {
+      await _engine.setProperty('audio-samplerate', '$targetSampleRate');
+    } else {
+      await _engine.setProperty('audio-samplerate', '0');
+    }
+
+    // Apply target sample format ('auto', 's16', 's24', 's32', 'float')
+    if (targetSampleFormat.isNotEmpty && targetSampleFormat != 'auto') {
+      await _engine.setProperty('audio-format', targetSampleFormat);
+    } else {
+      await _engine.setProperty('audio-format', '');
+    }
+
+    // Apply target channels
+    if (targetChannels.isNotEmpty && targetChannels != 'auto') {
+      await _engine.setProperty('audio-channels', targetChannels);
+    } else {
+      await _engine.setProperty('audio-channels', 'auto');
+    }
+
     if (_requestedDeviceId != null) {
       _log.i('Configuring output for requested WASAPI device: $_requestedDeviceId');
       bool isAvailable = false;
@@ -496,6 +549,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
 
     if (!exclusiveOutput) {
       _log.i('Using WASAPI shared mode (device: $effectiveDevice)');
+      await _engine.setProperty('audio-exclusive', 'no');
       windowsAudioStatus.value = WindowsAudioStatus(
         reason: _isFallbackDevice ? 'fallback' : 'active',
         mode: 'shared',
@@ -515,12 +569,21 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     final result = await _engine.setProperty('audio-exclusive', 'yes');
     if (result < 0) {
       _log.w('Failed to set audio-exclusive=yes (mpv error $result)');
-      windowsAudioStatus.value = WindowsAudioStatus(
-        reason: 'failed',
-        mode: 'exclusive',
-        device: effectiveDevice,
-      );
-      // Fallback to shared mode will be handled in _load
+      if (exclusiveFallback) {
+        _log.i('Falling back to shared mode due to exclusive mode property failure');
+        await _engine.setProperty('audio-exclusive', 'no');
+        windowsAudioStatus.value = WindowsAudioStatus(
+          reason: 'fallback',
+          mode: 'shared',
+          device: effectiveDevice,
+        );
+      } else {
+        windowsAudioStatus.value = WindowsAudioStatus(
+          reason: 'failed',
+          mode: 'exclusive',
+          device: effectiveDevice,
+        );
+      }
       return;
     }
 
@@ -571,6 +634,9 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
           .setVolume(_mpvVolume)
           .catchError((Object error) => _log.w('Output volume: $error')),
     );
+    if (Platform.isWindows && _state == PlaybackDeckState.playing) {
+      unawaited(_updateAudioStatus());
+    }
   }
 
   @override
@@ -614,16 +680,22 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
           error.toLowerCase().contains('audio') ||
           error.toLowerCase().contains('wasapi');
 
-      if (isAudioError && _activeDeviceId != 'auto' && !_hasRetriedDeviceFallback) {
+      if (isAudioError && !_hasRetriedDeviceFallback) {
         _hasRetriedDeviceFallback = true;
-        _isFallbackDevice = true;
-        _activeDeviceId = 'auto';
         _log.w(
-          'Audio driver initialization failed on device "$_requestedDeviceId" ($error). '
-          'Retrying once with audio-device=auto fallback...',
+          'Audio driver initialization failed ($error). '
+          'Retrying with fallback audio configuration...',
         );
         await _engine.stop();
-        await _engine.setProperty('audio-device', 'auto');
+        if (_activeDeviceId != 'auto') {
+          _isFallbackDevice = true;
+          _activeDeviceId = 'auto';
+          await _engine.setProperty('audio-device', 'auto');
+        }
+        if (exclusiveOutput && exclusiveFallback) {
+          _log.i('Falling back from exclusive to shared mode after audio driver error');
+          await _engine.setProperty('audio-exclusive', 'no');
+        }
 
         final retryLoaded = Completer<String?>();
         _pendingLoad = retryLoaded;
@@ -689,24 +761,30 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
   Future<void> _updateAudioStatus() async {
     if (_disposed) return;
     try {
-      final sampleRateStr = await _engine.getProperty('audio-params/samplerate');
-      final formatStr = await _engine.getProperty('audio-params/format');
-      final sampleRate = int.tryParse(sampleRateStr);
-      // Parse format string like "s16le", "f32le" to bit depth
-      int? bitDepth;
-      if (formatStr.contains('16')) {
-        bitDepth = 16;
-      } else if (formatStr.contains('24')) {
-        bitDepth = 24;
-      } else if (formatStr.contains('32')) {
-        bitDepth = 32;
-      } else if (formatStr.contains('64')) {
-        bitDepth = 64;
-      }
+      // 1. Source track parameters (decoder facts)
+      final srcSampleRateStr = await _engine.getProperty('audio-params/samplerate');
+      final srcFormatStr = await _engine.getProperty('audio-params/format');
+      final srcChannelsStr = await _engine.getProperty('audio-params/channels');
+      final srcSampleRate = int.tryParse(srcSampleRateStr);
+      final srcBitDepth = _parseBitDepth(srcFormatStr);
 
-      // Determine actual mode: check if exclusive mode was requested but not achieved
-      String actualMode;
-      String reason;
+      // 2. Physical hardware sink output parameters (to DAC)
+      String outSampleRateStr = await _engine.getProperty('audio-out-params/samplerate');
+      String outFormatStr = await _engine.getProperty('audio-out-params/format');
+      String outChannelsStr = await _engine.getProperty('audio-out-params/channels');
+      String outChannelCountStr = await _engine.getProperty('audio-out-params/channel-count');
+
+      if (outSampleRateStr.isEmpty) outSampleRateStr = srcSampleRateStr;
+      if (outFormatStr.isEmpty) outFormatStr = srcFormatStr;
+      if (outChannelsStr.isEmpty) outChannelsStr = srcChannelsStr;
+
+      final outSampleRate = int.tryParse(outSampleRateStr);
+      final outBitDepth = _parseBitDepth(outFormatStr);
+      final outChannelCount = int.tryParse(outChannelCountStr);
+
+      // 3. Determine actual exclusive mode
+      String actualMode = 'shared';
+      String reason = 'active';
       if (exclusiveOutput) {
         try {
           final exclusiveStatus = await _engine.getProperty('audio-exclusive');
@@ -726,6 +804,50 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
         reason = 'active';
       }
 
+      // 4. Bit-perfect analysis
+      final bool isVolume100 = playbackOutputVolume.value >= 0.999;
+      final bool isNormBypassed = _gain >= 0.999;
+      final bool isEqDisabled = !playbackEqualizer.value.enabled;
+      final bool isRateMatching = (srcSampleRate != null &&
+          outSampleRate != null &&
+          srcSampleRate == outSampleRate);
+      final bool isExclusive = (actualMode == 'exclusive');
+
+      final bool isBitPerfect = isExclusive &&
+          isVolume100 &&
+          isNormBypassed &&
+          isEqDisabled &&
+          isRateMatching;
+
+      String bitPerfectReason;
+      if (isBitPerfect) {
+        bitPerfectReason =
+            'Bit-perfect direct output: WASAPI Exclusive active, unattenuated 100% volume, DSP/EQ bypassed, source rate matched ($srcSampleRate Hz).';
+      } else {
+        final List<String> degradations = [];
+        if (!isExclusive) {
+          degradations.add(
+              'WASAPI Shared mixer active (Windows audio engine may resample or limit bit depth)');
+        }
+        if (!isRateMatching && srcSampleRate != null && outSampleRate != null) {
+          degradations.add(
+              'Sample rate conversion: ${srcSampleRate}Hz -> ${outSampleRate}Hz');
+        }
+        if (!isVolume100) {
+          degradations.add(
+              'Digital volume attenuation: ${(playbackOutputVolume.value * 100).round()}%');
+        }
+        if (!isNormBypassed) {
+          degradations.add('ReplayGain volume normalization active');
+        }
+        if (!isEqDisabled) {
+          degradations.add('Equalizer DSP processing active');
+        }
+        bitPerfectReason = degradations.isEmpty
+            ? 'Processed output'
+            : degradations.join(' • ');
+      }
+
       final effectiveDevice = _isFallbackDevice
           ? 'auto (requested: $_requestedDeviceId)'
           : (_activeDeviceId ?? wasapiDeviceId);
@@ -734,9 +856,16 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
         reason: _isFallbackDevice ? 'fallback' : reason,
         mode: actualMode,
         device: effectiveDevice,
-        sampleRate: sampleRate,
-        bitDepth: bitDepth,
-        transport: formatStr,
+        sampleRate: outSampleRate,
+        bitDepth: outBitDepth,
+        format: outFormatStr,
+        channels: outChannelsStr,
+        channelCount: outChannelCount,
+        sourceSampleRate: srcSampleRate,
+        sourceBitDepth: srcBitDepth,
+        sourceFormat: srcFormatStr,
+        isBitPerfect: isBitPerfect,
+        bitPerfectReason: bitPerfectReason,
       );
     } catch (e) {
       _log.w('Failed to query audio parameters: $e');
@@ -749,6 +878,15 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
         device: effectiveDevice,
       );
     }
+  }
+
+  static int? _parseBitDepth(String formatStr) {
+    if (formatStr.contains('64')) return 64;
+    if (formatStr.contains('32')) return 32;
+    if (formatStr.contains('24')) return 24;
+    if (formatStr.contains('16')) return 16;
+    if (formatStr.contains('8')) return 8;
+    return null;
   }
 
   @override

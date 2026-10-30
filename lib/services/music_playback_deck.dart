@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -85,6 +85,14 @@ class WindowsAudioStatus {
     this.bitDepth,
     this.transport = 'pcm',
     this.driver = 'wasapi',
+    this.channels,
+    this.channelCount,
+    this.format,
+    this.sourceSampleRate,
+    this.sourceBitDepth,
+    this.sourceFormat,
+    this.isBitPerfect = false,
+    this.bitPerfectReason,
   });
 
   final String reason; // 'idle', 'active', 'pending', 'failed', 'fallback'
@@ -94,11 +102,20 @@ class WindowsAudioStatus {
   final int? bitDepth;
   final String transport;
   final String driver;
+  final String? channels;
+  final int? channelCount;
+  final String? format;
+  final int? sourceSampleRate;
+  final int? sourceBitDepth;
+  final String? sourceFormat;
+  final bool isBitPerfect;
+  final String? bitPerfectReason;
 
   @override
   String toString() =>
       'WindowsAudioStatus(reason: $reason, mode: $mode, device: $device, '
-      'sampleRate: $sampleRate, bitDepth: $bitDepth, transport: $transport, driver: $driver)';
+      'sampleRate: $sampleRate, bitDepth: $bitDepth, format: $format, '
+      'sourceRate: $sourceSampleRate, isBitPerfect: $isBitPerfect)';
 }
 
 final AudioContext _musicAudioContext = AudioContext(

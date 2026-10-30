@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,8 +7,8 @@ import 'package:vibespace/providers/settings_provider.dart';
 import 'package:vibespace/services/music_playback_deck.dart';
 import 'package:vibespace/services/music_player_service.dart'
     show resetAutoplayLearning;
-import 'package:vibespace/services/media_kit_playback_deck.dart';
 import 'package:vibespace/screens/listening_statistics_screen.dart';
+import 'package:vibespace/screens/settings/windows_audio_output_page.dart';
 import 'package:vibespace/screens/equalizer_screen.dart';
 import 'package:vibespace/utils/desktop_platform.dart';
 import 'package:vibespace/utils/nav_bar_inset.dart';
@@ -490,62 +490,48 @@ class _PlaybackSettingsPageState extends ConsumerState<PlaybackSettingsPage> {
           if (Platform.isWindows)
             SliverToBoxAdapter(
               child: SettingsGroup(
-                connected: true,
                 children: [
                   ValueListenableBuilder<WindowsAudioStatus>(
                     valueListenable: windowsAudioStatus,
-                    builder: (context, status, _) => Column(
-                      children: [
-                        SettingsItem(
-                          icon: Icons.audio_file,
-                          title: 'WASAPI Output Mode',
-                          subtitle: 'Current mode: ${status.mode.toUpperCase()} (${status.reason})'
-                              '${status.sampleRate != null ? '\n${status.bitDepth}-bit PCM · ${(status.sampleRate! / 1000).toStringAsFixed(1)} kHz' : ''}',
-                          trailing: DropdownButton<String>(
-                            value: settings.windowsOutputMode,
-                            items: const [
-                              DropdownMenuItem(value: 'shared', child: Text('Shared (Default)')),
-                              DropdownMenuItem(value: 'exclusive', child: Text('Exclusive (Bit-perfect)')),
-                              DropdownMenuItem(value: 'auto', child: Text('Auto')),
-                            ],
-                            onChanged: (value) {
-                              if (value != null) {
-                                ref.read(settingsProvider.notifier).setWindowsOutputMode(value);
-                              }
-                            },
-                          ),
-                        ),
-                        FutureBuilder<List<Map<String, dynamic>>>(
-                          future: MediaKitPlaybackDeck.queryWASAPIDevices(),
-                          builder: (context, snapshot) {
-                            final devices = snapshot.data ?? [];
-                            return SettingsItem(
-                              icon: Icons.speaker,
-                              title: 'Output Device',
-                              subtitle: settings.windowsOutputDevice.isEmpty
-                                  ? 'System Default'
-                                  : settings.windowsOutputDevice,
-                              trailing: DropdownButton<String>(
-                                value: settings.windowsOutputDevice.isEmpty ? '' : settings.windowsOutputDevice,
-                                items: [
-                                  const DropdownMenuItem(value: '', child: Text('System Default')),
-                                  for (final device in devices)
-                                    DropdownMenuItem(
-                                      value: device['name']?.toString() ?? '',
-                                      child: Text(device['description']?.toString() ?? device['name']?.toString() ?? 'Device'),
-                                    ),
-                                ],
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    ref.read(settingsProvider.notifier).setWindowsOutputDevice(value);
-                                  }
-                                },
+                    builder: (context, status, _) => SettingsItem(
+                      icon: Icons.speaker_group,
+                      title: 'Windows Audio Output (WASAPI)',
+                      subtitle:
+                          '${status.mode.toUpperCase()} · ${status.sampleRate != null ? "${status.sampleRate} Hz · " : ""}${status.device ?? "Default"}',
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (status.isBitPerfect)
+                            Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(4),
                               ),
-                              showDivider: false,
-                            );
-                          },
-                        ),
-                      ],
+                              child: const Text(
+                                'BIT-PERFECT',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                          const Icon(Icons.chevron_right),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (context) =>
+                                const WindowsAudioOutputPage(),
+                          ),
+                        );
+                      },
+                      showDivider: false,
                     ),
                   ),
                 ],

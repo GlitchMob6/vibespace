@@ -92,6 +92,18 @@ class AppSettings {
   /// Only applies when using the internal player on Windows.
   final String windowsOutputDevice;
 
+  /// Target output sample rate for Windows (0 = auto / match source).
+  final int windowsOutputSampleRate;
+
+  /// Target output sample format for Windows ('auto', 's16', 's24', 's32', 'float').
+  final String windowsOutputSampleFormat;
+
+  /// Target output channels ('auto', 'stereo').
+  final String windowsOutputChannels;
+
+  /// Whether to automatically fall back to shared mode if exclusive mode fails.
+  final bool windowsExclusiveFallback;
+
   final bool autoplay;
   final bool autoplayPersonalization;
   final bool musicHaptics;
@@ -238,6 +250,10 @@ class AppSettings {
     this.dapExclusive = false,
     this.windowsOutputMode = 'exclusive',
     this.windowsOutputDevice = '',
+    this.windowsOutputSampleRate = 0,
+    this.windowsOutputSampleFormat = 'auto',
+    this.windowsOutputChannels = 'auto',
+    this.windowsExclusiveFallback = true,
     this.autoplay = false,
     this.autoplayPersonalization = true,
     this.musicHaptics = false,
@@ -362,6 +378,10 @@ class AppSettings {
     bool? dapExclusive,
     String? windowsOutputMode,
     String? windowsOutputDevice,
+    int? windowsOutputSampleRate,
+    String? windowsOutputSampleFormat,
+    String? windowsOutputChannels,
+    bool? windowsExclusiveFallback,
     bool? autoplay,
     bool? autoplayPersonalization,
     bool? musicHaptics,
@@ -481,6 +501,14 @@ class AppSettings {
       dapExclusive: dapExclusive ?? this.dapExclusive,
       windowsOutputMode: windowsOutputMode ?? this.windowsOutputMode,
       windowsOutputDevice: windowsOutputDevice ?? this.windowsOutputDevice,
+      windowsOutputSampleRate:
+          windowsOutputSampleRate ?? this.windowsOutputSampleRate,
+      windowsOutputSampleFormat:
+          windowsOutputSampleFormat ?? this.windowsOutputSampleFormat,
+      windowsOutputChannels:
+          windowsOutputChannels ?? this.windowsOutputChannels,
+      windowsExclusiveFallback:
+          windowsExclusiveFallback ?? this.windowsExclusiveFallback,
       autoplay: autoplay ?? this.autoplay,
       autoplayPersonalization:
           autoplayPersonalization ?? this.autoplayPersonalization,
