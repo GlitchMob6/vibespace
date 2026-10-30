@@ -35,8 +35,8 @@
 
 #define AppName "VibeSpace"
 #define AppExe "vibespace.exe"
-#define AppUserModelId "com.zarz.mornye"
-#define AppUrl "https://github.com/mornyeapp/Mornye"
+#define AppUserModelId "com.zarz.vibespace"
+#define AppUrl "https://github.com/GlitchMob6/vibespace"
 
 #if Arch == "arm64"
   #define AllowedArchitectures "arm64"
@@ -49,16 +49,16 @@ AppId={{0FFEA5B8-69C1-423B-B38E-1E521494A286}
 AppName={#AppName}
 AppVersion={#AppVersion}
 AppVerName={#AppName} {#AppVersion}
-AppPublisher=zarzet
+AppPublisher=VibeSpace
 AppPublisherURL={#AppUrl}
 AppSupportURL={#AppUrl}/issues
-AppUpdatesURL=https://github.com/mornyeapp/Mornye-Desktop/releases
+AppUpdatesURL=https://github.com/GlitchMob6/vibespace/releases
 VersionInfoVersion={#NumericVersion}
 VersionInfoProductName={#AppName}
 VersionInfoDescription={#AppName} Setup
 PrivilegesRequired=lowest
 DefaultDirName={userpf}\{#AppName}
-DisableDirPage=yes
+DisableDirPage=no
 DisableProgramGroupPage=yes
 DefaultGroupName={#AppName}
 UsePreviousAppDir=yes
@@ -80,7 +80,7 @@ OutputBaseFilename={#OutputBaseName}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [InstallDelete]
 ; Remove files of the previous version so stale plugins and assets do not
@@ -95,10 +95,10 @@ Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: 
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: "{#AppUserModelId}"; Tasks: desktopicon
 
 [Registry]
-Root: HKCU; Subkey: "Software\Classes\vibescape"; ValueType: string; ValueName: ""; ValueData: "URL:{#AppName} Protocol"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\Classes\vibescape"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
-Root: HKCU; Subkey: "Software\Classes\vibescape\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"",0"
-Root: HKCU; Subkey: "Software\Classes\vibescape\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%1"""
+Root: HKCU; Subkey: "Software\Classes\vibespace"; ValueType: string; ValueName: ""; ValueData: "URL:{#AppName} Protocol"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\vibespace"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCU; Subkey: "Software\Classes\vibespace\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"",0"
+Root: HKCU; Subkey: "Software\Classes\vibespace\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%1"""
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent

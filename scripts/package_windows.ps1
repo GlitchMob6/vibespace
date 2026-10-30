@@ -2,15 +2,15 @@
 # Inno Setup installer (windows\installer\mornye.iss).
 #
 # Usage, from the repository root:
-#   pwsh scripts\package_windows.ps1 -Version v5.3.0
-#   pwsh scripts\package_windows.ps1 -Version v5.3.0 -Arch arm64 -Only installer
+#   pwsh scripts\package_windows.ps1 -Version v5.2.6
+#   pwsh scripts\package_windows.ps1 -Version v5.2.6 -Arch arm64 -Only installer
 #
 # Outputs, in -OutputDir (default build\desktop):
-#   Mornye-<version>-windows-<arch>-setup.exe
-#   Mornye-<version>-windows-<arch>-portable.zip
+#   VibeSpace-<version>-windows-<arch>-setup.exe
+#   VibeSpace-<version>-windows-<arch>-portable.zip
 #
 # Inno Setup 6 is used from PATH, its default install folder, or installed
-# with Chocolatey when neither has it.
+# with Winget/Chocolatey when neither has it.
 
 [CmdletBinding()]
 param(
@@ -41,13 +41,14 @@ if ($upstream -notmatch '^(\d+)\.(\d+)\.(\d+)([.-][0-9A-Za-z.-]+)?$') {
 }
 $numericVersion = "$($Matches[1]).$($Matches[2]).$($Matches[3]).0"
 
-foreach ($required in 'mornye.exe', 'flutter_windows.dll', 'data\app.so') {
+$exeName = if (Test-Path (Join-Path $BundleDir 'vibespace.exe')) { 'vibespace.exe' } else { 'mornye.exe' }
+foreach ($required in $exeName, 'flutter_windows.dll', 'data\app.so') {
     if (-not (Test-Path (Join-Path $BundleDir $required))) {
         throw "Missing $required in $BundleDir"
     }
 }
 
-$baseName = "Mornye-$Version-windows-$Arch"
+$baseName = "VibeSpace-$Version-windows-$Arch"
 
 if ($Only -in 'all', 'portable') {
     $zip = Join-Path $OutputDir "$baseName-portable.zip"
@@ -62,12 +63,20 @@ if ($Only -in 'all', 'installer') {
     if ($isccCommand) {
         $iscc = $isccCommand.Source
     } else {
-        $default = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
-        if (-not (Test-Path $default)) {
-            choco install innosetup --no-progress -y
-            if ($LASTEXITCODE -ne 0) { throw 'Could not install Inno Setup' }
+        $candidates = @(
+            (Join-Path $env:LocalAppData 'Programs\Inno Setup 6\ISCC.exe'),
+            (Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'),
+            (Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe')
+        )
+        foreach ($candidate in $candidates) {
+            if ($candidate -and (Test-Path $candidate)) {
+                $iscc = $candidate
+                break
+            }
         }
-        $iscc = $default
+        if (-not $iscc) {
+            throw "ISCC.exe not found. Please install Inno Setup 6."
+        }
     }
 
     $script = Join-Path $projectDir 'windows\installer\mornye.iss'
