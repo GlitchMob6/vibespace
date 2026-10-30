@@ -1,452 +1,161 @@
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo/svg/mornye-lockup-horizontal-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo/svg/mornye-lockup-horizontal-light.svg">
-  <img alt="VibeSpace" src="assets/brand/logo/svg/mornye-lockup-horizontal-light.svg" width="650" height="auto">
-</picture>
+# Vibescape
 
 <p align="center">
-  <a href="https://trendshift.io/repositories/25971" target="_blank">
-    <img src="https://trendshift.io/api/badge/repositories/25971" alt="Mornye | Trendshift" width="250" height="55">
-  </a>
-  <a href="https://fmhy.net/mobile#android-audio" target="_blank">
-    <img src="assets/readme/featured-on-fmhy.svg" alt="Featured on FMHY" height="55">
-  </a>
-</p>
-
-</div>
-
-<p align="center">
-  <a href="https://github.com/mornyeapp/Mornye/releases/latest">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/badge-release-dark.svg">
-      <img alt="Download the latest release" src="assets/readme/badges/badge-release-light.svg" height="56">
-    </picture>
-  </a>
-  <a href="https://crowdin.com/project/mornye">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/badge-crowdin-dark.svg">
-      <img alt="Help translate on Crowdin" src="assets/readme/badges/badge-crowdin-light.svg" height="56">
-    </picture>
-  </a>
+  <strong>A music player shaped around the listening experience.</strong>
+  <br />
+  An independently maintained, desktop-focused derivative of the open-source <a href="https://github.com/mornyeapp/Mornye">Mornye</a> project.
 </p>
 
 <p align="center">
-  <a href="https://t.me/mornyeupdates">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/badge-telegram-channel-dark.svg">
-      <img alt="Telegram channel" src="assets/readme/badges/badge-telegram-channel-light.svg" height="56">
-    </picture>
-  </a>
-  <a href="https://t.me/mornyecommunity">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/badge-telegram-community-dark.svg">
-      <img alt="Telegram community" src="assets/readme/badges/badge-telegram-community-light.svg" height="56">
-    </picture>
-  </a>
+  <a href="https://github.com/GlitchMob6/vibespace">Source</a>
+  ·
+  <a href="https://github.com/GlitchMob6/vibespace/releases">Releases</a>
+  ·
+  <a href="https://github.com/GlitchMob6/vibespace/issues">Issues</a>
+  ·
+  <a href="https://github.com/mornyeapp/Mornye">Mornye upstream</a>
 </p>
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme/sections/section-screenshots-dark.svg"><img src="assets/readme/sections/section-screenshots-light.svg" height="32" align="top" alt=""></picture> Screenshots
+> **Development status:** Vibescape is actively being developed. Windows playback and WASAPI output are being hardened across audio devices and driver configurations. Treat current builds as development builds until a stable release is published.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/showcase-dark.png">
-  <img src="assets/readme/showcase-light.png" width="100%" alt="VibeSpace screens: Home, Library, Now Playing and Equalizer">
-</picture>
+## About
 
----
+Vibescape is a separately branded continuation of the Mornye codebase, with a particular focus on the desktop listening experience and Windows audio output.
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme/sections/section-features-dark.svg"><img src="assets/readme/sections/section-features-light.svg" height="32" align="top" alt=""></picture> Features
+The project keeps the existing Flutter/Dart application and Rust backend foundations while developing a dedicated Windows experience. It is maintained independently from Mornye; it is not an official Mornye release and is not affiliated with or endorsed by the upstream maintainers.
 
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-player-dark.svg">
-          <img src="assets/readme/features/feature-player-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Built-in player</b>
-      </p>
-      <p>
-        Full-screen cover art, a detailed audio quality label, queue
-        controls and a sleep timer. AutoMix blends tracks with its own beat
-        detection, and home screen widgets on Android and iOS follow your
-        wallpaper colors.
-      </p>
-      <p></p>
-    </td>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-hires-dark.svg">
-          <img src="assets/readme/features/feature-hires-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Hi-res output</b>
-      </p>
-      <p>
-        USB bit-perfect playback on Android 14 and later, AAudio exclusive
-        mode for DAPs at each track's original rate, and a direct USB driver
-        with native DSD on compatible DACs.
-      </p>
-      <p></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-equalizer-dark.svg">
-          <img src="assets/readme/features/feature-equalizer-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Equalizer and loudness</b>
-      </p>
-      <p>
-        A multiband equalizer with presets (beta), volume normalization, and
-        ReplayGain scanning based on EBU R128 for single tracks or whole
-        selections.
-      </p>
-      <p></p>
-    </td>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-lyrics-dark.svg">
-          <img src="assets/readme/features/feature-lyrics-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Lyrics</b>
-      </p>
-      <p>
-        Synced lyrics with word-by-word timing, optional translation and
-        romanization lines, and a reorderable chain of lyrics providers,
-        including Zarz-LRC. Files without lyrics can search
-        online from the player. Pick up to five lines and share them as a card.
-      </p>
-      <p></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-library-dark.svg">
-          <img src="assets/readme/features/feature-library-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Local library</b>
-      </p>
-      <p>
-        Scan your music folders and browse songs, albums, artists and
-        playlists. Review duplicates, edit metadata and export collections
-        as M3U8.
-      </p>
-      <p></p>
-    </td>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-network-dark.svg">
-          <img src="assets/readme/features/feature-network-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Network storage</b>
-      </p>
-      <p>
-        Play music from SMB, WebDAV, HTTP / HTTPS and Subsonic / OpenSubsonic servers. HTTPS
-        connections can trust a single approved certificate fingerprint.
-      </p>
-      <p></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-foryou-dark.svg">
-          <img src="assets/readme/features/feature-foryou-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Made for you</b>
-      </p>
-      <p>
-        Rewind recaps your listening, personalized autoplay learns on your
-        device, music haptics let you feel the beat, and artist pages show
-        upcoming concerts.
-      </p>
-      <p></p>
-    </td>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-look-dark.svg">
-          <img src="assets/readme/features/feature-look-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Your look</b>
-      </p>
-      <p>
-        Material 3 Expressive or the Mornye theme, Dynamic Color, an AMOLED
-        mode, Material Symbols and layouts for tablets and large screens.
-      </p>
-      <p></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-extensions-dark.svg">
-          <img src="assets/readme/features/feature-extensions-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Extensions</b>
-      </p>
-      <p>
-        Add metadata and lyrics sources from community extension
-        repositories, then choose their priority. Building one? See the
-        <a href="https://mornye.com/docs">extension documentation</a>.
-      </p>
-      <p></p>
-    </td>
-    <td width="50%" valign="top">
-      <p>
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features/feature-keep-dark.svg">
-          <img src="assets/readme/features/feature-keep-light.svg" width="56" height="56" alt="">
-        </picture>
-        <br><b>Yours to keep</b>
-      </p>
-      <p>
-        Back up and restore settings, history and playlists. The app is open
-        source, available in 20 languages, and offers an AltStore / SideStore
-        source on iOS.
-      </p>
-      <p></p>
-    </td>
-  </tr>
-</table>
+## What it includes
 
----
+The repository builds on capabilities present in the Mornye codebase and develops them for Vibescape:
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme/sections/section-development-dark.svg"><img src="assets/readme/sections/section-development-light.svg" height="32" align="top" alt=""></picture> Development
+- **Music library and playback** — browse and play local music, organize tracks into a library, and manage playback queues and playlists.
+- **Metadata and extensions** — use the extension-based provider architecture for supported metadata, lyrics and download integrations.
+- **Lyrics** — display synchronized lyrics when supported by the file or an enabled provider.
+- **Playback tools** — equalizer, volume normalization and ReplayGain-related functionality available in the application.
+- **Network music sources** — support in the codebase for SMB, WebDAV, HTTP/HTTPS and Subsonic/OpenSubsonic sources. Availability can vary by platform.
+- **Desktop foundation** — Flutter UI with a Rust backend and native platform integrations.
 
-VibeSpace combines a Flutter/Dart UI, a Rust backend from
-[`rust_backend/`](rust_backend/), and thin Android/iOS platform bridges.
+### Windows audio: WASAPI
 
-See the [Contributing Guide](CONTRIBUTING.md) for setup, Android and iOS builds,
-Full/Lite variants, crash symbols, validation, and pull request guidelines.
+Windows audio output is a central area of Vibescape development. The Windows playback path uses the existing `media_kit` / `libmpv` architecture and MPV's WASAPI audio output.
 
----
+The implementation is designed to support:
 
-## <picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme/sections/section-faq-dark.svg"><img src="assets/readme/sections/section-faq-light.svg" height="32" align="top" alt=""></picture> FAQ
+| Output mode | Intended behaviour |
+| --- | --- |
+| **WASAPI Shared** | Plays through the Windows shared audio engine, allowing other applications to share the endpoint. |
+| **WASAPI Exclusive (Event)** | Requests exclusive endpoint access with event-driven buffer handling. |
+| **WASAPI Exclusive (Push)** | Requests exclusive endpoint access with push/timer-driven buffer handling, where supported. |
 
-<details>
-<summary><b>Why does the Repo tab ask me to enter a URL?</b></summary>
-<br>
+The Windows audio work also includes endpoint discovery, device selection, format negotiation, runtime status reporting and recovery/fallback handling.
 
-VibeSpace uses a decentralized extension repository system.
-Extensions are hosted independently rather than on a built-in server, so
-anyone can create and host a compatible repository. In the **Repo** tab, tap
-**Add Repository** and enter a GitHub repository URL that contains a
-`registry.json` file to browse and install its extensions.
+**Important:** Available modes and formats depend on the Windows endpoint, driver and bundled MPV build. Selecting an exclusive or “bit-perfect” option does not by itself prove that the active stream is exclusive or bit-perfect. Vibescape should report the mode and format actually negotiated at runtime. Compatibility and playback lifecycle stability are still being validated across hardware.
 
-</details>
+## Platform focus
 
-<details>
-<summary><b>Why is my download failing with "Song not found"?</b></summary>
-<br>
+The repository contains platform projects for Windows, Android, iOS, Linux and macOS. Vibescape's current development focus is the Windows desktop experience. Feature parity, build readiness and runtime behaviour are not guaranteed to be identical on every platform.
 
-The track may not be available from your enabled providers. Under
-**Settings > Extensions > Provider Priority**, reorder providers and choose
-which download extensions may be used as a fallback; the app tries them from
-top to bottom. You can also install more download extensions from the
-**Repo** tab.
+Windows-specific WASAPI functionality applies only to Windows audio output.
 
-</details>
+## Downloads
 
-<details>
-<summary><b>Why are some tracks downloading in lower quality?</b></summary>
-<br>
+There are no published Vibescape release binaries at the time of writing. When releases are ready, they will be published on the [GitHub Releases page](https://github.com/GlitchMob6/vibespace/releases).
 
-Quality depends on what is available from the source and the installed
-download extension. Pick your preferred service and quality under
-**Settings > Download**, and check each extension's quality options and
-service notes in the app.
+Until then, the project can be built from source by developers with the required toolchain.
 
-</details>
+## Build from source (Windows)
 
-<details>
-<summary><b>Can I download whole albums and playlists?</b></summary>
-<br>
+### Requirements
 
-Yes. Paste an album or playlist link into the search bar on Home and the app
-fetches every track and queues it. An artist link opens the artist page, where
-**Download Discography** queues their releases. To bring in a list from elsewhere,
-tap the search bar and use the import button to load a CSV or M3U playlist
-file.
+- Windows with the Visual Studio C++ build tools (MSVC).
+- Flutter **3.47.7**, pinned in [`.fvmrc`](.fvmrc).
+- [FVM](https://fvm.app/) to install and use the pinned Flutter SDK (recommended).
+- Rust **1.99.0**, pinned in [`rust_backend/rust-toolchain.toml`](rust_backend/rust-toolchain.toml).
+- Git and PowerShell.
 
-</details>
+### Build
 
-<details>
-<summary><b>Can I play music I already have?</b></summary>
-<br>
+Run these commands from the repository root:
 
-Yes. Add your music folders under **Settings > Local Library**. The app scans
-them, merges them with your downloads in the Library tab, and plays everything
-in the built-in player. It can also point out duplicates.
+```powershell
+# Install the repository-pinned Flutter SDK.
+fvm install
 
-</details>
+# Apply the repository's Flutter SDK preparation step.
+fvm dart scripts/prepare_flutter_sdk.dart
 
-<details>
-<summary><b>Can I play music from my NAS or home server?</b></summary>
-<br>
+# Resolve Dart/Flutter dependencies.
+fvm flutter pub get
 
-Yes. Open **Settings > Network storage** and connect to an SMB, WebDAV,
-HTTP / HTTPS or Subsonic / OpenSubsonic server. Sign-in details are stored
-securely on your device. Subsonic supports browsing artists and albums,
-searching, streaming and syncing the server catalogue to Library on mobile
-and desktop. Choose salted-token, password or API-key authentication to match
-your server, and approve its certificate fingerprint if it uses a private
-HTTPS certificate. Subsonic is a read-only source; network download folders
-still require SMB or WebDAV.
+# Build and stage the native Rust desktop backend.
+pwsh scripts/build_rust_backend_windows.ps1
 
-</details>
-
-<details>
-<summary><b>Why doesn't the equalizer change the sound?</b></summary>
-<br>
-
-Bit-perfect, Direct USB and exclusive Hi-Res outputs bypass the equalizer so
-the audio reaches your DAC untouched. Turn bit-perfect output off to use the
-equalizer. External players also apply their own effects instead. The
-equalizer lives in **Settings > Playback** and in the Now Playing menu.
-
-</details>
-
-<details>
-<summary><b>How do I get bit-perfect playback on a USB DAC?</b></summary>
-<br>
-
-Turn on **Hi-res and bit-perfect audio** under **Settings > Playback**, then
-choose the direct USB driver or AAudio exclusive mode. Without either, Android
-USB output needs Android 14 or later. Direct USB can be much louder than
-normal playback and the phone's volume buttons may not control it, so lower
-your DAC or amplifier volume before you press play.
-
-</details>
-
-<details>
-<summary><b>Where do the lyrics come from?</b></summary>
-<br>
-
-From the providers in **Settings > Lyrics > Lyrics Provider Priority**, tried
-top to bottom until one has the song. By default that is Apple Music (through
-Paxsenix), lrc.red, Zarz-LRC, LyricsPlus and LRCLIB; you can
-reorder them or turn on others. Lyrics already in a file always come first.
-If a file has none, tap **Search online** on the player's lyrics page.
-
-</details>
-
-<details>
-<summary><b>Where are my listening statistics stored?</b></summary>
-<br>
-
-Only on your device. Listening statistics and Rewind record plays from the
-built-in player; pauses, buffering and seeking add no listening time, and a
-play counts after 30 seconds.
-
-</details>
-
-<details>
-<summary><b>Which download folder should I choose?</b></summary>
-<br>
-
-On Android, **App Folder** saves to `Music/VibeSpace` by default. You can
-instead pick any folder with the system folder picker. If Android later
-revokes access to that folder, select it again under
-**Settings > Files & Folders**.
-
-</details>
-
-<details>
-<summary><b>Is this app safe?</b></summary>
-<br>
-
-VibeSpace is open source, so its code and build workflows can be
-inspected directly in this repository.
-
-</details>
-
-<details>
-<summary><b>Why is downloading not working in my country?</b></summary>
-<br>
-
-Some countries have restricted access to certain streaming service APIs. If
-downloads are failing, try a VPN to connect through a different region. For
-the Home feed only, **Settings > Extensions > Home feed country** shows
-another country's recommendations without a VPN.
-
-</details>
-
-<details>
-<summary><b>Can I add VibeSpace to AltStore or SideStore?</b></summary>
-<br>
-
-Yes! Add the official source to receive updates directly within the app. Copy this link:
-
-```
-https://raw.githubusercontent.com/mornyeapp/Mornye/refs/heads/main/apps.json
+# Build the Windows Release application.
+fvm flutter build windows --release
 ```
 
-In AltStore/SideStore, go to **Browse > Sources**, tap **+**, and paste the link.
+The Windows build expects the Rust desktop library to be staged before CMake configures the application. The build script selects the host Windows architecture by default; see its help and source for the ARM64 target option.
 
-</details>
+The generated application bundle is produced under:
 
-> [!NOTE]
-> If VibeSpace is useful to you, consider supporting development:
->
-> [![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/zarzet)
+```text
+build/windows/x64/runner/Release/
+```
+
+The exact output architecture directory depends on the target used to build.
+
+For the full development workflow and platform-specific requirements, see [CONTRIBUTING.md](CONTRIBUTING.md). That guide is inherited from the upstream codebase and may still use upstream project terminology.
+
+## Repository map
+
+| Path | Purpose |
+| --- | --- |
+| `lib/` | Flutter UI, state management, playback orchestration and platform services |
+| `rust_backend/` | Rust backend, native bindings and desktop functionality |
+| `windows/` | Windows runner, native integration and packaging configuration |
+| `android/`, `ios/` | Mobile platform projects and bridges |
+| `linux/`, `macos/` | Desktop platform projects |
+| `test/` | Unit and widget tests |
+| `integration_test/` | Integration and device-level tests |
+| `third_party/` | Vendored or patched dependencies |
+| `scripts/` | Build, packaging and maintenance scripts |
+| `.paul/`, `.planning/` | Project planning and engineering notes |
+
+## Project relationship and attribution
+
+Vibescape is a downstream derivative of [Mornye](https://github.com/mornyeapp/Mornye), originally created and maintained by **zarzet**. The upstream project provides the codebase and application foundations on which Vibescape is built.
+
+Vibescape adds its own branding and independently maintained changes, including Windows-focused audio work. It is not the official Mornye application, and no affiliation, endorsement or support by the Mornye maintainers is implied.
+
+Please visit and support the original project:
+
+- [Mornye source repository](https://github.com/mornyeapp/Mornye)
+- [Mornye project website](https://mornye.com)
+
+## Contributing
+
+Bug reports, focused fixes, documentation improvements and testing feedback are welcome.
+
+Before opening an issue or pull request:
+
+1. Search existing issues to avoid duplicates.
+2. Include the operating system, audio endpoint, output mode and relevant logs for playback problems.
+3. Keep pull requests focused and explain how changes were tested.
+4. Never commit API keys, credentials, signing material, downloaded music or generated build artifacts.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the inherited development workflow and toolchain details. Please note that some instructions may refer to Mornye and should be interpreted in the context of this derivative repository.
+
+## Licensing
+
+This repository retains the upstream **GNU Lesser General Public License v3.0 only (LGPL-3.0-only)** licensing files. See [`LICENSE`](LICENSE), [`COPYING`](COPYING) and [`NOTICE`](NOTICE) for the applicable terms and upstream notice.
+
+Third-party components keep their own copyright and licence terms. Their notices are maintained in the relevant component directories and licence folders. Do not assume that every bundled dependency is licensed under the same terms.
+
+When modifying or redistributing Vibescape, preserve the required copyright notices and comply with the applicable licence obligations, including source and relinking requirements where they apply.
 
 ---
-
-## <picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme/sections/section-contributors-dark.svg"><img src="assets/readme/sections/section-contributors-light.svg" height="32" align="top" alt=""></picture> Contributors
-
-Thanks to everyone who has contributed to VibeSpace!
-
-<a href="https://github.com/mornyeapp/Mornye/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=mornyeapp/Mornye" />
-</a>
-
-We also appreciate everyone who helped with [translations on Crowdin](https://crowdin.com/project/mornye), reported bugs, suggested features, and spread the word.
-
-Interested in contributing? Check out the [Contributing Guide](CONTRIBUTING.md) to get started!
-
----
-
-## <picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme/sections/section-credits-dark.svg"><img src="assets/readme/sections/section-credits-light.svg" height="32" align="top" alt=""></picture> API Credits
 
 <p align="center">
-  <a href="https://lyrics.paxsenix.org"><b>Paxsenix</b></a> &nbsp;·&nbsp;
-  <a href="https://lrc.red"><b>lrc.red</b></a> &nbsp;·&nbsp;
-  <a href="https://github.com/ibratabian17/LyricsPlus"><b>LyricsPlus</b></a> &nbsp;·&nbsp;
-  <a href="https://lrclib.net"><b>LRCLib</b></a> &nbsp;·&nbsp;
-  <a href="https://betterlyrics.org"><b>BetterLyrics</b></a> &nbsp;·&nbsp;
-  <a href="https://developers.deezer.com"><b>Deezer</b></a> &nbsp;·&nbsp;
-  <a href="https://musicbrainz.org"><b>MusicBrainz</b></a> &nbsp;·&nbsp;
-  <a href="https://song.link"><b>Song.link</b></a> &nbsp;·&nbsp;
-  <a href="https://github.com/FlazeIGuess/unitune-api"><b>UniTune</b></a> &nbsp;·&nbsp;
-  <a href="https://squigly.link"><b>Squigly</b></a>
+  <strong>Vibescape</strong><br />
+  Built on Mornye. Maintained independently.
 </p>
-
----
-
-## <picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme/sections/section-disclaimer-dark.svg"><img src="assets/readme/sections/section-disclaimer-light.svg" height="32" align="top" alt=""></picture> Disclaimer
-
-VibeSpace is licensed under the [GNU Lesser General Public License v3.0 only (LGPL-3.0-only)](LICENSE), together with the incorporated [GNU GPL v3.0 terms](COPYING). Copyright 2026 zarzet. Third-party components retain their own license notices.
-
-This repository and its contents are provided for educational and research purposes. The software is provided "as-is" without warranty of any kind, express or implied, as stated in the license.
-
-- No copyrighted content is hosted, stored, mirrored, or distributed by this repository.
-- Users must ensure that their use of this software is properly authorized and complies with all applicable laws, regulations, and third-party terms of service.
-- This software is provided free of charge by the maintainer. If you paid a third party for access to this software in its original form from this repository, you may have been misled or scammed. Any redistribution or commercial use by third parties must comply with the terms of the repository license. No affiliation, endorsement, or support by the maintainer is implied unless explicitly stated in writing.
-- VibeSpace is an independent project. It is not affiliated with, endorsed by, or connected to any other project or version on other platforms that may share a similar name. The maintainer of this repository has no control over or responsibility for third-party projects.
-- The author(s) disclaim all liability for any direct, indirect, incidental, or consequential damages arising from the use or misuse of this software. Users assume all risk associated with its use.
-- If you are a copyright holder or authorized representative and believe this repository infringes upon your rights, please contact the maintainer with sufficient detail (including relevant URLs and proof of ownership). The matter will be promptly investigated and appropriate action will be taken, which may include removal of the referenced material.
-
-> [!TIP]
-> **Star the repo** to get notified about all new releases directly from GitHub.
