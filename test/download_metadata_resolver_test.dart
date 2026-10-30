@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/services/download_metadata_resolver.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/services/download_metadata_resolver.dart';
 
 Extension provider(
   String id, {

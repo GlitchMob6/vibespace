@@ -8,16 +8,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/user_profile_provider.dart';
-import 'package:mornye/screens/settings/settings_tab.dart';
-import 'package:mornye/services/backup_service.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
-import 'package:mornye/services/user_profile_store.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/profile_avatar.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/user_profile_provider.dart';
+import 'package:vibespace/screens/settings/settings_tab.dart';
+import 'package:vibespace/services/backup_service.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
+import 'package:vibespace/services/user_profile_store.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/profile_avatar.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

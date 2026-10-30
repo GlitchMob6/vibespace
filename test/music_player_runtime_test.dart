@@ -7,17 +7,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show AppLifecycleState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/services/app_state_database.dart';
-import 'package:mornye/services/autoplay_personalization.dart';
-import 'package:mornye/services/listening_statistics.dart';
-import 'package:mornye/services/music_player_service.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_notification.dart';
-import 'package:mornye/services/source_deletion_events.dart';
-import 'package:mornye/utils/file_access.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/services/app_state_database.dart';
+import 'package:vibespace/services/autoplay_personalization.dart';
+import 'package:vibespace/services/listening_statistics.dart';
+import 'package:vibespace/services/music_player_service.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_notification.dart';
+import 'package:vibespace/services/source_deletion_events.dart';
+import 'package:vibespace/utils/file_access.dart';
+import 'package:vibespace/utils/logger.dart';
 
 class _Deck implements PlaybackDeck {
   @override

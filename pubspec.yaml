@@ -173,20 +173,20 @@ flutter_launcher_icons:
   ios: true
   image_path: "icon.png"
   image_path_android: "icon_android.png"
-  adaptive_icon_background: "#1E4E4F"
+  adaptive_icon_background: "#080615"
   adaptive_icon_foreground: "icon_foreground_android.png"
   adaptive_icon_foreground_inset: 0
   adaptive_icon_monochrome: "icon_monochrome_android.png"
   ios_content_mode: scaleAspectFill
   remove_alpha_ios: true
-  background_color_ios: "#1E4E4F"
+  background_color_ios: "#080615"
   # The macOS source places the badge on Apple's 824 pt icon grid.
   macos:
     generate: true
     image_path: "icon_macos.png"
   windows:
     generate: true
-    image_path: "assets/brand/logo/png/mornye-badge@1x.png"
+    image_path: "icon.png"
     icon_size: 256
 
 flutter:

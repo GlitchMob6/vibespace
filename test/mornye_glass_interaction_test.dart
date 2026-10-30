@@ -5,10 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_switch.dart';
-import 'package:mornye/widgets/mornye_chrome.dart';
-import 'package:mornye/widgets/mornye_selection_pill.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_switch.dart';
+import 'package:vibespace/widgets/mornye_chrome.dart';
+import 'package:vibespace/widgets/mornye_selection_pill.dart';
 
 void _maskCullingTests() {
   for (final direction in TextDirection.values) {

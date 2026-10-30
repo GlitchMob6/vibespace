@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/constants/language_choices.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/l10n/supported_locales.dart';
+import 'package:vibespace/constants/language_choices.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/l10n/supported_locales.dart';
 
 void main() {
   test('selectable languages have generated localizations', () async {

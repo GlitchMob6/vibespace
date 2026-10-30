@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/services/music_player_service.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/services/music_player_service.dart';
 
 PlayableMedia track(
   String id, {

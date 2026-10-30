@@ -4,11 +4,11 @@ import 'package:audio_service_platform_interface/audio_service_platform_interfac
 import 'package:dbus/dbus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/media_session_desktop.dart';
-import 'package:mornye/services/media_session_mpris.dart';
-import 'package:mornye/services/media_session_smtc.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/services/media_session_desktop.dart';
+import 'package:vibespace/services/media_session_mpris.dart';
+import 'package:vibespace/services/media_session_smtc.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 import 'package:smtc_windows/smtc_windows.dart' as smtc;
 
 /// Records each handler callback by request type.

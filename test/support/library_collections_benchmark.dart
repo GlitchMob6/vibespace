@@ -4,12 +4,12 @@ import 'dart:isolate';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mornye/models/library_collections.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/services/library_collections_database.dart';
-import 'package:mornye/services/library_collections_hydration.dart';
-import 'package:mornye/services/library_playlist_search.dart';
-import 'package:mornye/services/library_search.dart';
+import 'package:vibespace/models/library_collections.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/services/library_collections_database.dart';
+import 'package:vibespace/services/library_collections_hydration.dart';
+import 'package:vibespace/services/library_playlist_search.dart';
+import 'package:vibespace/services/library_search.dart';
 
 LibraryCollectionsSnapshot _fixture(int count) => LibraryCollectionsSnapshot(
   wishlistRows: [

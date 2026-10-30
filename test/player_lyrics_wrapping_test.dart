@@ -4,12 +4,12 @@ import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/lyrics_parser.dart';
-import 'package:mornye/widgets/player_lyrics.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/lyrics_parser.dart';
+import 'package:vibespace/widgets/player_lyrics.dart';
 
 const _text = 'AAAA BBBB CCCC';
 

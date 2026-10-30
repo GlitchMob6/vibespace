@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/utils/lyrics_parser.dart';
-import 'package:mornye/utils/lyrics_timeline.dart';
+import 'package:vibespace/utils/lyrics_parser.dart';
+import 'package:vibespace/utils/lyrics_timeline.dart';
 
 void main() {
   test('indexed active voices match the timeline contract across seeks', () {

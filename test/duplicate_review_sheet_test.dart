@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/local_library_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/duplicate_review_sheet.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/local_library_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/duplicate_review_sheet.dart';
 
 import 'support/fixed_settings.dart';
 

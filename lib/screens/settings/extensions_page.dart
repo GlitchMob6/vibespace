@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:vibespace/widgets/app_snack_bar.dart';
 import 'package:vibespace/widgets/app_switch.dart';
@@ -248,7 +248,8 @@ class _ExtensionsPageState extends ConsumerState<ExtensionsPage> {
 
     final hasInvalidFile = selectedFiles.any((file) {
       final lowerName = file.name.toLowerCase();
-      return !lowerName.endsWith('.mornye-ext') &&
+      return !lowerName.endsWith('.vibespace-ext') &&
+          !lowerName.endsWith('.mornye-ext') &&
           !lowerName.endsWith('.spotiflac-ext') &&
           !lowerName.endsWith('.sflx');
     });

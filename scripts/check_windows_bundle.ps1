@@ -10,7 +10,8 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $BundleDir = (Resolve-Path $BundleDir).Path
-$required = 'mornye.exe', 'flutter_windows.dll', 'mornye_desktop.dll',
+$exeName = if (Test-Path (Join-Path $BundleDir 'vibespace.exe')) { 'vibespace.exe' } else { 'mornye.exe' }
+$required = $exeName, 'flutter_windows.dll', 'mornye_desktop.dll',
     'libmpv-2.dll', 'vcruntime140.dll', 'msvcp140.dll', 'data\app.so', 'ffmpeg\ffmpeg.exe', 'ffmpeg\ffprobe.exe',
     'ffmpeg\LICENSE.txt', 'ffmpeg\SOURCE.txt'
 if ($Arch -eq 'x64') {

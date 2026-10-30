@@ -6,12 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/screens/settings/extension_detail_page.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/screens/settings/extension_detail_page.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 import 'support/fixed_settings.dart';
 

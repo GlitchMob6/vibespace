@@ -4,12 +4,12 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/runtime_profile_provider.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/mini_player.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/runtime_profile_provider.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/mini_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _Controller implements MusicPlayerController {

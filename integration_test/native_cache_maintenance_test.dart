@@ -5,10 +5,10 @@ import 'dart:isolate';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:mornye/services/library_cleanup.dart';
-import 'package:mornye/services/library_schema.dart';
-import 'package:mornye/services/native_cache_maintenance.dart';
-import 'package:mornye/utils/cache_byte_budget.dart';
+import 'package:vibespace/services/library_cleanup.dart';
+import 'package:vibespace/services/library_schema.dart';
+import 'package:vibespace/services/native_cache_maintenance.dart';
+import 'package:vibespace/utils/cache_byte_budget.dart';
 
 Future<File> _payload(
   Directory directory,

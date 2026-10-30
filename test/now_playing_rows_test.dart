@@ -2,16 +2,16 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/theme/player_artwork_theme.dart';
-import 'package:mornye/widgets/album_track_tile.dart';
-import 'package:mornye/widgets/app_content_card.dart';
-import 'package:mornye/widgets/desktop/track_table.dart';
-import 'package:mornye/widgets/now_playing_indicator.dart';
-import 'package:mornye/widgets/track_card.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/theme/player_artwork_theme.dart';
+import 'package:vibespace/widgets/album_track_tile.dart';
+import 'package:vibespace/widgets/app_content_card.dart';
+import 'package:vibespace/widgets/desktop/track_table.dart';
+import 'package:vibespace/widgets/now_playing_indicator.dart';
+import 'package:vibespace/widgets/track_card.dart';
 
 /// Long enough for the effect and spatial springs to settle.
 const _settle = Duration(seconds: 1);

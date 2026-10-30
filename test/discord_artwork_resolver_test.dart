@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/services/discord_artwork_resolver.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/services/discord_artwork_resolver.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

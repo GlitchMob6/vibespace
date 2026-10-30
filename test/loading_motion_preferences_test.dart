@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_3_expressive/material_3_expressive.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/widgets/animation_utils.dart';
-import 'package:mornye/widgets/app_loading_indicator.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/widgets/animation_utils.dart';
+import 'package:vibespace/widgets/app_loading_indicator.dart';
 
 void main() {
   for (final reduced in [false, true]) {

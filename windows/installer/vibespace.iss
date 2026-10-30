@@ -1,0 +1,111 @@
+; Inno Setup 6 script for the per-user VibeSpace installer.
+;
+; Built by scripts/package_windows.ps1, which passes:
+;   /DAppVersion=5.3.0          display version (release tag without "v")
+;   /DNumericVersion=5.3.0.0    file version (digits only)
+;   /DBundleDir=<path>          the flutter build windows Release folder
+;   /DArch=x64 or arm64
+;   /DOutputDir=<path> /DOutputBaseName=<file name without .exe>
+;
+; Installs to %LOCALAPPDATA%\Programs\VibeSpace without elevation, adds a Start
+; Menu shortcut (desktop shortcut optional), registers the vibespace:// URL
+; protocol under HKCU\Software\Classes and closes a running VibeSpace before
+; replacing files. The in-app updater runs the installer with
+;   /SILENT /SP- /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /RELAUNCH=1
+; and /RELAUNCH=1 starts VibeSpace again once a silent install finishes.
+
+#ifndef AppVersion
+  #error AppVersion is required
+#endif
+#ifndef NumericVersion
+  #error NumericVersion is required
+#endif
+#ifndef BundleDir
+  #error BundleDir is required
+#endif
+#ifndef Arch
+  #define Arch "x64"
+#endif
+#ifndef OutputDir
+  #define OutputDir "."
+#endif
+#ifndef OutputBaseName
+  #define OutputBaseName "VibeSpace-setup"
+#endif
+
+#define AppName "VibeSpace"
+#define AppExe "vibespace.exe"
+#define AppUserModelId "com.zarz.vibespace"
+#define AppUrl "https://github.com/GlitchMob6/vibespace"
+
+#if Arch == "arm64"
+  #define AllowedArchitectures "arm64"
+#else
+  #define AllowedArchitectures "x64compatible"
+#endif
+
+[Setup]
+AppId={{0FFEA5B8-69C1-423B-B38E-1E521494A286}
+AppName={#AppName}
+AppVersion={#AppVersion}
+AppVerName={#AppName} {#AppVersion}
+AppPublisher=VibeSpace
+AppPublisherURL={#AppUrl}
+AppSupportURL={#AppUrl}/issues
+AppUpdatesURL=https://github.com/GlitchMob6/vibespace/releases
+VersionInfoVersion={#NumericVersion}
+VersionInfoProductName={#AppName}
+VersionInfoDescription={#AppName} Setup
+PrivilegesRequired=lowest
+DefaultDirName={userpf}\{#AppName}
+DisableDirPage=no
+DisableProgramGroupPage=yes
+DefaultGroupName={#AppName}
+UsePreviousAppDir=yes
+ArchitecturesAllowed={#AllowedArchitectures}
+ArchitecturesInstallIn64BitMode={#AllowedArchitectures}
+MinVersion=10.0.17763
+CloseApplications=force
+RestartApplications=no
+SetupIconFile=..\runner\resources\app_icon.ico
+UninstallDisplayIcon={app}\{#AppExe}
+UninstallDisplayName={#AppName}
+WizardStyle=modern
+Compression=lzma2/max
+SolidCompression=yes
+OutputDir={#OutputDir}
+OutputBaseFilename={#OutputBaseName}
+
+[Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+
+[InstallDelete]
+; Remove files of the previous version so stale plugins and assets do not
+; linger next to the new ones.
+Type: filesandordirs; Name: "{app}\data"
+
+[Files]
+Source: "{#BundleDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[Icons]
+Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: "{#AppUserModelId}"
+Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; AppUserModelID: "{#AppUserModelId}"; Tasks: desktopicon
+
+[Registry]
+Root: HKCU; Subkey: "Software\Classes\vibespace"; ValueType: string; ValueName: ""; ValueData: "URL:{#AppName} Protocol"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Classes\vibespace"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKCU; Subkey: "Software\Classes\vibespace\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"",0"
+Root: HKCU; Subkey: "Software\Classes\vibespace\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExe}"" ""%1"""
+
+[Run]
+Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#AppExe}"; Flags: nowait; Check: ShouldRelaunch
+
+[Code]
+function ShouldRelaunch: Boolean;
+begin
+  Result := WizardSilent and (ExpandConstant('{param:RELAUNCH|0}') = '1');
+end;

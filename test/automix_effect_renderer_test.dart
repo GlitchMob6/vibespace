@@ -4,9 +4,9 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/automix_options.dart';
-import 'package:mornye/services/audio_analysis_jobs.dart';
-import 'package:mornye/services/automix_effect_renderer.dart';
+import 'package:vibespace/models/automix_options.dart';
+import 'package:vibespace/services/audio_analysis_jobs.dart';
+import 'package:vibespace/services/automix_effect_renderer.dart';
 
 void main() {
   late Directory temporary;

@@ -5,17 +5,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/screens/album_screen.dart';
-import 'package:mornye/screens/home_tab.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/album_description.dart';
-import 'package:mornye/widgets/album_detail_header.dart';
-import 'package:mornye/widgets/audio_quality_badges.dart';
-import 'package:mornye/widgets/disc_separator_chip.dart';
-import 'package:mornye/widgets/track_list_tile.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/screens/album_screen.dart';
+import 'package:vibespace/screens/home_tab.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/album_description.dart';
+import 'package:vibespace/widgets/album_detail_header.dart';
+import 'package:vibespace/widgets/audio_quality_badges.dart';
+import 'package:vibespace/widgets/disc_separator_chip.dart';
+import 'package:vibespace/widgets/track_list_tile.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

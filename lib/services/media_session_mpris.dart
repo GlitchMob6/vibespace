@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_service_platform_interface/audio_service_platform_interface.dart';
@@ -146,7 +146,7 @@ class MprisPlayerObject extends DBusObject {
     'CanQuit': DBusBoolean(false),
     'CanRaise': DBusBoolean(false),
     'HasTrackList': DBusBoolean(false),
-    'Identity': DBusString('Mornye'),
+    'Identity': DBusString('VibeSpace'),
     'DesktopEntry': DBusString('com.zarz.mornye'),
     'SupportedUriSchemes': DBusArray(DBusSignature('s')),
     'SupportedMimeTypes': DBusArray(DBusSignature('s')),

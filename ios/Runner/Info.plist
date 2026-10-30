@@ -24,7 +24,7 @@
 		<string>zh-Hant</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>Mornye</string>
+	<string>VibeSpace</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -32,7 +32,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Mornye</string>
+	<string>VibeSpace</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -102,7 +102,7 @@
 	<true/>
 	
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Mornye needs access to save album artwork</string>
+	<string>VibeSpace needs access to save album artwork</string>
 	
 	<key>CFBundleURLTypes</key>
 	<array>
@@ -113,6 +113,7 @@
 			<string>com.zarz.mornye</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>vibespace</string>
 				<string>mornye</string>
 				<string>discord-1549854098801692862</string>
 			</array>

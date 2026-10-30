@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/download_item.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_state.dart';
-import 'package:mornye/providers/download_progress.dart';
+import 'package:vibespace/models/download_item.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_state.dart';
+import 'package:vibespace/providers/download_progress.dart';
 
 DownloadItem _item({DownloadStatus status = DownloadStatus.downloading}) =>
     DownloadItem(

@@ -26,6 +26,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 
 $projectDir = Split-Path -Parent $PSScriptRoot
 if (-not $BundleDir) {
@@ -79,7 +80,11 @@ if ($Only -in 'all', 'installer') {
         }
     }
 
-    $script = Join-Path $projectDir 'windows\installer\mornye.iss'
+    $script = if (Test-Path (Join-Path $projectDir 'windows\installer\vibespace.iss')) {
+        Join-Path $projectDir 'windows\installer\vibespace.iss'
+    } else {
+        Join-Path $projectDir 'windows\installer\mornye.iss'
+    }
     & $iscc `
         "/DAppVersion=$upstream" `
         "/DNumericVersion=$numericVersion" `

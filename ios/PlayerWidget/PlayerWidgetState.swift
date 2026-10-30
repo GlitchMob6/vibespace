@@ -35,7 +35,7 @@ struct PlayerWidgetState: Codable {
     static var preview: PlayerWidgetState {
         var value = Self()
         value.title = "Your favorite music"
-        value.artist = "Mornye"
+        value.artist = "VibeSpace"
         value.album = "Now Playing"
         value.canPlay = true
         value.canPrevious = true

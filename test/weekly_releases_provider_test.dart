@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/providers/library_collections_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/providers/weekly_releases_provider.dart';
-import 'package:mornye/services/platform_bridge.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/providers/library_collections_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/providers/weekly_releases_provider.dart';
+import 'package:vibespace/services/platform_bridge.dart';
 
 class _Collections extends LibraryCollectionsNotifier {
   _Collections(this.initial);

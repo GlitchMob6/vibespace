@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/music_player_provider.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
 
 PlaybackRowKey _row(String id, [String path = '']) => (id: id, path: path);
 

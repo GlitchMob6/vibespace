@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/equalizer_settings.dart';
-import 'package:mornye/services/music_playback_deck.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_equalizer.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/models/equalizer_settings.dart';
+import 'package:vibespace/services/music_playback_deck.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_equalizer.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

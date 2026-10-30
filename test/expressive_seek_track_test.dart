@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderRepaintBoundary;
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/expressive_seek_track.dart';
-import 'package:mornye/widgets/playback_seek_slider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/expressive_seek_track.dart';
+import 'package:vibespace/widgets/playback_seek_slider.dart';
 
 Widget _host({
   bool playing = true,

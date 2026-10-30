@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/network_storage_service.dart';
-import 'package:mornye/services/network_metadata_service.dart';
+import 'package:vibespace/services/network_storage_service.dart';
+import 'package:vibespace/services/network_metadata_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

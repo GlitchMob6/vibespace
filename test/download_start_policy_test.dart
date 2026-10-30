@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/services/platform_bridge.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/services/platform_bridge.dart';
 
 void main() {
   group('download storage recovery', () {

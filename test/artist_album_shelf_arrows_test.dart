@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/track_provider.dart';
-import 'package:mornye/screens/artist_screen.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/track_provider.dart';
+import 'package:vibespace/screens/artist_screen.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

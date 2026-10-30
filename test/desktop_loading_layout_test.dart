@@ -5,17 +5,17 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/screens/extension_collection_screens.dart';
-import 'package:mornye/services/backend/native_backend_transport.dart';
-import 'package:mornye/services/backend/rust_ffi_backend.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/animation_utils.dart';
-import 'package:mornye/widgets/desktop/track_table.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/screens/extension_collection_screens.dart';
+import 'package:vibespace/services/backend/native_backend_transport.dart';
+import 'package:vibespace/services/backend/rust_ffi_backend.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/animation_utils.dart';
+import 'package:vibespace/widgets/desktop/track_table.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _PendingMetadata implements NativeBackendTransport {

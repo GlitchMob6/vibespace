@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/models/app_crash_report.dart';
-import 'package:mornye/providers/app_crash_provider.dart';
-import 'package:mornye/services/app_crash_service.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/widgets/app_content_card.dart';
-import 'package:mornye/widgets/app_crash_banner.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/models/app_crash_report.dart';
+import 'package:vibespace/providers/app_crash_provider.dart';
+import 'package:vibespace/services/app_crash_service.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/widgets/app_content_card.dart';
+import 'package:vibespace/widgets/app_crash_banner.dart';
 
 Map<String, dynamic> _report() => {
   'id': '123456',

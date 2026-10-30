@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/download_item.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/library_browse_provider.dart';
-import 'package:mornye/providers/library_search_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/screens/mornye_library_screen.dart';
-import 'package:mornye/services/album_completeness.dart';
-import 'package:mornye/theme/mornye_theme.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/download_item.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/library_browse_provider.dart';
+import 'package:vibespace/providers/library_search_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/screens/mornye_library_screen.dart';
+import 'package:vibespace/services/album_completeness.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
 
 class _Settings extends SettingsNotifier {
   @override

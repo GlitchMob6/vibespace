@@ -3,15 +3,15 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/theme_settings.dart';
-import 'package:mornye/providers/runtime_profile_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_switch.dart';
-import 'package:mornye/widgets/extension_repo_card.dart';
-import 'package:mornye/widgets/mornye_chrome.dart';
-import 'package:mornye/widgets/mornye_selection_pill.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/theme_settings.dart';
+import 'package:vibespace/providers/runtime_profile_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_switch.dart';
+import 'package:vibespace/widgets/extension_repo_card.dart';
+import 'package:vibespace/widgets/mornye_chrome.dart';
+import 'package:vibespace/widgets/mornye_selection_pill.dart';
 
 class _Settings extends SettingsNotifier {
   @override

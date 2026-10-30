@@ -6,14 +6,14 @@ import 'package:ffmpeg_kit_flutter_new_audio/return_code.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mornye/models/download_result.dart';
-import 'package:mornye/models/extension.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/services/download_metadata_embedding.dart';
-import 'package:mornye/services/download_request_payload.dart';
-import 'package:mornye/services/ffmpeg_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
+import 'package:vibespace/models/download_result.dart';
+import 'package:vibespace/models/extension.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/services/download_metadata_embedding.dart';
+import 'package:vibespace/services/download_request_payload.dart';
+import 'package:vibespace/services/ffmpeg_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

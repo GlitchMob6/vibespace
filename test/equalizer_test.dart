@@ -5,16 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_3_expressive/material_3_expressive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/equalizer_settings.dart';
-import 'package:mornye/providers/equalizer_provider.dart';
-import 'package:mornye/screens/equalizer_screen.dart';
-import 'package:mornye/services/playback_equalizer.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_slider.dart';
-import 'package:mornye/widgets/mornye_chrome.dart';
-import 'package:mornye/widgets/mornye_level_slider.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/equalizer_settings.dart';
+import 'package:vibespace/providers/equalizer_provider.dart';
+import 'package:vibespace/screens/equalizer_screen.dart';
+import 'package:vibespace/services/playback_equalizer.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_slider.dart';
+import 'package:vibespace/widgets/mornye_chrome.dart';
+import 'package:vibespace/widgets/mornye_level_slider.dart';
 
 void main() {
   setUp(() {

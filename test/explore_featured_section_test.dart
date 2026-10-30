@@ -6,13 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/providers/explore_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/widgets/explore_featured_section.dart';
-import 'package:mornye/widgets/audio_quality_badges.dart';
-import 'package:mornye/l10n/app_localizations.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/providers/explore_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/widgets/explore_featured_section.dart';
+import 'package:vibespace/widgets/audio_quality_badges.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

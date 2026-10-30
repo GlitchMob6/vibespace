@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/library_collections.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/models/unified_library_item.dart';
-import 'package:mornye/providers/download_history_provider.dart';
-import 'package:mornye/services/library_database.dart';
+import 'package:vibespace/models/library_collections.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/models/unified_library_item.dart';
+import 'package:vibespace/providers/download_history_provider.dart';
+import 'package:vibespace/services/library_database.dart';
 
 Track _track(String id, {String? source, String? isrc}) => Track(
   id: id,

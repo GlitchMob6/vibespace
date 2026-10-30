@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/network_storage_service.dart';
-import 'package:mornye/services/source_deletion_events.dart';
-import 'package:mornye/utils/file_access.dart';
+import 'package:vibespace/services/network_storage_service.dart';
+import 'package:vibespace/services/source_deletion_events.dart';
+import 'package:vibespace/utils/file_access.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

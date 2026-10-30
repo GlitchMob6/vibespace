@@ -5,17 +5,17 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/screens/local_album_screen.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/cover_palette.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/theme/player_artwork_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/album_detail_header.dart';
-import 'package:mornye/widgets/desktop/detail_header.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/screens/local_album_screen.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/cover_palette.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/theme/player_artwork_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/album_detail_header.dart';
+import 'package:vibespace/widgets/desktop/detail_header.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Hands out cover schemes without decoding images: [cached] answers a peek

@@ -7,12 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/download_history_provider.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/screens/track_metadata_screen.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/widgets/app_choice_chip.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/download_history_provider.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/screens/track_metadata_screen.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/widgets/app_choice_chip.dart';
 
 import 'support/app_icon_finder.dart';
 

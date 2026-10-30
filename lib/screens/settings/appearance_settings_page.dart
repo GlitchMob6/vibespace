@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:vibespace/widgets/app_bottom_sheet.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vibespace/l10n/l10n.dart';
@@ -54,7 +54,7 @@ class AppearanceSettingsPage extends ConsumerWidget {
                         children: [
                           Text(
                             style == AppThemeStyle.mornye
-                                ? 'Mornye'
+                                ? 'VibeSpace'
                                 : 'Material',
                           ),
                           if (style == AppThemeStyle.mornye)

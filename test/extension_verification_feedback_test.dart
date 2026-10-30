@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/services/app_navigation_service.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/extension_auth_launcher.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/services/app_navigation_service.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/extension_auth_launcher.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
 
 void main() {
   const channel = MethodChannel('com.zarz.mornye/backend');

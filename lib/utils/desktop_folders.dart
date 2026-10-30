@@ -9,8 +9,8 @@ typedef DesktopProcessRunner =
     Future<ProcessResult> Function(String executable, List<String> arguments);
 
 /// Folder created inside the OS Music folder for desktop downloads, matching
-/// the mobile `Download/Mornye` and `Documents/Mornye` defaults.
-const desktopOutputFolderName = 'Mornye';
+/// the mobile `Download/VibeSpace` and `Documents/VibeSpace` defaults.
+const desktopOutputFolderName = 'VibeSpace';
 
 /// Replaces the host Music folder in widget tests, which must not depend on
 /// the test machine's OS or run `xdg-user-dir`.

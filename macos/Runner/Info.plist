@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Mornye</string>
+	<string>VibeSpace</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconFile</key>
@@ -29,6 +29,7 @@
 			<string>com.zarz.mornye</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>vibespace</string>
 				<string>mornye</string>
 				<string>discord-1549854098801692862</string>
 			</array>

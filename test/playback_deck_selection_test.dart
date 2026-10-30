@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/media_kit_playback_deck.dart';
-import 'package:mornye/services/music_playback_deck.dart';
-import 'package:mornye/services/music_player_runtime.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/services/media_kit_playback_deck.dart';
+import 'package:vibespace/services/music_playback_deck.dart';
+import 'package:vibespace/services/music_player_runtime.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 import 'support/fake_mpv_engine.dart';
 

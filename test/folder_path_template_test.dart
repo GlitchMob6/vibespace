@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/backend/rust_ffi_backend.dart';
-import 'package:mornye/services/folder_path_template.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/services/backend/rust_ffi_backend.dart';
+import 'package:vibespace/services/folder_path_template.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

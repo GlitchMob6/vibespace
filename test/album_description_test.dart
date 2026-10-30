@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/editorial_notes.dart';
-import 'package:mornye/widgets/album_description.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/editorial_notes.dart';
+import 'package:vibespace/widgets/album_description.dart';
 
 void main() {
   test(

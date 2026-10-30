@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
 
 Track albumTrack({
   required String id,

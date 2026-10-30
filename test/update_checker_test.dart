@@ -6,12 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/services/update_checker.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/runtime_profile_provider.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/logger.dart';
-import 'package:mornye/widgets/update_dialog.dart';
+import 'package:vibespace/services/update_checker.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/runtime_profile_provider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/logger.dart';
+import 'package:vibespace/widgets/update_dialog.dart';
 
 Map<String, Object?> release(String version) => {
   'tag_name': 'v$version',

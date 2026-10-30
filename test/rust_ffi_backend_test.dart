@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/constants/app_info.dart';
-import 'package:mornye/services/backend/ffi_backend_transport.dart';
-import 'package:mornye/services/backend/native_backend_transport.dart';
-import 'package:mornye/services/backend/rust_ffi_backend.dart';
+import 'package:vibespace/constants/app_info.dart';
+import 'package:vibespace/services/backend/ffi_backend_transport.dart';
+import 'package:vibespace/services/backend/native_backend_transport.dart';
+import 'package:vibespace/services/backend/rust_ffi_backend.dart';
 
 class _Call {
   _Call(this.id, this.method, this.args, this.bytes);

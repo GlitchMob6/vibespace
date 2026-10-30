@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/library_collections_provider.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/utils/audio_format_utils.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/library_collections_provider.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/utils/audio_format_utils.dart';
 
 void main() {
   group('local library incremental scan', () {

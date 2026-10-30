@@ -1,5 +1,5 @@
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/settings_provider.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/settings_provider.dart';
 
 /// Skips loading persisted settings and serves [initial] unchanged.
 class FixedSettingsNotifier extends SettingsNotifier {

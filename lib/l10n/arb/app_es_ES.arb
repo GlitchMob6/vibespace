@@ -73,7 +73,7 @@
   "@networkErrorPermission": {
     "description": "Network access error when the server denies account permissions for a shared folder; distinct from the device's local network permission"
   },
-  "networkErrorLocalPermission": "Local network access is not allowed. Allow Nearby devices for Mornye in Android app settings, then try again.",
+  "networkErrorLocalPermission": "Local network access is not allowed. Allow Nearby devices for VibeSpace in Android app settings, then try again.",
   "@networkErrorLocalPermission": {
     "description": "Network access error when Android denies local network permission; Nearby devices is the Android app permission setting"
   },
@@ -182,7 +182,7 @@
   "usbBitPerfectDescription": "Mantén la precisión de la fuente en salidas compatibles. Elige a continuación entre USB directo o AAudio exclusivo; de lo contrario, la salida USB de Android requiere Android 14 o una versión posterior. Se aplica a partir de la siguiente pista, sin AutoMix ni normalización. Es posible que el volumen del sistema no controle la salida USB directa.",
   "usbHardwareVolume": "Volumen del hardware del DAC",
   "usbVolumeWarningTitle": "Revisa el volumen de audio",
-  "usbVolumeWarning": "El audio directo por USB puede ser mucho más alto que la reproducción normal, y es posible que los botones de volumen del teléfono no lo controlen. Baja el volumen de tu DAC o amplificador antes de comenzar. Cuando sea compatible, Mornye configura el DAC a un máximo de −40 dB al conectarse; esto no garantiza un nivel de escucha seguro en todos los amplificadores o audífonos.",
+  "usbVolumeWarning": "El audio directo por USB puede ser mucho más alto que la reproducción normal, y es posible que los botones de volumen del teléfono no lo controlen. Baja el volumen de tu DAC o amplificador antes de comenzar. Cuando sea compatible, VibeSpace configura el DAC a un máximo de −40 dB al conectarse; esto no garantiza un nivel de escucha seguro en todos los amplificadores o audífonos.",
   "usbVolumeAccept": "Entiendo",
   "usbVolumeUnavailable": "La reproducción está en pausa porque este DAC no cuenta con un control de volumen de hardware verificado. Baja el volumen del DAC o del amplificador; luego, si es necesario, activa la salida de volumen fijo y vuelve a seleccionar la pista.",
   "usbFixedVolume": "Permitir salida USB de volumen fijo",
@@ -206,7 +206,7 @@
   "cacheMotionArtworkDesc": "Los videos de los álbumes se guardan junto con las descargas. Al eliminarlos, se conservan tus archivos de música y las portadas estáticas.",
   "nowPlayingVolume": "Volúmen",
   "@nowPlayingVolume": {
-    "description": "System volume control label in the Mornye player"
+    "description": "System volume control label in the VibeSpace player"
   },
   "appearanceStyle": "Estilo de la aplicación",
   "appearanceAccentRed": "Rojo (predeterminado)",
@@ -218,14 +218,14 @@
   "appearanceAccentPink": "Rosado",
   "appearanceGlassClarity": "Transparencia del vidrio",
   "appearanceGlassOutlines": "Contornos de vidrio",
-  "appearanceGlassOutlinesSubtitle": "Mostrar bordes decorativos alrededor del cristal de Mornye. Si desactivas esta opción, se mantendrán el desenfoque y la refracción.",
-  "appearanceGlassClaritySubtitle": "Ajusta la transparencia en los menús y la navegación de Mornye. Se conserva el contraste del texto.",
+  "appearanceGlassOutlinesSubtitle": "Mostrar bordes decorativos alrededor del cristal de VibeSpace. Si desactivas esta opción, se mantendrán el desenfoque y la refracción.",
+  "appearanceGlassClaritySubtitle": "Ajusta la transparencia en los menús y la navegación de VibeSpace. Se conserva el contraste del texto.",
   "appearanceGlassTinted": "Tintado",
   "appearanceGlassClear": "Borrar",
   "appearanceGlassClearPerformance": "El vidrio muy transparente puede consumir más energía y dar una sensación menos fluida en dispositivos más antiguos. Reduce la claridad si es necesario.",
   "appearanceGlassClarityBlurOff": "El vidrio se ve opaco en este dispositivo. Activa “{setting}” para ajustar la claridad.",
   "@appearanceGlassClarityBlurOff": {
-    "description": "Shown under the disabled glass clarity slider when the device renders Mornye glass without blur. The placeholder is the name of the force-blur toggle.",
+    "description": "Shown under the disabled glass clarity slider when the device renders VibeSpace glass without blur. The placeholder is the name of the force-blur toggle.",
     "placeholders": {
       "setting": {
         "type": "String"
@@ -248,7 +248,7 @@
   },
   "@@locale": "es_ES",
   "@@last_modified": "2026-04-28",
-  "appName": "Mornye",
+  "appName": "VibeSpace",
   "@appName": {
     "description": "App name - DO NOT TRANSLATE"
   },
@@ -733,7 +733,7 @@
   },
   "aboutServiceStatus": "Estado del servicio",
   "@aboutServiceStatus": {
-    "description": "Link to the status page of the Mornye online services"
+    "description": "Link to the status page of the VibeSpace online services"
   },
   "aboutReportIssue": "Reportar un problema",
   "@aboutReportIssue": {
@@ -944,7 +944,7 @@
   "@setupStorageRequired": {
     "description": "Title when storage permission needed"
   },
-  "setupStorageDescription": "Mornye necesita permiso de almacenamiento para guardar sus archivos de música descargados.",
+  "setupStorageDescription": "VibeSpace necesita permiso de almacenamiento para guardar sus archivos de música descargados.",
   "@setupStorageDescription": {
     "description": "Explanation for storage permission"
   },
@@ -1614,15 +1614,15 @@
   "@updateStartingInstaller": {
     "description": "Update status on Windows - the downloaded installer is starting and the app will close"
   },
-  "updateMacInstallHint": "The disk image is open in Finder. Quit Mornye, then drag Mornye from the disk image to Applications and replace the old copy.",
+  "updateMacInstallHint": "The disk image is open in Finder. Quit VibeSpace, then drag VibeSpace from the disk image to Applications and replace the old copy.",
   "@updateMacInstallHint": {
     "description": "Update instructions on macOS after the downloaded disk image opens"
   },
-  "updateQuitApp": "Quit Mornye",
+  "updateQuitApp": "Quit VibeSpace",
   "@updateQuitApp": {
     "description": "Update button on macOS - quit the app so the new version can replace it"
   },
-  "updateReadyToRestart": "The update is installed. Restart Mornye to use it.",
+  "updateReadyToRestart": "The update is installed. Restart VibeSpace to use it.",
   "@updateReadyToRestart": {
     "description": "Update status on Linux after the AppImage was replaced"
   },
@@ -2900,7 +2900,7 @@
   "@libraryRemoveFolder": {
     "description": "Action to remove one indexed library source"
   },
-  "libraryRemoveFolderMessage": "¿Deseas eliminar esta carpeta y sus pistas indexadas de Mornye? Los archivos de audio almacenados no se borrarán.",
+  "libraryRemoveFolderMessage": "¿Deseas eliminar esta carpeta y sus pistas indexadas de VibeSpace? Los archivos de audio almacenados no se borrarán.",
   "@libraryRemoveFolderMessage": {
     "description": "Confirmation shown before removing a library source"
   },
@@ -3090,13 +3090,13 @@
   "@libraryStorageAccessRequired": {
     "description": "Dialog title for storage permission"
   },
-  "libraryStorageAccessMessage": "Mornye necesita acceso al almacenamiento para escanear tu biblioteca musical. Por favor, concede el permiso en los ajustes.",
+  "libraryStorageAccessMessage": "VibeSpace necesita acceso al almacenamiento para escanear tu biblioteca musical. Por favor, concede el permiso en los ajustes.",
   "@libraryStorageAccessMessage": {
     "description": "Dialog message for storage permission"
   },
   "librarySourceDownloaded": "Descargado",
   "@librarySourceDownloaded": {
-    "description": "Badge for tracks downloaded via Mornye"
+    "description": "Badge for tracks downloaded via VibeSpace"
   },
   "librarySourceLocal": "En el dispositivo",
   "@librarySourceLocal": {
@@ -3232,11 +3232,11 @@
       }
     }
   },
-  "tutorialWelcomeTitle": "¡Bienvenido a Mornye!",
+  "tutorialWelcomeTitle": "¡Bienvenido a VibeSpace!",
   "@tutorialWelcomeTitle": {
     "description": "Tutorial welcome page title"
   },
-  "tutorialWelcomeDesc": "Aprende a buscar música con extensiones, a elegir la calidad que desees y a administrar las descargas en Mornye.",
+  "tutorialWelcomeDesc": "Aprende a buscar música con extensiones, a elegir la calidad que desees y a administrar las descargas en VibeSpace.",
   "@tutorialWelcomeDesc": {
     "description": "Tutorial welcome page description"
   },
@@ -4365,7 +4365,7 @@
   "@safMigrationTitle": {
     "description": "Title of SAF migration dialog"
   },
-  "safMigrationMessage1": "Mornye ahora utiliza el Android Storage Access Framework (SAF) para las descargas. Esto soluciona los errores de «permiso denegado» en Android 10 y versiones posteriores.",
+  "safMigrationMessage1": "VibeSpace ahora utiliza el Android Storage Access Framework (SAF) para las descargas. Esto soluciona los errores de «permiso denegado» en Android 10 y versiones posteriores.",
   "@safMigrationMessage1": {
     "description": "First paragraph of SAF migration dialog"
   },
@@ -4445,7 +4445,7 @@
   "@backupRestoreFailed": {
     "description": "Snackbar when restore fails"
   },
-  "backupInvalidFile": "Este archivo no es una copia de seguridad válida de Mornye",
+  "backupInvalidFile": "Este archivo no es una copia de seguridad válida de VibeSpace",
   "@backupInvalidFile": {
     "description": "Snackbar when the chosen file is not a valid backup"
   },
@@ -4629,9 +4629,9 @@
     "description": "Subtitle shown in the download location picker sheet"
   },
   "storageAutomaticFolder": "Carpeta automática",
-  "storageAutomaticDownloadFolder": "Utiliza «Descargar/Mornye» si es un dispositivo grabable; de lo contrario, utiliza el almacenamiento de la aplicación",
+  "storageAutomaticDownloadFolder": "Utiliza «Descargar/VibeSpace» si es un dispositivo grabable; de lo contrario, utiliza el almacenamiento de la aplicación",
   "storageSafRecommended": "Selecciona una carpeta (recomendado)",
-  "storageDownloadFolderHint": "En el selector de carpetas de Android, abre la carpeta «Descargas» y selecciona «Mornye». Si no existe, créala con la opción «Nueva carpeta» y, a continuación, toca «Usar esta carpeta» para otorgar acceso.",
+  "storageDownloadFolderHint": "En el selector de carpetas de Android, abre la carpeta «Descargas» y selecciona «VibeSpace». Si no existe, créala con la opción «Nueva carpeta» y, a continuación, toca «Usar esta carpeta» para otorgar acceso.",
   "downloadFolderAccessLostTitle": "Se perdió el acceso a la carpeta de descargas",
   "@downloadFolderAccessLostTitle": {
     "description": "Title of the warning banner shown in Files settings when the saved SAF folder grant is no longer valid"
@@ -5644,7 +5644,7 @@
       }
     }
   },
-  "notifDownloadingUpdate": "Descargar Mornye v{version}",
+  "notifDownloadingUpdate": "Descargar VibeSpace v{version}",
   "@notifDownloadingUpdate": {
     "description": "Notification title while downloading an app update",
     "placeholders": {
@@ -5672,7 +5672,7 @@
   "@notifUpdateReady": {
     "description": "Notification title when app update download is complete"
   },
-  "notifUpdateReadyBody": "Se ha descargado Mornye v{version}. Toca para instalar.",
+  "notifUpdateReadyBody": "Se ha descargado VibeSpace v{version}. Toca para instalar.",
   "@notifUpdateReadyBody": {
     "description": "Notification body when app update is ready to install",
     "placeholders": {
@@ -6440,7 +6440,7 @@
   "@extensionCustomUrlHandlingSubtitle": {
     "description": "Extension detail subtitle for custom URL handling"
   },
-  "extensionCustomUrlHandlingShareHint": "Comparte enlaces de estos sitios a Mornye y esta extensión los manejará.",
+  "extensionCustomUrlHandlingShareHint": "Comparte enlaces de estos sitios a VibeSpace y esta extensión los manejará.",
   "@extensionCustomUrlHandlingShareHint": {
     "description": "Extension detail hint explaining share-to-app URL handling"
   },
@@ -6650,7 +6650,7 @@
   "@libraryBuiltInPreviewPlayer": {
     "description": "Setting option to use the built-in preview player"
   },
-  "libraryBuiltInPreviewPlayerSubtitle": "Reproduce tu música directamente en Mornye",
+  "libraryBuiltInPreviewPlayerSubtitle": "Reproduce tu música directamente en VibeSpace",
   "@libraryBuiltInPreviewPlayerSubtitle": {
     "description": "Subtitle for built-in preview player option"
   },
@@ -7133,11 +7133,11 @@
   "@extensionVerificationHelpTitleWaiting": {
     "description": "Dialog title when verification is taking longer than expected"
   },
-  "extensionVerificationHelpMessageManual": "Mornye no pudo abrir el navegador automáticamente. Abre este enlace en tu navegador o cópialo manualmente.",
+  "extensionVerificationHelpMessageManual": "VibeSpace no pudo abrir el navegador automáticamente. Abre este enlace en tu navegador o cópialo manualmente.",
   "@extensionVerificationHelpMessageManual": {
     "description": "Dialog message when automatic browser launch for verification fails"
   },
-  "extensionVerificationHelpMessageWaiting": "Si el navegador no se abrió, o si la verificación terminó pero no regresaste a Mornye, abre este enlace de nuevo o cópialo manualmente.",
+  "extensionVerificationHelpMessageWaiting": "Si el navegador no se abrió, o si la verificación terminó pero no regresaste a VibeSpace, abre este enlace de nuevo o cópialo manualmente.",
   "@extensionVerificationHelpMessageWaiting": {
     "description": "Dialog message when verification may need manual browser help"
   },
@@ -7269,7 +7269,7 @@
   "@playerCoverStyleFullScreen": {
     "description": "Cover art style: artwork fills the top of the player"
   },
-  "playerCoverStyleFullScreenDescription": "Artwork fills the top of the player and fades into a blur. Motion artwork is always full screen in Mornye",
+  "playerCoverStyleFullScreenDescription": "Artwork fills the top of the player and fades into a blur. Motion artwork is always full screen in VibeSpace",
   "@playerCoverStyleFullScreenDescription": {
     "description": "Subtitle of the full screen cover art style"
   },
@@ -7695,7 +7695,7 @@
   "equalizerPresetName": "Preset name",
   "equalizerImport": "Import preset",
   "equalizerExport": "Share preset",
-  "equalizerImportInvalid": "Choose a valid Mornye equalizer preset (JSON, up to 64 KB).",
+  "equalizerImportInvalid": "Choose a valid VibeSpace equalizer preset (JSON, up to 64 KB).",
   "equalizerSaved": "Preset saved",
   "equalizerResetTitle": "Reset equalizer?",
   "equalizerResetDescription": "Restore a flat curve, default tone and dynamics settings. Saved presets are kept.",
@@ -7803,7 +7803,7 @@
   "audioInfoOff": "Desactivado",
   "audioInfoBypassed": "Bypassed by direct output",
   "audioInfoPlayer": "Reproductor",
-  "audioInfoPlayerValue": "Mornye built-in player",
+  "audioInfoPlayerValue": "VibeSpace built-in player",
   "audioInfoSignalPath": "Signal path",
   "audioInfoPathSystem": "System mixer",
   "audioInfoPathDirect": "Direct USB, bypasses the system mixer",

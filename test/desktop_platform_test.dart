@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/app.dart';
-import 'package:mornye/models/theme_settings.dart';
-import 'package:mornye/providers/theme_provider.dart';
-import 'package:mornye/utils/adaptive_layout.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/app.dart';
+import 'package:vibespace/models/theme_settings.dart';
+import 'package:vibespace/providers/theme_provider.dart';
+import 'package:vibespace/utils/adaptive_layout.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

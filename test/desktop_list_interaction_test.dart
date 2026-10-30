@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/screens/selection_mode_mixin.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/desktop/context_menu.dart';
-import 'package:mornye/widgets/desktop/desktop_selection.dart';
-import 'package:mornye/widgets/desktop/hover_play_button.dart';
-import 'package:mornye/widgets/desktop/library_drop_target.dart';
-import 'package:mornye/widgets/desktop/track_table.dart';
-import 'package:mornye/widgets/mornye_context_menu.dart';
-import 'package:mornye/widgets/track_card.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/screens/selection_mode_mixin.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/desktop/context_menu.dart';
+import 'package:vibespace/widgets/desktop/desktop_selection.dart';
+import 'package:vibespace/widgets/desktop/hover_play_button.dart';
+import 'package:vibespace/widgets/desktop/library_drop_target.dart';
+import 'package:vibespace/widgets/desktop/track_table.dart';
+import 'package:vibespace/widgets/mornye_context_menu.dart';
+import 'package:vibespace/widgets/track_card.dart';
 
 Widget _app(Widget child, {bool mornye = false}) => ProviderScope(
   child: MaterialApp(

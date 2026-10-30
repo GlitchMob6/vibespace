@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/download_item.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/screens/queue_tab.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_alert_dialog.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/download_item.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/screens/queue_tab.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_alert_dialog.dart';
 
 import 'support/fixed_settings.dart';
 

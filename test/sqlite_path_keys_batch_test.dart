@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/sqlite_helpers.dart';
-import 'package:mornye/utils/path_match_keys.dart';
+import 'package:vibespace/services/sqlite_helpers.dart';
+import 'package:vibespace/utils/path_match_keys.dart';
 import 'package:sqflite/sqflite.dart';
 
 class _RecordingBatch implements Batch {

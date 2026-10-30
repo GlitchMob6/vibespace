@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -86,7 +86,7 @@ class CoverDownloadService {
       }
       if (outputDirectory.isEmpty) {
         final documents = await getApplicationDocumentsDirectory();
-        outputDirectory = p.join(documents.path, 'Mornye');
+        outputDirectory = p.join(documents.path, 'VibeSpace');
       }
 
       final directory = Directory(outputDirectory);

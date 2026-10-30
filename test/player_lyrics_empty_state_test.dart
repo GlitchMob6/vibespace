@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/controllers/player_metadata_controller.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/utils/playback_seek_preview.dart';
-import 'package:mornye/widgets/expressive_button.dart';
-import 'package:mornye/widgets/player_lyrics.dart';
-import 'package:mornye/widgets/player_lyrics_section.dart';
+import 'package:vibespace/controllers/player_metadata_controller.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/utils/playback_seek_preview.dart';
+import 'package:vibespace/widgets/expressive_button.dart';
+import 'package:vibespace/widgets/player_lyrics.dart';
+import 'package:vibespace/widgets/player_lyrics_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _NoLyrics extends PlayerMetadataController {

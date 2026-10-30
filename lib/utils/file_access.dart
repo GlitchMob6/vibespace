@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -109,7 +109,7 @@ bool isValidIosWritablePath(String path) {
 /// Returns a valid Documents subdirectory path if the input is invalid.
 Future<String> validateOrFixIosPath(
   String path, {
-  String subfolder = 'Mornye',
+  String subfolder = 'VibeSpace',
 }) async {
   if (!Platform.isIOS) return path;
 

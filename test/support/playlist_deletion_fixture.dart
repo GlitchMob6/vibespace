@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/library_collections_provider.dart';
-import 'package:mornye/services/library_collections_database.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/library_collections_provider.dart';
+import 'package:vibespace/services/library_collections_database.dart';
 
 class PlaylistDeletionDatabase implements LibraryCollectionsDatabase {
   PlaylistDeletionDatabase(this.owner);

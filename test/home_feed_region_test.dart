@@ -6,15 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/explore_provider.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_snack_bar.dart';
-import 'package:mornye/widgets/home_feed_region_setting.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/explore_provider.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_snack_bar.dart';
+import 'package:vibespace/widgets/home_feed_region_setting.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 const _extension = Extension(
   id: 'example.feed',

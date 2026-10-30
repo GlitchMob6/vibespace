@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/download_history_provider.dart';
-import 'package:mornye/providers/library_browse_provider.dart';
-import 'package:mornye/providers/local_library_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/library_database.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/download_history_provider.dart';
+import 'package:vibespace/providers/library_browse_provider.dart';
+import 'package:vibespace/providers/local_library_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/library_database.dart';
 
 class _Settings extends SettingsNotifier {
   @override

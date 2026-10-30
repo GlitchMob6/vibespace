@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/unified_library_item.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/library_selection_playback_actions.dart';
-import 'package:mornye/widgets/library_track_selection_bar.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/unified_library_item.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/library_selection_playback_actions.dart';
+import 'package:vibespace/widgets/library_track_selection_bar.dart';
 
 class _Controller extends MusicPlayerController {
   List<String> enqueued = [];

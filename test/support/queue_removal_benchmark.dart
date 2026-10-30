@@ -1,9 +1,9 @@
 import 'dart:isolate';
 
-import 'package:mornye/models/download_item.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_state.dart';
-import 'package:mornye/utils/chunked_list.dart';
+import 'package:vibespace/models/download_item.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_state.dart';
+import 'package:vibespace/utils/chunked_list.dart';
 
 Future<DownloadQueueState> queueRemovalFixture(int count) => Isolate.run(() {
   return const DownloadQueueState().copyWith(

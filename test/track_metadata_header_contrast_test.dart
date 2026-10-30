@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/download_history_provider.dart';
-import 'package:mornye/screens/track_metadata_screen.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/widgets/album_detail_header.dart';
-import 'package:mornye/widgets/audio_quality_badges.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/mornye_chrome.dart';
-import 'package:mornye/widgets/mornye_metadata_row.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/download_history_provider.dart';
+import 'package:vibespace/screens/track_metadata_screen.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/widgets/album_detail_header.dart';
+import 'package:vibespace/widgets/audio_quality_badges.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/mornye_chrome.dart';
+import 'package:vibespace/widgets/mornye_metadata_row.dart';
 
 void main() {
   for (final useFileUri in [false, true]) {

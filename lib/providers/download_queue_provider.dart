@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:math';
 import 'dart:convert';
 import 'dart:io';
@@ -89,7 +89,7 @@ final _multiUnderscoreRegex = RegExp(r'_+');
 
 double _log10(num x) => log(x) / ln10;
 final _yearRegex = RegExp(r'^(\d{4})');
-const _defaultOutputFolderName = 'Mornye';
+const _defaultOutputFolderName = 'VibeSpace';
 const _defaultAndroidDownloadSubpath = 'Download/$_defaultOutputFolderName';
 const _maxSafFilenameUtf8Bytes = 180;
 const _maxSafDirSegmentUtf8Bytes = 120;

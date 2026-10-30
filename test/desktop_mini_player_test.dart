@@ -7,19 +7,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/controllers/player_metadata_controller.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/services/shell_navigation_service.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/utils/lyrics_parser.dart';
-import 'package:mornye/widgets/desktop/desktop_commands.dart';
-import 'package:mornye/widgets/desktop/desktop_navigation.dart';
-import 'package:mornye/widgets/desktop/desktop_player_bar.dart';
-import 'package:mornye/widgets/desktop/desktop_window.dart';
-import 'package:mornye/widgets/player_lyrics.dart';
+import 'package:vibespace/controllers/player_metadata_controller.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/services/shell_navigation_service.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/utils/lyrics_parser.dart';
+import 'package:vibespace/widgets/desktop/desktop_commands.dart';
+import 'package:vibespace/widgets/desktop/desktop_navigation.dart';
+import 'package:vibespace/widgets/desktop/desktop_player_bar.dart';
+import 'package:vibespace/widgets/desktop/desktop_window.dart';
+import 'package:vibespace/widgets/player_lyrics.dart';
 
 const _track = MediaItem(
   id: 'track',

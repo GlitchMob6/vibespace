@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/utils/file_access.dart';
+import 'package:vibespace/utils/file_access.dart';
 
 void main() {
   group('validateIosPath', () {

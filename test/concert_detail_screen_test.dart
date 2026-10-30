@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/models/artist_concert.dart';
-import 'package:mornye/screens/artist_concerts_screen.dart';
-import 'package:mornye/screens/concert_detail_screen.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/animation_utils.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/models/artist_concert.dart';
+import 'package:vibespace/screens/artist_concerts_screen.dart';
+import 'package:vibespace/screens/concert_detail_screen.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/animation_utils.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

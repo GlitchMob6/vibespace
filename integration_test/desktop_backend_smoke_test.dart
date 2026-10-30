@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mornye/services/backend/backend_channel.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/services/backend/backend_channel.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 /// Runs the desktop app against the bundled Rust library (set
 /// `MORNYE_DESKTOP_LIB` to test another build):

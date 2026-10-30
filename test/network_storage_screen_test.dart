@@ -5,13 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/screens/network_storage_screen.dart';
-import 'package:mornye/services/local_network_access.dart';
-import 'package:mornye/services/network_certificate.dart';
-import 'package:mornye/services/network_storage_service.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_action_button.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/screens/network_storage_screen.dart';
+import 'package:vibespace/services/local_network_access.dart';
+import 'package:vibespace/services/network_certificate.dart';
+import 'package:vibespace/services/network_storage_service.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
 
 void main() {
   for (final olderFails in [false, true]) {

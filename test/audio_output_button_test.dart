@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/widgets/audio_output_button.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/widgets/audio_output_button.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

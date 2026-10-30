@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/download_item.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/library_collections_provider.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/recent_access_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/screens/album_screen.dart';
-import 'package:mornye/screens/playlist_screen.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/album_detail_header.dart';
-import 'package:mornye/widgets/track_list_tile.dart';
-import 'package:mornye/widgets/track_detail_actions.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/download_item.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/library_collections_provider.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/recent_access_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/screens/album_screen.dart';
+import 'package:vibespace/screens/playlist_screen.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/album_detail_header.dart';
+import 'package:vibespace/widgets/track_list_tile.dart';
+import 'package:vibespace/widgets/track_detail_actions.dart';
 
 import 'support/fixed_settings.dart';
 

@@ -6,12 +6,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/theme_settings.dart';
-import 'package:mornye/providers/runtime_profile_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/mornye_context_menu.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/theme_settings.dart';
+import 'package:vibespace/providers/runtime_profile_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/mornye_context_menu.dart';
 
 class _Settings extends SettingsNotifier {
   _Settings(this._forceBlur);

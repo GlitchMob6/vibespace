@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/playback_provider.dart';
-import 'package:mornye/services/history_database.dart';
-import 'package:mornye/services/library_database.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/playback_provider.dart';
+import 'package:vibespace/services/history_database.dart';
+import 'package:vibespace/services/library_database.dart';
 
 class _Library extends Fake implements LibraryDatabase {
   @override

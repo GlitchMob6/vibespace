@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/preview_player_provider.dart';
-import 'package:mornye/services/music_player_service.dart';
-import 'package:mornye/services/playback_deck.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/preview_player_provider.dart';
+import 'package:vibespace/services/music_player_service.dart';
+import 'package:vibespace/services/playback_deck.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

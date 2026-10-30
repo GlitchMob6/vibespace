@@ -327,7 +327,7 @@ static void register_url_scheme() {
   g_autofree gchar* commandline = g_shell_quote(self_path);
   g_autoptr(GError) error = nullptr;
   g_autoptr(GAppInfo) handler = g_app_info_create_from_commandline(
-      commandline, "Mornye", G_APP_INFO_CREATE_SUPPORTS_URIS, &error);
+      commandline, "VibeSpace", G_APP_INFO_CREATE_SUPPORTS_URIS, &error);
   if (handler == nullptr ||
       !g_app_info_set_as_default_for_type(handler, "x-scheme-handler/mornye",
                                           &error)) {
@@ -375,12 +375,12 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "Mornye");
+    gtk_header_bar_set_title(header_bar, "VibeSpace");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
     self->header_bar = GTK_WIDGET(header_bar);
   } else {
-    gtk_window_set_title(window, "Mornye");
+    gtk_window_set_title(window, "VibeSpace");
   }
 
   gtk_window_set_default_size(window, 1280, 800);

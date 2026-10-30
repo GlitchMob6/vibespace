@@ -8,12 +8,12 @@ import 'package:ffmpeg_kit_flutter_new_audio/return_code.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:mornye/models/equalizer_settings.dart';
-import 'package:mornye/services/media_kit_playback_deck.dart';
-import 'package:mornye/services/music_player_runtime.dart';
-import 'package:mornye/services/playback_deck.dart';
-import 'package:mornye/services/playback_equalizer.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/models/equalizer_settings.dart';
+import 'package:vibespace/services/media_kit_playback_deck.dart';
+import 'package:vibespace/services/music_player_runtime.dart';
+import 'package:vibespace/services/playback_deck.dart';
+import 'package:vibespace/services/playback_equalizer.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 /// Drives the Windows and Linux deck (media_kit) on macOS, where the app
 /// itself keeps audioplayers. The macOS app does not bundle libmpv, so the

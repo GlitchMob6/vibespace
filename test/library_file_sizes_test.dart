@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/library_file_sizes.dart';
-import 'package:mornye/services/library_queue_store.dart';
-import 'package:mornye/services/library_database_models.dart';
+import 'package:vibespace/services/library_file_sizes.dart';
+import 'package:vibespace/services/library_queue_store.dart';
+import 'package:vibespace/services/library_database_models.dart';
 
 import 'support/library_paging_fixture.dart';
 import 'support/sqlite_process_database.dart';

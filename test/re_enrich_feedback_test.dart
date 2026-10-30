@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/library_database.dart';
-import 'package:mornye/services/local_track_batch_actions.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/app_bottom_sheet.dart';
-import 'package:mornye/widgets/re_enrich_review_sheet.dart';
-import 'package:mornye/widgets/selection_bottom_bar.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/library_database.dart';
+import 'package:vibespace/services/local_track_batch_actions.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/app_bottom_sheet.dart';
+import 'package:vibespace/widgets/re_enrich_review_sheet.dart';
+import 'package:vibespace/widgets/selection_bottom_bar.dart';
 
 import 'support/re_enrich_settings.dart';
 

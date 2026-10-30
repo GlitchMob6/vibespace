@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/services/desktop_updater.dart';
-import 'package:mornye/services/update_checker.dart';
+import 'package:vibespace/services/desktop_updater.dart';
+import 'package:vibespace/services/update_checker.dart';
 
 const _version = 'v5.3.0';
 

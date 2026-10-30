@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/file_access_check.dart';
-import 'package:mornye/utils/file_access.dart';
+import 'package:vibespace/services/file_access_check.dart';
+import 'package:vibespace/utils/file_access.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

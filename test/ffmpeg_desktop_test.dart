@@ -4,10 +4,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/services/ffmpeg_desktop.dart';
-import 'package:mornye/services/ffmpeg_probe.dart';
-import 'package:mornye/services/ffmpeg_support.dart';
-import 'package:mornye/utils/desktop_platform.dart';
+import 'package:vibespace/services/ffmpeg_desktop.dart';
+import 'package:vibespace/services/ffmpeg_probe.dart';
+import 'package:vibespace/services/ffmpeg_support.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 
 class _DiscardingConsumer implements StreamConsumer<List<int>> {
   @override

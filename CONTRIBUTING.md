@@ -170,7 +170,7 @@ in each `third_party/` fork, for example
 
 ### Flutter (`lib/`)
 
-App files import each other as `package:mornye/...`. The intended
+App files import each other as `package:vibespace/...`. The intended
 direction is screens and widgets on top, then controllers, providers, services,
 and models and utilities at the bottom. The last column is the current state
 found by scanning import lines, including today's exceptions; do not add new

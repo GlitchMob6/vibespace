@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/theme/app_theme.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/collection_scaffold.dart';
-import 'package:mornye/widgets/selection_bottom_bar.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/theme/app_theme.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/collection_scaffold.dart';
+import 'package:vibespace/widgets/selection_bottom_bar.dart';
 
 Widget _app(ThemeData theme, GlobalKey<NavigatorState> navigator) {
   return ProviderScope(

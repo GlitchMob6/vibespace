@@ -8,14 +8,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:mornye/models/download_item.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/models/track.dart';
-import 'package:mornye/providers/download_queue_provider.dart';
-import 'package:mornye/providers/extension_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/app_state_database.dart';
-import 'package:mornye/utils/logger.dart';
+import 'package:vibespace/models/download_item.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/models/track.dart';
+import 'package:vibespace/providers/download_queue_provider.dart';
+import 'package:vibespace/providers/extension_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/app_state_database.dart';
+import 'package:vibespace/utils/logger.dart';
 
 class _Settings extends SettingsNotifier {
   _Settings(this._directory);

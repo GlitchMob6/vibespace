@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/widgets/lyrics_screen_awake.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/widgets/lyrics_screen_awake.dart';
 
 class _Settings extends SettingsNotifier {
   @override

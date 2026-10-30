@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mornye/l10n/app_localizations.dart';
-import 'package:mornye/screens/artist_screen.dart';
-import 'package:mornye/screens/home_tab.dart';
-import 'package:mornye/screens/playlist_screen.dart';
-import 'package:mornye/services/platform_bridge.dart';
-import 'package:mornye/widgets/track_collection_quick_actions.dart';
+import 'package:vibespace/l10n/app_localizations.dart';
+import 'package:vibespace/screens/artist_screen.dart';
+import 'package:vibespace/screens/home_tab.dart';
+import 'package:vibespace/screens/playlist_screen.dart';
+import 'package:vibespace/services/platform_bridge.dart';
+import 'package:vibespace/widgets/track_collection_quick_actions.dart';
 
 void main() {
   final screens = <String, Widget>{

@@ -9,17 +9,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:liquid_glass_easy/liquid_glass_easy.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/models/settings.dart';
-import 'package:mornye/providers/music_player_provider.dart';
-import 'package:mornye/providers/runtime_profile_provider.dart';
-import 'package:mornye/providers/settings_provider.dart';
-import 'package:mornye/services/music_player_runtime.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/widgets/mini_player.dart';
-import 'package:mornye/widgets/mornye_bottom_bar.dart';
-import 'package:mornye/widgets/mornye_chrome.dart';
-import 'package:mornye/widgets/mornye_liquid_backdrop.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/models/settings.dart';
+import 'package:vibespace/providers/music_player_provider.dart';
+import 'package:vibespace/providers/runtime_profile_provider.dart';
+import 'package:vibespace/providers/settings_provider.dart';
+import 'package:vibespace/services/music_player_runtime.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/widgets/mini_player.dart';
+import 'package:vibespace/widgets/mornye_bottom_bar.dart';
+import 'package:vibespace/widgets/mornye_chrome.dart';
+import 'package:vibespace/widgets/mornye_liquid_backdrop.dart';
 
 class _Settings extends SettingsNotifier {
   @override

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/l10n/l10n.dart';
-import 'package:mornye/screens/network_storage_screen.dart';
-import 'package:mornye/services/network_storage_service.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/desktop_platform.dart';
-import 'package:mornye/widgets/app_action_button.dart';
-import 'package:mornye/widgets/settings_group.dart';
+import 'package:vibespace/l10n/l10n.dart';
+import 'package:vibespace/screens/network_storage_screen.dart';
+import 'package:vibespace/services/network_storage_service.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
+import 'package:vibespace/widgets/app_action_button.dart';
+import 'package:vibespace/widgets/settings_group.dart';
 
 class _Server extends NetworkStorageService {
   _Server() : super(read: () async => null, write: (_) async {});

@@ -4,9 +4,9 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mornye/theme/mornye_theme.dart';
-import 'package:mornye/utils/nav_bar_inset.dart';
-import 'package:mornye/widgets/collection_scaffold.dart';
+import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/nav_bar_inset.dart';
+import 'package:vibespace/widgets/collection_scaffold.dart';
 
 void main() {
   for (final brightness in Brightness.values) {
