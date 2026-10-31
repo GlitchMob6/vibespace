@@ -323,12 +323,17 @@ class _WindowsAudioQuickSettingsPanelState
 
     final devices = _devices.endpoints;
     final selectedDevice = settings.windowsOutputDevice;
-    final validDevice = selectedDevice.isEmpty ||
-        devices.any((device) =>
-            device.mpvDeviceId == selectedDevice ||
+    var deviceValue = '';
+    if (selectedDevice.isNotEmpty) {
+      for (final device in devices) {
+        if (device.mpvDeviceId == selectedDevice ||
             device.id == selectedDevice ||
-            device.guid == selectedDevice);
-    final deviceValue = validDevice ? selectedDevice : '';
+            device.guid == selectedDevice) {
+          deviceValue = device.mpvDeviceId;
+          break;
+        }
+      }
+    }
 
     return Material(
       color: colors.surfaceContainerHigh,
