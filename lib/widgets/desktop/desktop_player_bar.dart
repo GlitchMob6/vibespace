@@ -1,4 +1,5 @@
 ﻿import 'dart:async';
+import 'dart:io' show Platform;
 import 'dart:math' as math;
 
 import 'package:audio_service/audio_service.dart';
@@ -21,6 +22,7 @@ import 'package:vibespace/widgets/desktop/desktop_commands.dart';
 import 'package:vibespace/widgets/desktop/desktop_downloads_button.dart';
 import 'package:vibespace/widgets/desktop/desktop_inspector.dart';
 import 'package:vibespace/widgets/desktop/desktop_window.dart';
+import 'package:vibespace/widgets/desktop/windows_audio_quick_settings.dart';
 import 'package:vibespace/widgets/mornye_chrome.dart';
 import 'package:vibespace/widgets/mornye_playback_button.dart';
 import 'package:vibespace/widgets/mornye_player_background.dart';
@@ -794,26 +796,53 @@ class _MornyeVolumeButtonState extends ConsumerState<_MornyeVolumeButton> {
       < 0.67 => CupertinoIcons.speaker_2_fill,
       _ => CupertinoIcons.speaker_3_fill,
     };
+    final windowsAudio = Platform.isWindows;
     return MenuAnchor(
       controller: _menu,
       consumeOutsideTap: true,
-      alignmentOffset: const Offset(-96, 8),
+      alignmentOffset: windowsAudio
+          ? const Offset(-348, 8)
+          : const Offset(-96, 8),
       style: MenuStyle(
         padding: const WidgetStatePropertyAll(EdgeInsets.zero),
         backgroundColor: WidgetStatePropertyAll(
-          colorScheme.surfaceContainerHigh,
+          windowsAudio ? Colors.transparent : colorScheme.surfaceContainerHigh,
         ),
+        elevation: WidgetStatePropertyAll(windowsAudio ? 0 : 4),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(windowsAudio ? 0 : 14),
+          ),
         ),
       ),
       menuChildren: [
-        SizedBox(
-          key: const ValueKey('desktop-player-volume-popover'),
-          width: 240,
-          height: 48,
-          child: PlayerVolumeControl(foreground: colorScheme.onSurface),
-        ),
+        if (windowsAudio)
+          SizedBox(
+            key: const ValueKey('desktop-player-audio-quick-settings'),
+            width: 372,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.sizeOf(context).height * 0.82,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    WindowsLiveAudioMonitorCard(),
+                    SizedBox(height: 8),
+                    WindowsAudioQuickSettingsPanel(),
+                  ],
+                ),
+              ),
+            ),
+          )
+        else
+          SizedBox(
+            key: const ValueKey('desktop-player-volume-popover'),
+            width: 240,
+            height: 48,
+            child: PlayerVolumeControl(foreground: colorScheme.onSurface),
+          ),
       ],
       child: AppIconButton(
         key: const ValueKey('desktop-player-volume'),
