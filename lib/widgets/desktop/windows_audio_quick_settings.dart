@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vibespace/providers/settings_provider.dart';
@@ -335,7 +333,7 @@ class _WindowsAudioQuickSettingsPanelState
     return Material(
       color: colors.surfaceContainerHigh,
       elevation: 4,
-      borderRadius: BorderRadius.circular(16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.antiAlias,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 13, 14, 12),
