@@ -37,7 +37,7 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
         return Material(
           color: colors.surfaceContainerHigh,
           elevation: 4,
-          borderRadius: BorderRadius.circular(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           clipBehavior: Clip.antiAlias,
           child: Container(
             decoration: BoxDecoration(
