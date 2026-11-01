@@ -90,6 +90,8 @@ android {
     }
 
     defaultConfig {
+        // Installed Android identity is VibeSpace. Keep the legacy namespace above
+        // until native package references and generated bindings are migrated separately.
         applicationId = "com.zarz.vibespace"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         minSdk = flutter.minSdkVersion
