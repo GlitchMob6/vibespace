@@ -1,6 +1,8 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart'
+    show PointerDeviceKind, kBackMouseButton, kForwardMouseButton;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +22,11 @@ import 'package:vibespace/widgets/desktop/desktop_inspector.dart';
 import 'package:vibespace/widgets/desktop/desktop_player_bar.dart';
 import 'package:vibespace/widgets/desktop/desktop_window.dart';
 import 'package:vibespace/widgets/desktop/desktop_window_controls.dart';
+import 'package:vibespace/widgets/desktop/windows_audio_quick_settings.dart'
+    show
+        closeDesktopAudioQuickSettings,
+        desktopAudioQuickSettingsOpen,
+        desktopLiveAudioMonitorOpen;
 import 'package:url_launcher/url_launcher.dart';
 
 /// Keyboard shortcuts for desktop builds, plus the macOS menu bar that
@@ -85,6 +92,7 @@ class _DesktopShortcutsState extends ConsumerState<DesktopShortcuts> {
     DesktopCommand.volumeUp ||
     DesktopCommand.volumeDown => !_editingText,
     DesktopCommand.back => _canCloseTopLayer,
+    DesktopCommand.forward => ShellNavigationService.canNavigateForward,
     DesktopCommand.dismiss =>
       _editingText ||
           _canCloseTopLayer ||
@@ -115,6 +123,8 @@ class _DesktopShortcutsState extends ConsumerState<DesktopShortcuts> {
         ShellNavigationService.requestTab(ShellTab.settings);
       case DesktopCommand.back:
         _closeTopLayer();
+      case DesktopCommand.forward:
+        ShellNavigationService.navigateForward();
       case DesktopCommand.dismiss:
         if (_editingText) {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -176,21 +186,68 @@ class _DesktopShortcutsState extends ConsumerState<DesktopShortcuts> {
 
   bool get _canCloseTopLayer =>
       _rootNavigator?.canPop() == true ||
+      desktopAudioQuickSettingsOpen.value ||
+      desktopLiveAudioMonitorOpen.value ||
+      desktopWindowMode.value != DesktopWindowMode.windowed ||
       canDismissDesktopPlayerLayer(_windowWidth) ||
-      ShellNavigationService.activeBackNavigator()?.canPop() == true;
+      ShellNavigationService.canNavigateBack;
 
-  /// Closes what Escape or Back closes: a dialog or page over the shell
-  /// first, then the floating inspector or Now Playing, then the active
-  /// destination's own pages.
+  /// Closes what Escape, Back or Mouse Button 4 closes, with strict priority:
+  /// 1. Dismiss an active dialog, popup, menu or other higher-priority transient UI.
+  /// 2. If the normal application ACC is open, close ACC and its associated monitor together.
+  /// 3. If in True Fullscreen, return to Expanded Preview.
+  /// 4. If in Expanded Preview, return to the normal application.
+  /// 5. Otherwise, navigate to the previous application page when navigation history permits.
   void _closeTopLayer() {
+    // 1. Dismiss active dialog, popup, menu or transient root UI
     final root = _rootNavigator;
     if (root != null && root.canPop()) {
       unawaited(root.maybePop());
       return;
     }
-    if (dismissDesktopPlayerLayer(_windowWidth)) return;
-    final tab = ShellNavigationService.activeBackNavigator();
-    if (tab != null && tab.canPop()) unawaited(tab.maybePop());
+
+    // 2. Normal application Audio Control Center and Live Stream Monitor
+    if (desktopAudioQuickSettingsOpen.value ||
+        desktopLiveAudioMonitorOpen.value) {
+      closeDesktopAudioQuickSettings();
+      return;
+    }
+
+    // 3. True Fullscreen -> Expanded Preview
+    if (desktopWindowMode.value != DesktopWindowMode.windowed) {
+      unawaited(leaveDesktopWindowMode());
+      return;
+    }
+
+    // 4. Expanded Preview -> Normal application
+    if (canDismissDesktopPlayerLayer(_windowWidth)) {
+      dismissDesktopPlayerLayer(_windowWidth);
+      return;
+    }
+
+    // 5. Navigate to previous application page
+    if (ShellNavigationService.canNavigateBack) {
+      ShellNavigationService.navigateBack();
+      return;
+    }
+  }
+
+  int _lastPointerButtons = 0;
+
+  void _handlePointerEvent(PointerEvent event) {
+    if (event.kind != PointerDeviceKind.mouse) return;
+    final pressed = event.buttons & ~_lastPointerButtons;
+    _lastPointerButtons = event.buttons;
+
+    if ((pressed & kBackMouseButton) != 0) {
+      if (_canCloseTopLayer) {
+        _closeTopLayer();
+      }
+    } else if ((pressed & kForwardMouseButton) != 0) {
+      if (ShellNavigationService.canNavigateForward) {
+        ShellNavigationService.navigateForward();
+      }
+    }
   }
 
   void _nudgeVolume(double delta) {
@@ -229,6 +286,14 @@ class _DesktopShortcutsState extends ConsumerState<DesktopShortcuts> {
           ),
         ),
       ),
+    );
+    child = Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: _handlePointerEvent,
+      onPointerMove: _handlePointerEvent,
+      onPointerUp: _handlePointerEvent,
+      onPointerCancel: (_) => _lastPointerButtons = 0,
+      child: child,
     );
     if (defaultTargetPlatform == TargetPlatform.macOS) {
       child = ValueListenableBuilder<DesktopWindowMode>(

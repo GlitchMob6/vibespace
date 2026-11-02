@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:media_kit/media_kit.dart';
@@ -66,7 +68,7 @@ void main() {
     print('Starting playback...');
     await sharedDeck.resume();
     expect(sharedDeck.state, PlaybackDeckState.playing);
-    await Future.delayed(const Duration(seconds: 4));
+    await Future<void>.delayed(const Duration(seconds: 4));
     final pos = await sharedDeck.getCurrentPosition();
     print('Playback position after delay: $pos');
     print('windowsAudioStatus during playback: ${windowsAudioStatus.value}');
@@ -97,7 +99,7 @@ void main() {
     print('Starting exclusive playback...');
     await exclusiveDeck.resume();
     expect(exclusiveDeck.state, PlaybackDeckState.playing);
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     final exclusivePos = await exclusiveDeck.getCurrentPosition();
     print('Playback position after 2s: $exclusivePos');
     print('windowsAudioStatus during playback: ${windowsAudioStatus.value}');

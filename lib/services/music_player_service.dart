@@ -280,6 +280,7 @@ class MusicPlayerHandler extends BaseAudioHandler
         // Cleanly stop so Windows Core Audio releases the IAudioClient exclusive lock
         await _player.stop();
         if (_disposed) return;
+        await deck.configureOutput();
         await _playIndex(
           currentIndex,
           recordHistory: false,

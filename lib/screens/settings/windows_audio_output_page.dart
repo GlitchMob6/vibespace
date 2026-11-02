@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vibespace/providers/settings_provider.dart';
-import 'package:vibespace/services/music_playback_deck.dart';
 import 'package:vibespace/services/windows_audio_device_service.dart';
 import 'package:vibespace/widgets/app_sliver_header.dart';
 import 'package:vibespace/widgets/settings_group.dart';

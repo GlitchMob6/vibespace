@@ -1,14 +1,128 @@
+import 'dart:math' as math;
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vibespace/providers/settings_provider.dart';
 import 'package:vibespace/services/music_playback_deck.dart';
 import 'package:vibespace/services/windows_audio_device_service.dart';
+import 'package:vibespace/widgets/desktop/desktop_inspector.dart'
+    show desktopNowPlayingOpen;
 import 'package:vibespace/widgets/player_volume_control.dart';
 
-/// The live WASAPI readout. It is intentionally its own Material surface so
-/// it can sit beside (not inside) the Audio Quick Settings surface.
+/// Global state controlling whether the independent floating Live Audio Stream Monitor
+/// surface is visible.
+final ValueNotifier<bool> desktopLiveAudioMonitorOpen = ValueNotifier<bool>(
+  false,
+);
+
+/// Global state controlling whether the Audio Quick Settings panel is visible
+/// in the root desktop application overlay.
+final ValueNotifier<bool> desktopAudioQuickSettingsOpen = ValueNotifier<bool>(
+  false,
+);
+
+/// Shared TapRegion group identifier connecting the audio control center panels
+/// and the player bar trigger so that outside dismissal behaves predictably.
+const String kAudioControlCenterTapRegionGroup = 'audio_control_center_region';
+
+/// Standard width for both Audio Quick Settings and Live Audio Stream Monitor.
+const double kAudioPanelWidth = 400.0;
+
+/// Coordinates the visibility and lifecycle of the Audio Control Center (ACC)
+/// and the Live Audio Stream Monitor.
+class DesktopAudioControlCenterController {
+  DesktopAudioControlCenterController._();
+  static final DesktopAudioControlCenterController instance =
+      DesktopAudioControlCenterController._();
+
+  /// Whether Audio Quick Settings is currently open.
+  final ValueNotifier<bool> quickSettingsOpen = desktopAudioQuickSettingsOpen;
+
+  /// Whether the Live Audio Stream Monitor is currently open.
+  final ValueNotifier<bool> monitorOpen = desktopLiveAudioMonitorOpen;
+
+  /// Whether either surface is currently active.
+  bool get isOpen => quickSettingsOpen.value || monitorOpen.value;
+
+  /// Opens Audio Quick Settings and automatically coordinates opening the
+  /// Live Audio Stream Monitor as well.
+  void open() {
+    quickSettingsOpen.value = true;
+    monitorOpen.value = true;
+  }
+
+  /// Closes both Audio Quick Settings and the Live Audio Stream Monitor.
+  void close() {
+    quickSettingsOpen.value = false;
+    monitorOpen.value = false;
+  }
+
+  /// Toggles Audio Quick Settings from the player-bar speaker button.
+  /// If ACC is currently open, closes both ACC and the monitor.
+  /// If ACC is closed, opens both ACC and the monitor.
+  void toggle() {
+    if (quickSettingsOpen.value) {
+      close();
+    } else {
+      open();
+    }
+  }
+
+  /// Closes only the Live Audio Stream Monitor, keeping ACC open.
+  void closeMonitorOnly() {
+    monitorOpen.value = false;
+  }
+
+  /// Opens the Live Audio Stream Monitor (e.g. when reopened from ACC).
+  void openMonitor() {
+    monitorOpen.value = true;
+  }
+
+  /// Toggles only the Live Audio Stream Monitor (e.g. from the ACC header button).
+  void toggleMonitor() {
+    monitorOpen.value = !monitorOpen.value;
+  }
+}
+
+/// Toggles visibility of the independent floating Live Audio Stream Monitor surface.
+void toggleDesktopLiveAudioMonitor() =>
+    DesktopAudioControlCenterController.instance.toggleMonitor();
+
+/// Opens the independent floating Live Audio Stream Monitor surface.
+void openDesktopLiveAudioMonitor() =>
+    DesktopAudioControlCenterController.instance.openMonitor();
+
+/// Closes the independent floating Live Audio Stream Monitor surface.
+void closeDesktopLiveAudioMonitor() =>
+    DesktopAudioControlCenterController.instance.closeMonitorOnly();
+
+/// Toggles visibility of the Audio Quick Settings panel.
+void toggleDesktopAudioQuickSettings() =>
+    DesktopAudioControlCenterController.instance.toggle();
+
+/// Opens the Audio Quick Settings panel.
+void openDesktopAudioQuickSettings() =>
+    DesktopAudioControlCenterController.instance.open();
+
+/// Closes the Audio Quick Settings panel.
+void closeDesktopAudioQuickSettings() =>
+    DesktopAudioControlCenterController.instance.close();
+
+/// The live WASAPI readout card. It is an independent Material surface
+/// positioned above Audio Quick Settings at the right side of the window.
 class WindowsLiveAudioMonitorCard extends StatelessWidget {
-  const WindowsLiveAudioMonitorCard({super.key});
+  const WindowsLiveAudioMonitorCard({
+    super.key,
+    this.onDismiss,
+    this.isFloating = false,
+  });
+
+  /// Optional callback to dismiss the surface.
+  final VoidCallback? onDismiss;
+
+  /// Whether the card is presented as a floating surface.
+  final bool isFloating;
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +148,41 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
           return '$rate Hz · ${depth ?? '—'}-bit$detail';
         }
 
-        return Material(
-          color: colors.surfaceContainerHigh,
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          clipBehavior: Clip.antiAlias,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: accent.withValues(alpha: bitPerfect ? 0.65 : 0.28),
-                width: bitPerfect ? 1.5 : 1,
+        final glassColor = Color.alphaBlend(
+          colors.primary.withValues(alpha: 0.08),
+          const Color(0xD6151222),
+        );
+
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+            child: Material(
+              color: glassColor,
+              elevation: isFloating ? 8 : 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: accent.withValues(alpha: bitPerfect ? 0.65 : 0.28),
+                  width: bitPerfect ? 1.5 : 1,
+                ),
               ),
-            ),
-            padding: const EdgeInsets.all(14),
-            child: Column(
+              clipBehavior: Clip.antiAlias,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: isFloating
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.28),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                          ),
+                        ]
+                      : null,
+                ),
+                padding: const EdgeInsets.all(14),
+                child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -57,41 +191,82 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                     Icon(
                       exclusive ? Icons.lock_outline : Icons.graphic_eq,
                       color: accent,
-                      size: 17,
+                      size: 19,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'LIVE AUDIO STREAM MONITOR',
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.65,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    if (onDismiss != null) ...[
+                      const SizedBox(width: 6),
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        iconSize: 18,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(
+                          minWidth: 28,
+                          minHeight: 28,
+                        ),
+                        tooltip: 'Close Monitor',
+                        icon: Icon(Icons.close, color: colors.onSurfaceVariant),
+                        onPressed: onDismiss,
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 7,
-                        vertical: 4,
+                        horizontal: 8,
+                        vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: accent.withValues(alpha: 0.14),
-                        borderRadius: BorderRadius.circular(7),
+                        color: accent.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: accent.withValues(alpha: 0.35),
+                          width: 1,
+                        ),
                       ),
                       child: Text(
                         bitPerfect
                             ? 'BIT-PERFECT'
                             : exclusive
                             ? (status.mode == 'exclusive_push'
-                                ? 'EXCLUSIVE PUSH'
-                                : 'EXCLUSIVE EVENT')
+                                  ? 'EXCLUSIVE PUSH'
+                                  : 'EXCLUSIVE EVENT')
                             : 'SHARED',
                         style: theme.textTheme.labelSmall?.copyWith(
+                          fontSize: 11,
                           color: accent,
                           fontWeight: FontWeight.w800,
+                          letterSpacing: 0.35,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        bitPerfect
+                            ? 'Lossless bit-perfect stream'
+                            : exclusive
+                            ? 'WASAPI exclusive stream'
+                            : 'WASAPI shared mixer stream',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontSize: 11.5,
+                          color: colors.onSurfaceVariant,
                         ),
                       ),
                     ),
@@ -124,21 +299,25 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 9),
+                const SizedBox(height: 8),
                 Text(
                   'Endpoint: ${status.device ?? 'Default'} · '
                   '${status.driver.toUpperCase()} · '
                   'State: ${status.reason.toUpperCase()}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall?.copyWith(
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontSize: 12.5,
                     color: colors.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 9),
+                const SizedBox(height: 8),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(9),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: colors.surfaceContainerHighest.withValues(
                       alpha: 0.65,
@@ -149,11 +328,13 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Icon(
-                        bitPerfect ? Icons.check_circle_outline : Icons.info_outline,
-                        size: 15,
+                        bitPerfect
+                            ? Icons.check_circle_outline
+                            : Icons.info_outline,
+                        size: 16,
                         color: accent,
                       ),
-                      const SizedBox(width: 7),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           status.bitPerfectReason ??
@@ -162,8 +343,11 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                                   : 'Playback is active; bit-perfect output is not currently verified.'),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: bitPerfect ? Colors.green : colors.onSurfaceVariant,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontSize: 12.5,
+                            color: bitPerfect
+                                ? Colors.green
+                                : colors.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -173,8 +357,10 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
               ],
             ),
           ),
-        );
-      },
+        ),
+      ),
+    );
+  },
     );
   }
 }
@@ -198,8 +384,9 @@ class _MonitorValue extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: theme.textTheme.labelSmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
-            fontSize: 9,
-            letterSpacing: 0.25,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.35,
           ),
         ),
         const SizedBox(height: 3),
@@ -207,8 +394,10 @@ class _MonitorValue extends StatelessWidget {
           value,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.titleSmall?.copyWith(
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontSize: 15.5,
             fontWeight: FontWeight.w700,
+            letterSpacing: 0.2,
           ),
         ),
       ],
@@ -219,7 +408,14 @@ class _MonitorValue extends StatelessWidget {
 /// Compact Windows audio controls. The panel reads and writes the same
 /// settings and device service used by WindowsAudioOutputPage.
 class WindowsAudioQuickSettingsPanel extends ConsumerStatefulWidget {
-  const WindowsAudioQuickSettingsPanel({super.key});
+  const WindowsAudioQuickSettingsPanel({
+    super.key,
+    this.onClose,
+    this.showCloseButton = true,
+  });
+
+  final VoidCallback? onClose;
+  final bool showCloseButton;
 
   @override
   ConsumerState<WindowsAudioQuickSettingsPanel> createState() =>
@@ -300,10 +496,23 @@ class _WindowsAudioQuickSettingsPanelState
         : exclusive
         ? _capabilities!.exclusiveRates
         : _capabilities!.sharedRates;
-    final rates = <int>{0, ...probedRates};
-    if (!rates.contains(settings.windowsOutputSampleRate)) {
-      rates.add(settings.windowsOutputSampleRate);
-    }
+
+    // Standard candidate sample rates provide fallbacks so dropdowns never collapse to a single value
+    const standardRates = <int>[
+      0,
+      44100,
+      48000,
+      88200,
+      96000,
+      176400,
+      192000,
+      352800,
+      384000,
+    ];
+    final Set<int> rates = probedRates.isNotEmpty
+        ? {0, ...probedRates}
+        : Set<int>.from(standardRates);
+    rates.add(settings.windowsOutputSampleRate);
     final sortedRates = rates.toList()..sort();
 
     final rateKey = settings.windowsOutputSampleRate == 0
@@ -315,11 +524,12 @@ class _WindowsAudioQuickSettingsPanelState
               (exclusive
                   ? _capabilities!.exclusiveFormats
                   : _capabilities!.sampleFormats));
-    final formats = <String>{
-      'auto',
-      ...probedFormats,
-      settings.windowsOutputSampleFormat,
-    }.toList();
+    const standardFormats = <String>['auto', 's16', 's24', 's32', 'float'];
+    final Set<String> formatsSet = probedFormats.isNotEmpty
+        ? {'auto', ...probedFormats}
+        : Set<String>.from(standardFormats);
+    formatsSet.add(settings.windowsOutputSampleFormat);
+    final formats = formatsSet.toList();
 
     final devices = _devices.endpoints;
     final selectedDevice = settings.windowsOutputDevice;
@@ -335,34 +545,95 @@ class _WindowsAudioQuickSettingsPanelState
       }
     }
 
-    return Material(
-      color: colors.surfaceContainerHigh,
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 13, 14, 12),
-        child: Column(
+    final glassColor = Color.alphaBlend(
+      colors.primary.withValues(alpha: 0.08),
+      const Color(0xD6151222),
+    );
+    final borderColor = Colors.white.withValues(alpha: 0.12);
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Material(
+          color: glassColor,
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: borderColor, width: 1),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.28),
+                  blurRadius: 22,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.fromLTRB(14, 13, 14, 12),
+            child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
-                const Icon(Icons.tune, size: 17),
+                const Icon(Icons.tune, size: 19),
                 const SizedBox(width: 8),
-                Text(
-                  'AUDIO QUICK SETTINGS',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.65,
+                Expanded(
+                  child: Text(
+                    'AUDIO QUICK SETTINGS',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
+                ValueListenableBuilder<bool>(
+                  valueListenable: desktopLiveAudioMonitorOpen,
+                  builder: (context, open, _) => IconButton(
+                    visualDensity: VisualDensity.compact,
+                    iconSize: 18,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 28,
+                      minHeight: 28,
+                    ),
+                    tooltip: open
+                        ? 'Hide Stream Monitor'
+                        : 'Show Stream Monitor',
+                    icon: Icon(
+                      open ? Icons.graphic_eq : Icons.graphic_eq_outlined,
+                      color: open ? colors.primary : colors.onSurfaceVariant,
+                    ),
+                    onPressed: toggleDesktopLiveAudioMonitor,
+                  ),
+                ),
+                if (widget.showCloseButton) ...[
+                  const SizedBox(width: 4),
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    iconSize: 18,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 28,
+                      minHeight: 28,
+                    ),
+                    tooltip: 'Close Quick Settings',
+                    icon: Icon(Icons.close, color: colors.onSurfaceVariant),
+                    onPressed: widget.onClose ?? closeDesktopAudioQuickSettings,
+                  ),
+                ],
               ],
             ),
             const SizedBox(height: 12),
             Text('VOLUME', style: _sectionLabel(context)),
             const SizedBox(height: 2),
-            const PlayerVolumeControl(),
+            PlayerVolumeControl(foreground: colors.onSurface),
             const Divider(height: 18),
             Text('AUDIO ENGINE', style: _sectionLabel(context)),
             const SizedBox(height: 7),
@@ -371,10 +642,13 @@ class _WindowsAudioQuickSettingsPanelState
               style: ButtonStyle(
                 visualDensity: VisualDensity.compact,
                 padding: const WidgetStatePropertyAll(
-                  EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  EdgeInsets.symmetric(horizontal: 6, vertical: 8),
                 ),
                 textStyle: WidgetStatePropertyAll(
-                  Theme.of(context).textTheme.labelSmall,
+                  Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               segments: const [
@@ -407,7 +681,9 @@ class _WindowsAudioQuickSettingsPanelState
                 Expanded(
                   child: Text(
                     'Automatic fallback to Shared',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(fontSize: 12.5),
                   ),
                 ),
                 Switch.adaptive(
@@ -490,23 +766,25 @@ class _WindowsAudioQuickSettingsPanelState
             ),
             if (_loadingCapabilities)
               Padding(
-                padding: const EdgeInsets.only(top: 7),
+                padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   'Checking device capabilities…',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 12,
                     color: colors.onSurfaceVariant,
                   ),
                 ),
               )
             else if (_capabilities != null)
               Padding(
-                padding: const EdgeInsets.only(top: 7),
+                padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   'Hardware: ${_capabilities!.exclusiveRates.length} exclusive rates · '
                   '${_capabilities!.exclusiveFormats.length} formats probed',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 12,
                     color: colors.onSurfaceVariant,
                   ),
                 ),
@@ -519,6 +797,11 @@ class _WindowsAudioQuickSettingsPanelState
                 value: deviceValue,
                 isExpanded: true,
                 isDense: true,
+                iconSize: 18,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
                 items: [
                   const DropdownMenuItem(
                     value: '',
@@ -546,14 +829,17 @@ class _WindowsAudioQuickSettingsPanelState
           ],
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 
   TextStyle? _sectionLabel(BuildContext context) =>
       Theme.of(context).textTheme.labelSmall?.copyWith(
+        fontSize: 12.5,
         color: Theme.of(context).colorScheme.onSurfaceVariant,
-        fontWeight: FontWeight.w800,
-        letterSpacing: 0.55,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.45,
       );
 }
 
@@ -582,10 +868,11 @@ class _FormatDropdown<T> extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
             color: colors.onSurfaceVariant,
-            fontSize: 10,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 3),
         DropdownButtonHideUnderline(
           child: DropdownButton<T>(
             value: value,
@@ -593,11 +880,105 @@ class _FormatDropdown<T> extends StatelessWidget {
             onChanged: onChanged,
             isExpanded: true,
             isDense: true,
-            iconSize: 16,
-            style: Theme.of(context).textTheme.labelMedium,
+            iconSize: 18,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
     );
+  }
+}
+
+/// Root application-level overlay that hosts the two independent audio panels
+/// on the right side of the VibeSpace application window.
+///
+/// Layout:
+/// - Positioned near the right edge (18px margin) with a 400px width.
+/// - Sits above the player bar (bottom: 88px).
+/// - Clamped below the native title bar / window controls.
+/// - Arranged vertically:
+///     LIVE AUDIO STREAM MONITOR
+///     10px GAP
+///     AUDIO QUICK SETTINGS
+/// - Each surface remains independently visible and dismissible.
+/// - Dismissed on outside tap using TapRegion.
+class DesktopAudioControlCenterOverlay extends StatelessWidget {
+  const DesktopAudioControlCenterOverlay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: desktopNowPlayingOpen,
+      builder: (context, nowPlayingOpen, _) {
+        if (nowPlayingOpen) {
+          return const SizedBox.shrink();
+        }
+        return ValueListenableBuilder<bool>(
+          valueListenable: desktopLiveAudioMonitorOpen,
+          builder: (context, monitorOpen, _) {
+            return ValueListenableBuilder<bool>(
+              valueListenable: desktopAudioQuickSettingsOpen,
+              builder: (context, quickSettingsOpen, _) {
+                if (!quickSettingsOpen) {
+                  return const SizedBox.shrink();
+                }
+
+            final mediaQuery = MediaQuery.of(context);
+            final screenSize = mediaQuery.size;
+            const rightSpacing = 18.0;
+            const bottomSpacing = 88.0;
+            const topMargin = 52.0;
+
+            final panelWidth = math.min(
+              kAudioPanelWidth,
+              screenSize.width - (rightSpacing * 2),
+            );
+            final maxAvailableHeight = math.max(
+              120.0,
+              screenSize.height - bottomSpacing - topMargin,
+            );
+
+            return Positioned(
+              right: rightSpacing,
+              bottom: bottomSpacing,
+              width: panelWidth,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: maxAvailableHeight),
+                child: TapRegion(
+                  groupId: kAudioControlCenterTapRegionGroup,
+                  onTapOutside: (_) {
+                    closeDesktopAudioQuickSettings();
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (monitorOpen) ...[
+                        WindowsLiveAudioMonitorCard(
+                          isFloating: true,
+                          onDismiss: closeDesktopLiveAudioMonitor,
+                        ),
+                        if (quickSettingsOpen) const SizedBox(height: 10),
+                      ],
+                      if (quickSettingsOpen)
+                        Flexible(
+                          child: SingleChildScrollView(
+                            child: const WindowsAudioQuickSettingsPanel(),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  },
+);
   }
 }

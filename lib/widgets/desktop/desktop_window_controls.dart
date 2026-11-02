@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:vibespace/l10n/l10n.dart';
@@ -9,6 +9,8 @@ import 'package:vibespace/widgets/app_bottom_sheet.dart';
 import 'package:vibespace/widgets/app_icon.dart';
 import 'package:vibespace/widgets/app_icon_button.dart';
 import 'package:vibespace/widgets/desktop/desktop_commands.dart';
+import 'package:vibespace/widgets/desktop/desktop_inspector.dart'
+    show desktopNowPlayingOpen;
 import 'package:vibespace/widgets/desktop/desktop_window.dart';
 import 'package:vibespace/widgets/settings_group.dart';
 
@@ -89,10 +91,14 @@ class DesktopWindowFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isDesktopPlatform) return child;
     return DesktopWindowModeScope(
-      child: ValueListenableBuilder<DesktopWindowMode>(
-        valueListenable: desktopWindowMode,
-        child: child,
-        builder: (context, mode, child) {
+      child: ListenableBuilder(
+        listenable: Listenable.merge([desktopWindowMode, desktopNowPlayingOpen]),
+        builder: (context, _) {
+          final mode = desktopWindowMode.value;
+          final nowPlayingOpen = desktopNowPlayingOpen.value;
+          final showHeader = showControls &&
+              mode == DesktopWindowMode.borderless &&
+              !nowPlayingOpen;
           final left = Directionality.of(context) == TextDirection.rtl;
           // The replacement title bar sits above the root navigator. Give
           // its tooltips an overlay while keeping the navigator mounted.
@@ -102,17 +108,17 @@ class DesktopWindowFrame extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    if (showControls && mode != DesktopWindowMode.windowed)
+                    if (showHeader)
                       _WindowControls(
                         mode: mode,
                         onChooseMode: _chooseWindowMode,
                       )
                     else
                       const SizedBox.shrink(),
-                    Expanded(child: child!),
+                    Expanded(child: child),
                   ],
                 ),
-                if (showControls && mode == DesktopWindowMode.borderless)
+                if (showHeader)
                   PositionedDirectional(
                     bottom: 0,
                     end: 0,

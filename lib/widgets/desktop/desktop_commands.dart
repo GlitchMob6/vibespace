@@ -1,4 +1,4 @@
-﻿import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vibespace/l10n/l10n.dart';
@@ -20,6 +20,7 @@ enum DesktopCommand {
   search,
   settings,
   back,
+  forward,
   lyrics,
   upNext,
   toggleSidebar,
@@ -88,6 +89,7 @@ SingleActivator? desktopCommandShortcut(
     DesktopCommand.search => _primary(LogicalKeyboardKey.keyF, target),
     DesktopCommand.settings => _primary(LogicalKeyboardKey.comma, target),
     DesktopCommand.back => _primary(LogicalKeyboardKey.bracketLeft, target),
+    DesktopCommand.forward => _primary(LogicalKeyboardKey.bracketRight, target),
     DesktopCommand.lyrics => _primary(
       LogicalKeyboardKey.keyL,
       target,
@@ -153,7 +155,7 @@ Map<ShortcutActivator, Intent> desktopShortcutBindings([
   TargetPlatform? platform,
 ]) {
   final target = platform ?? defaultTargetPlatform;
-  return {
+  final map = <ShortcutActivator, Intent>{
     for (final command in DesktopCommand.values)
       ?desktopCommandShortcut(command, target): DesktopCommandIntent(command),
     for (var position = 1; position <= _destinationKeys.length; position++)
@@ -161,6 +163,11 @@ Map<ShortcutActivator, Intent> desktopShortcutBindings([
         position,
       ),
   };
+  map[const SingleActivator(LogicalKeyboardKey.browserBack)] =
+      const DesktopCommandIntent(DesktopCommand.back);
+  map[const SingleActivator(LogicalKeyboardKey.browserForward)] =
+      const DesktopCommandIntent(DesktopCommand.forward);
+  return map;
 }
 
 /// Human-readable form of [activator]: "⌘→" on macOS, "Ctrl+Right" elsewhere.

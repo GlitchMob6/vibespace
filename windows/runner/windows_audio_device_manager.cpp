@@ -480,6 +480,7 @@ flutter::EncodableMap WindowsAudioDeviceManager::QueryDeviceCapabilities(const s
   flutter::EncodableList exclusive_rates;
   flutter::EncodableList exclusive_formats;
   flutter::EncodableList shared_rates;
+  flutter::EncodableMap formats_by_rate;
 
   std::vector<int> tested_exclusive_rates;
   std::vector<std::string> tested_exclusive_formats;
@@ -487,6 +488,7 @@ flutter::EncodableMap WindowsAudioDeviceManager::QueryDeviceCapabilities(const s
   for (int r = 0; r < candidate_rates_count; ++r) {
     int rate = candidate_rates[r];
     bool rate_supported_exclusive = false;
+    flutter::EncodableList rate_formats;
 
     // Test Shared Mode (2 channels float/pcm)
     WAVEFORMATEXTENSIBLE wf_shared;
@@ -513,11 +515,16 @@ flutter::EncodableMap WindowsAudioDeviceManager::QueryDeviceCapabilities(const s
 
       if (hr_excl == S_OK) {
         rate_supported_exclusive = true;
+        rate_formats.push_back(flutter::EncodableValue(formats[f].label));
         if (std::find(tested_exclusive_formats.begin(), tested_exclusive_formats.end(), formats[f].label) == tested_exclusive_formats.end()) {
           tested_exclusive_formats.push_back(formats[f].label);
           exclusive_formats.push_back(flutter::EncodableValue(formats[f].label));
         }
       }
+    }
+
+    if (!rate_formats.empty()) {
+      formats_by_rate[flutter::EncodableValue(std::to_string(rate))] = flutter::EncodableValue(rate_formats);
     }
 
     if (rate_supported_exclusive) {
@@ -527,14 +534,25 @@ flutter::EncodableMap WindowsAudioDeviceManager::QueryDeviceCapabilities(const s
   }
 
   bool supports_exclusive = !exclusive_rates.empty();
+  bool supports_shared = !shared_rates.empty();
   int min_excl_rate = tested_exclusive_rates.empty() ? 0 : tested_exclusive_rates.front();
   int max_excl_rate = tested_exclusive_rates.empty() ? 0 : tested_exclusive_rates.back();
 
   result[flutter::EncodableValue("deviceId")] = flutter::EncodableValue(device_id);
   result[flutter::EncodableValue("supportsExclusive")] = flutter::EncodableValue(supports_exclusive);
+  result[flutter::EncodableValue("exclusiveSupported")] = flutter::EncodableValue(supports_exclusive);
+  result[flutter::EncodableValue("supportsShared")] = flutter::EncodableValue(supports_shared);
+  result[flutter::EncodableValue("sharedSupported")] = flutter::EncodableValue(supports_shared);
   result[flutter::EncodableValue("exclusiveSupportedRates")] = flutter::EncodableValue(exclusive_rates);
+  result[flutter::EncodableValue("exclusiveRates")] = flutter::EncodableValue(exclusive_rates);
   result[flutter::EncodableValue("exclusiveSupportedFormats")] = flutter::EncodableValue(exclusive_formats);
+  result[flutter::EncodableValue("exclusiveFormats")] = flutter::EncodableValue(exclusive_formats);
   result[flutter::EncodableValue("sharedSupportedRates")] = flutter::EncodableValue(shared_rates);
+  result[flutter::EncodableValue("sharedRates")] = flutter::EncodableValue(shared_rates);
+  result[flutter::EncodableValue("sampleRates")] = flutter::EncodableValue(exclusive_rates.empty() ? shared_rates : exclusive_rates);
+  result[flutter::EncodableValue("sampleFormats")] = flutter::EncodableValue(exclusive_formats);
+  result[flutter::EncodableValue("formatsByRate")] = flutter::EncodableValue(formats_by_rate);
+  result[flutter::EncodableValue("formats_by_rate")] = flutter::EncodableValue(formats_by_rate);
   result[flutter::EncodableValue("minExclusiveSampleRate")] = flutter::EncodableValue(min_excl_rate);
   result[flutter::EncodableValue("maxExclusiveSampleRate")] = flutter::EncodableValue(max_excl_rate);
 

@@ -119,7 +119,7 @@ void main() {
             pauseOnMute: false,
           ),
           dependencies: PlaybackDependencies(
-            createDeck: (id) {
+            createDeck: (id, {settings}) {
               final deck = AudioplayersPlaybackDeck(playerId: id);
               decks[id] = deck;
               return deck;

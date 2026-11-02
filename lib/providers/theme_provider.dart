@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibespace/models/theme_settings.dart';
@@ -25,6 +25,8 @@ ThemeSettings loadBootstrapThemeSettings(SharedPreferences prefs) {
       prefs.getDouble(kMornyeGlassClarityKey),
     ),
     mornyeGlassOutlines: prefs.getBool(kMornyeGlassOutlinesKey) ?? true,
+    fullscreenControlsAutoHide:
+        prefs.getBool(kFullscreenControlsAutoHideKey) ?? true,
   );
 }
 
@@ -93,6 +95,10 @@ class ThemeNotifier extends Notifier<ThemeSettings> {
         kMornyeGlassOutlinesKey,
         snapshot.mornyeGlassOutlines,
       );
+      await prefs.setBool(
+        kFullscreenControlsAutoHideKey,
+        snapshot.fullscreenControlsAutoHide,
+      );
     } catch (e) {
       debugPrint('Error saving theme settings: $e');
     }
@@ -155,6 +161,11 @@ class ThemeNotifier extends Notifier<ThemeSettings> {
 
   Future<void> setMornyeGlassOutlines(bool value) async {
     _editState((current) => current.copyWith(mornyeGlassOutlines: value));
+    await _saveToStorage();
+  }
+
+  Future<void> setFullscreenControlsAutoHide(bool value) async {
+    _editState((current) => current.copyWith(fullscreenControlsAutoHide: value));
     await _saveToStorage();
   }
 }

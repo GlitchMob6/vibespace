@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:io' show Platform;
 import 'dart:math' as math;
 
@@ -797,52 +797,39 @@ class _MornyeVolumeButtonState extends ConsumerState<_MornyeVolumeButton> {
       _ => CupertinoIcons.speaker_3_fill,
     };
     final windowsAudio = Platform.isWindows;
+    if (windowsAudio) {
+      return TapRegion(
+        groupId: kAudioControlCenterTapRegionGroup,
+        child: AppIconButton(
+          key: const ValueKey('desktop-player-volume'),
+          tooltip: context.l10n.nowPlayingVolume,
+          color: colorScheme.onSurface,
+          icon: AppIcon(icon),
+          onPressed: toggleDesktopAudioQuickSettings,
+        ),
+      );
+    }
     return MenuAnchor(
       controller: _menu,
       consumeOutsideTap: true,
-      alignmentOffset: windowsAudio
-          ? const Offset(-348, 8)
-          : const Offset(-96, 8),
+      alignmentOffset: const Offset(-96, 8),
       style: MenuStyle(
         padding: const WidgetStatePropertyAll(EdgeInsets.zero),
         backgroundColor: WidgetStatePropertyAll(
-          windowsAudio ? Colors.transparent : colorScheme.surfaceContainerHigh,
+          colorScheme.surfaceContainerHigh,
         ),
-        elevation: WidgetStatePropertyAll(windowsAudio ? 0 : 4),
+        elevation: const WidgetStatePropertyAll(4),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(windowsAudio ? 0 : 14),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
       ),
       menuChildren: [
-        if (windowsAudio)
-          SizedBox(
-            key: const ValueKey('desktop-player-audio-quick-settings'),
-            width: 372,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.sizeOf(context).height * 0.82,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    WindowsLiveAudioMonitorCard(),
-                    SizedBox(height: 8),
-                    WindowsAudioQuickSettingsPanel(),
-                  ],
-                ),
-              ),
-            ),
-          )
-        else
-          SizedBox(
-            key: const ValueKey('desktop-player-volume-popover'),
-            width: 240,
-            height: 48,
-            child: PlayerVolumeControl(foreground: colorScheme.onSurface),
-          ),
+        SizedBox(
+          key: const ValueKey('desktop-player-volume-popover'),
+          width: 240,
+          height: 48,
+          child: PlayerVolumeControl(foreground: colorScheme.onSurface),
+        ),
       ],
       child: AppIconButton(
         key: const ValueKey('desktop-player-volume'),

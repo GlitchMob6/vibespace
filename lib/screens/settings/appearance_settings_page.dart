@@ -36,8 +36,23 @@ class AppearanceSettingsPage extends ConsumerWidget {
             AppSliverHeader.page(title: context.l10n.appearanceTitle),
 
             if (isDesktopPlatform)
-              const SliverToBoxAdapter(
-                child: SettingsGroup(children: [DesktopWindowModeSetting()]),
+              SliverToBoxAdapter(
+                child: SettingsGroup(
+                  children: [
+                    const DesktopWindowModeSetting(),
+                    SettingsSwitchItem(
+                      icon: Icons.visibility_outlined,
+                      title: 'Auto-hide fullscreen controls',
+                      subtitle:
+                          'Hide transient player controls when idle in fullscreen',
+                      value: themeSettings.fullscreenControlsAutoHide,
+                      onChanged: ref
+                          .read(themeProvider.notifier)
+                          .setFullscreenControlsAutoHide,
+                      showDivider: false,
+                    ),
+                  ],
+                ),
               ),
 
             SliverToBoxAdapter(

@@ -56,7 +56,7 @@ void main() {
     final decks = <_PreviewDeck>[];
     final runtime = MusicPlayerRuntime(
       dependencies: PlaybackDependencies(
-        createPreviewDeck: (id) {
+        createPreviewDeck: (id, {settings}) {
           expect(id, 'preview-player');
           final deck = _PreviewDeck();
           decks.add(deck);

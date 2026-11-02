@@ -1,4 +1,4 @@
-﻿import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vibespace/utils/desktop_platform.dart';
 
@@ -12,6 +12,7 @@ const String kUseSystemFontKey = 'use_system_font';
 const String kCustomFontIdKey = 'custom_font_id';
 const String kCustomFontNameKey = 'custom_font_name';
 const String kLyricsTextScaleKey = 'lyrics_text_scale';
+const String kFullscreenControlsAutoHideKey = 'fullscreen_controls_auto_hide';
 
 double normalizeLyricsTextScale(num? value) =>
     value != null && value.isFinite ? value.toDouble().clamp(0.8, 1.4) : 1.0;
@@ -60,6 +61,7 @@ class ThemeSettings {
   final double lyricsTextScale;
   final double mornyeGlassClarity;
   final bool mornyeGlassOutlines;
+  final bool fullscreenControlsAutoHide;
 
   const ThemeSettings({
     this.themeMode = ThemeMode.system,
@@ -74,6 +76,7 @@ class ThemeSettings {
     this.lyricsTextScale = 1,
     this.mornyeGlassClarity = kDefaultMornyeGlassClarity,
     this.mornyeGlassOutlines = true,
+    this.fullscreenControlsAutoHide = true,
   });
 
   Color get seedColor => Color(seedColorValue);
@@ -91,6 +94,7 @@ class ThemeSettings {
     double? lyricsTextScale,
     double? mornyeGlassClarity,
     bool? mornyeGlassOutlines,
+    bool? fullscreenControlsAutoHide,
   }) {
     return ThemeSettings(
       themeMode: themeMode ?? this.themeMode,
@@ -109,6 +113,8 @@ class ThemeSettings {
         mornyeGlassClarity ?? this.mornyeGlassClarity,
       ),
       mornyeGlassOutlines: mornyeGlassOutlines ?? this.mornyeGlassOutlines,
+      fullscreenControlsAutoHide:
+          fullscreenControlsAutoHide ?? this.fullscreenControlsAutoHide,
     );
   }
 
@@ -125,6 +131,7 @@ class ThemeSettings {
     kLyricsTextScaleKey: lyricsTextScale,
     kMornyeGlassClarityKey: mornyeGlassClarity,
     kMornyeGlassOutlinesKey: mornyeGlassOutlines,
+    kFullscreenControlsAutoHideKey: fullscreenControlsAutoHide,
   };
 
   factory ThemeSettings.fromJson(Map<String, dynamic> json) {
@@ -145,6 +152,8 @@ class ThemeSettings {
         json[kMornyeGlassClarityKey] as num?,
       ),
       mornyeGlassOutlines: json[kMornyeGlassOutlinesKey] as bool? ?? true,
+      fullscreenControlsAutoHide:
+          json[kFullscreenControlsAutoHideKey] as bool? ?? true,
     );
   }
 
@@ -163,7 +172,8 @@ class ThemeSettings {
         other.customFontName == customFontName &&
         other.lyricsTextScale == lyricsTextScale &&
         other.mornyeGlassClarity == mornyeGlassClarity &&
-        other.mornyeGlassOutlines == mornyeGlassOutlines;
+        other.mornyeGlassOutlines == mornyeGlassOutlines &&
+        other.fullscreenControlsAutoHide == fullscreenControlsAutoHide;
   }
 
   @override
@@ -179,7 +189,8 @@ class ThemeSettings {
       customFontName.hashCode ^
       lyricsTextScale.hashCode ^
       mornyeGlassClarity.hashCode ^
-      mornyeGlassOutlines.hashCode;
+      mornyeGlassOutlines.hashCode ^
+      fullscreenControlsAutoHide.hashCode;
 }
 
 ThemeMode themeModeFromString(String? value) {

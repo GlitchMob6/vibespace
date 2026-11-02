@@ -175,7 +175,7 @@ MusicPlayerRuntime _runtime({
   Future<MusicPlayerHandler> Function(MusicPlayerHandler Function())?
   initialize,
   List<_Deck>? decks,
-  PlaybackDeck Function(String)? createDeck,
+  PlaybackDeck Function(String, {AppSettings? settings})? createDeck,
   Stream<double> volumeChanges = const Stream.empty(),
   SourceDeletionEvents? sourceDeletionEvents,
   ListeningRecorder? recorder,
@@ -192,7 +192,7 @@ MusicPlayerRuntime _runtime({
           createPersonalization ?? AutoplayPersonalization.new,
       createDeck:
           createDeck ??
-          (_) {
+          (id, {settings}) {
             final deck = _Deck();
             decks?.add(deck);
             return deck;
@@ -1046,7 +1046,7 @@ void main() {
       var calls = 0;
       final deck = _Deck();
       final runtime = _runtime(
-        createDeck: (_) {
+        createDeck: (_, {settings}) {
           if (++calls == 1) throw StateError('Deck creation failed');
           return deck;
         },

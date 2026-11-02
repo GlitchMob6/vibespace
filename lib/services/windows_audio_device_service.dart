@@ -76,16 +76,47 @@ class WindowsDeviceCapabilities {
   });
 
   factory WindowsDeviceCapabilities.fromMap(Map<dynamic, dynamic> map) {
+    final exclusiveRates = _toIntList(
+      map['exclusiveRates'] ?? map['exclusiveSupportedRates'],
+    );
+    final sharedRates = _toIntList(
+      map['sharedRates'] ?? map['sharedSupportedRates'],
+    );
+    final exclusiveFormats = _toStringList(
+      map['exclusiveFormats'] ?? map['exclusiveSupportedFormats'],
+    );
+    final sampleRates = _toIntList(map['sampleRates']);
+    final sampleFormats = _toStringList(map['sampleFormats']);
+    final formatsByRate = _toMapOfLists(
+      map['formatsByRate'] ?? map['formats_by_rate'],
+    );
+
+    final effectiveRates = sampleRates.isNotEmpty
+        ? sampleRates
+        : ({...sharedRates, ...exclusiveRates}.toList()..sort());
+    final effectiveFormats = sampleFormats.isNotEmpty
+        ? sampleFormats
+        : (exclusiveFormats.isNotEmpty
+            ? exclusiveFormats
+            : const ['s16', 's24', 's32', 'float']);
+
+    final bool isSharedSupported = map['sharedSupported'] as bool? ??
+        map['supportsShared'] as bool? ??
+        (sharedRates.isNotEmpty || map['sharedMixFormat'] != null);
+    final bool isExclusiveSupported = map['exclusiveSupported'] as bool? ??
+        map['supportsExclusive'] as bool? ??
+        exclusiveRates.isNotEmpty;
+
     return WindowsDeviceCapabilities(
       deviceId: map['deviceId'] as String? ?? '',
-      sharedSupported: map['sharedSupported'] as bool? ?? false,
-      exclusiveSupported: map['exclusiveSupported'] as bool? ?? false,
-      sampleRates: _toIntList(map['sampleRates']),
-      sampleFormats: _toStringList(map['sampleFormats']),
-      sharedRates: _toIntList(map['sharedRates']),
-      exclusiveRates: _toIntList(map['exclusiveRates']),
-      exclusiveFormats: _toStringList(map['exclusiveFormats']),
-      formatsByRate: _toMapOfLists(map['formatsByRate']),
+      sharedSupported: isSharedSupported,
+      exclusiveSupported: isExclusiveSupported,
+      sampleRates: effectiveRates,
+      sampleFormats: effectiveFormats,
+      sharedRates: sharedRates,
+      exclusiveRates: exclusiveRates,
+      exclusiveFormats: exclusiveFormats,
+      formatsByRate: formatsByRate,
     );
   }
 
@@ -262,6 +293,17 @@ class WindowsAudioDeviceService extends ChangeNotifier {
       _log.w('Failed to query device mix format for $deviceId: $e');
     }
     return null;
+  }
+
+  /// Invalidate cached capabilities, allowing fresh hardware queries.
+  void invalidateCapabilities([String? deviceId]) {
+    if (deviceId != null) {
+      _capabilitiesCache.remove(deviceId);
+      _mixFormatCache.remove(deviceId);
+    } else {
+      _capabilitiesCache.clear();
+      _mixFormatCache.clear();
+    }
   }
 
   @override

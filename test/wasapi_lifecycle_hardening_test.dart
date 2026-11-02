@@ -199,7 +199,7 @@ void main() {
         text: 'Error initializing device: AUDCLNT_E_DEVICE_IN_USE (0x8889000a)',
       ));
 
-      await Future.delayed(const Duration(milliseconds: 50));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
 
       // Output should have recovered to shared mode gracefully
       expect(engine.properties['audio-exclusive'], 'no');

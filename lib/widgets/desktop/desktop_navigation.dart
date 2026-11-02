@@ -1,4 +1,5 @@
-﻿import 'dart:ui' show lerpDouble;
+import 'dart:io' show Platform;
+import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:vibespace/services/user_profile_store.dart';
 import 'package:vibespace/theme/app_motion.dart';
 import 'package:vibespace/theme/material_expressive.dart';
 import 'package:vibespace/theme/mornye_theme.dart';
+import 'package:vibespace/utils/desktop_platform.dart';
 import 'package:vibespace/widgets/app_icon.dart';
 import 'package:vibespace/widgets/app_icon_button.dart';
 import 'package:vibespace/widgets/desktop/desktop_commands.dart';
@@ -18,6 +20,8 @@ import 'package:vibespace/widgets/desktop/desktop_inspector.dart';
 import 'package:vibespace/widgets/desktop/desktop_now_playing.dart';
 import 'package:vibespace/widgets/desktop/desktop_player_bar.dart';
 import 'package:vibespace/widgets/desktop/desktop_window.dart';
+import 'package:vibespace/widgets/desktop/windows_audio_quick_settings.dart'
+    show DesktopAudioControlCenterOverlay;
 import 'package:vibespace/widgets/profile_avatar.dart';
 import 'package:vibespace/widgets/no_scrollbars.dart';
 
@@ -238,6 +242,8 @@ class DesktopShellLayout extends StatelessWidget {
                 key: const ValueKey('desktop-now-playing'),
                 child: nowPlaying,
               ),
+            if (isDesktopPlatform && Platform.isWindows && !nowPlayingOpen)
+              const DesktopAudioControlCenterOverlay(),
           ],
         ),
         child: Builder(builder: _shell),

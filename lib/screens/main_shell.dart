@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui' show ImageFilter;
 import 'package:device_info_plus/device_info_plus.dart';
@@ -396,6 +396,7 @@ class _MainShellState extends ConsumerState<MainShell>
       context.isMornye ? (showStore ? 4 : 3) : (showStore ? 3 : 2);
 
   void _onShellTabRequested(ShellTab tab) {
+    ShellNavigationService.recordTabVisit(tab);
     // Picking a destination returns from Now Playing to the content pane.
     if (isDesktopPlatform) desktopNowPlayingOpen.value = false;
     if (tab == ShellTab.settings && context.isMornye && !_mornyeSettingsTab) {
