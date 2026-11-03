@@ -107,6 +107,96 @@ void main() {
 
       expect(dismissed, isTrue);
     });
+
+    testWidgets(
+      'displays WASAPI OUTPUT FORMAT label and shows Unavailable when output rate is null during active playback',
+      (tester) async {
+        windowsAudioStatus.value = const WindowsAudioStatus(
+          reason: 'active',
+          mode: 'shared',
+          sampleRate: null,
+          sourceSampleRate: 44100,
+          sourceBitDepth: 16,
+          sourceFormat: 's16',
+          isBitPerfect: false,
+          bitPerfectReason:
+              'Not verified: Hardware sink output format unavailable',
+        );
+
+        await tester.pumpWidget(
+          testFrame(child: const WindowsLiveAudioMonitorCard()),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('WASAPI OUTPUT FORMAT'), findsOneWidget);
+        expect(find.text('SOURCE TRACK FORMAT'), findsOneWidget);
+        expect(find.text('Unavailable'), findsOneWidget);
+        expect(find.text('44100 Hz · 16-bit (s16)'), findsOneWidget);
+        expect(
+          find.text('Not verified: Hardware sink output format unavailable'),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'displays active and selected endpoints distinctly when they differ',
+      (tester) async {
+        windowsAudioStatus.value = const WindowsAudioStatus(
+          reason: 'fallback',
+          mode: 'shared',
+          selectedDevice: 'wasapi/{requested-dac}',
+          activeDevice: 'auto (fallback)',
+          isBitPerfect: false,
+          bitPerfectReason:
+              'Not verified: Exclusive mode rejected; fell back to Shared mode.',
+        );
+
+        await tester.pumpWidget(
+          testFrame(child: const WindowsLiveAudioMonitorCard()),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          find.textContaining(
+            'Active Endpoint: auto (fallback) (Selected: wasapi/{requested-dac})',
+          ),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'shows Active Endpoint: Not verified when endpoint verification is unavailable',
+      (tester) async {
+        windowsAudioStatus.value = const WindowsAudioStatus(
+          reason: 'active',
+          mode: 'exclusive_event',
+          selectedDevice: 'wasapi/{configured-dac}',
+          activeDevice: null,
+          sampleRate: 96000,
+          bitDepth: 32,
+          format: 's32',
+          sourceSampleRate: 96000,
+          sourceBitDepth: 24,
+          isBitPerfect: false,
+          bitPerfectReason:
+              'Not verified: Hardware endpoint verification is unavailable.',
+        );
+
+        await tester.pumpWidget(
+          testFrame(child: const WindowsLiveAudioMonitorCard()),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          find.textContaining(
+            'Active Endpoint: Not verified (Selected: wasapi/{configured-dac})',
+          ),
+          findsOneWidget,
+        );
+      },
+    );
   });
 
   group('WindowsAudioQuickSettingsPanel', () {

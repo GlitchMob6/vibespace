@@ -141,7 +141,12 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
             : Colors.amber;
 
         String format(int? rate, int? depth, String? sampleFormat) {
-          if (rate == null) return 'Awaiting playback…';
+          if (rate == null) {
+            if (status.reason == 'active' || status.reason == 'fallback') {
+              return 'Unavailable';
+            }
+            return 'Awaiting playback…';
+          }
           final detail = sampleFormat == null || sampleFormat.isEmpty
               ? ''
               : ' ($sampleFormat)';
@@ -258,10 +263,12 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         bitPerfect
-                            ? 'Lossless bit-perfect stream'
+                            ? 'Lossless bit-perfect direct stream'
                             : exclusive
-                            ? 'WASAPI exclusive stream'
-                            : 'WASAPI shared mixer stream',
+                            ? 'WASAPI exclusive direct stream'
+                            : (status.mixSampleRate != null
+                                ? 'WASAPI shared stream (Windows Mix: ${status.mixSampleRate} Hz, ${status.mixBitDepth ?? 32}-bit ${status.mixFormat ?? "float"})'
+                                : 'WASAPI shared stream (Windows Shared Mixer)'),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -278,7 +285,7 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _MonitorValue(
-                        label: 'DAC HARDWARE OUTPUT',
+                        label: 'WASAPI OUTPUT FORMAT',
                         value: format(
                           status.sampleRate,
                           status.bitDepth,
@@ -300,16 +307,32 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  'Endpoint: ${status.device ?? 'Default'} · '
-                  '${status.driver.toUpperCase()} · '
-                  'State: ${status.reason.toUpperCase()}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontSize: 12.5,
-                    color: colors.onSurfaceVariant,
-                  ),
+                Builder(
+                  builder: (context) {
+                    final activeLabel = (status.activeDevice != null &&
+                            status.activeDevice!.isNotEmpty)
+                        ? status.activeDevice!
+                        : 'Not verified';
+                    final selectedDetail = (status.selectedDevice != null &&
+                            status.selectedDevice!.isNotEmpty)
+                        ? (status.activeDevice != null &&
+                                status.selectedDevice == status.activeDevice
+                            ? ''
+                            : ' (Selected: ${status.selectedDevice})')
+                        : '';
+                    return Text(
+                      'Active Endpoint: $activeLabel$selectedDetail · '
+                      '${status.driver.toUpperCase()} · '
+                      '${status.mode == 'exclusive_push' ? 'Push' : status.mode.startsWith('exclusive') ? 'Event' : 'Shared'} · '
+                      '${status.reason.toUpperCase()}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontSize: 12.5,
+                        color: colors.onSurfaceVariant,
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 8),
                 Container(
@@ -340,7 +363,7 @@ class WindowsLiveAudioMonitorCard extends StatelessWidget {
                           status.bitPerfectReason ??
                               (status.sampleRate == null
                                   ? 'Start playback to inspect the negotiated output stream.'
-                                  : 'Playback is active; bit-perfect output is not currently verified.'),
+                                  : 'Not verified: Bit-perfect output is not currently verified.'),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.bodySmall?.copyWith(
@@ -534,14 +557,10 @@ class _WindowsAudioQuickSettingsPanelState
     final devices = _devices.endpoints;
     final selectedDevice = settings.windowsOutputDevice;
     var deviceValue = '';
-    if (selectedDevice.isNotEmpty) {
-      for (final device in devices) {
-        if (device.mpvDeviceId == selectedDevice ||
-            device.id == selectedDevice ||
-            device.guid == selectedDevice) {
-          deviceValue = device.mpvDeviceId;
-          break;
-        }
+    if (selectedDevice.isNotEmpty && selectedDevice != 'auto') {
+      final match = _devices.findEndpoint(selectedDevice);
+      if (match != null) {
+        deviceValue = match.mpvDeviceId;
       }
     }
 

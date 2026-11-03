@@ -80,7 +80,9 @@ class WindowsAudioStatus {
   const WindowsAudioStatus({
     this.reason = 'idle',
     this.mode = 'shared',
-    this.device,
+    String? device,
+    this.selectedDevice,
+    this.activeDevice,
     this.sampleRate,
     this.bitDepth,
     this.transport = 'pcm',
@@ -91,13 +93,18 @@ class WindowsAudioStatus {
     this.sourceSampleRate,
     this.sourceBitDepth,
     this.sourceFormat,
+    this.mixSampleRate,
+    this.mixBitDepth,
+    this.mixFormat,
     this.isBitPerfect = false,
     this.bitPerfectReason,
-  });
+  }) : device = device ?? activeDevice;
 
   final String reason; // 'idle', 'active', 'pending', 'failed', 'fallback'
   final String mode; // 'shared' or 'exclusive'
   final String? device;
+  final String? selectedDevice;
+  final String? activeDevice;
   final int? sampleRate;
   final int? bitDepth;
   final String transport;
@@ -108,12 +115,16 @@ class WindowsAudioStatus {
   final int? sourceSampleRate;
   final int? sourceBitDepth;
   final String? sourceFormat;
+  final int? mixSampleRate;
+  final int? mixBitDepth;
+  final String? mixFormat;
   final bool isBitPerfect;
   final String? bitPerfectReason;
 
   @override
   String toString() =>
       'WindowsAudioStatus(reason: $reason, mode: $mode, device: $device, '
+      'activeDevice: $activeDevice, selectedDevice: $selectedDevice, '
       'sampleRate: $sampleRate, bitDepth: $bitDepth, format: $format, '
       'sourceRate: $sourceSampleRate, isBitPerfect: $isBitPerfect)';
 }

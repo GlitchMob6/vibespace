@@ -12,6 +12,7 @@ import 'package:vibespace/services/music_playback_deck.dart'
     show UsbDsdUnavailable, windowsAudioStatus, WindowsAudioStatus;
 import 'package:vibespace/services/playback_deck.dart';
 import 'package:vibespace/services/playback_equalizer.dart';
+import 'package:vibespace/services/windows_audio_device_service.dart';
 import 'package:vibespace/utils/logger.dart';
 
 final _log = AppLogger('MediaKitDeck');
@@ -741,7 +742,9 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       windowsAudioStatus.value = WindowsAudioStatus(
         reason: _isFallbackDevice ? 'fallback' : 'active',
         mode: 'shared',
-        device: effectiveDevice,
+        selectedDevice: wasapiDeviceId,
+        activeDevice: null,
+        bitPerfectReason: 'Not verified: WASAPI Shared mixer active',
       );
       return;
     }
@@ -751,7 +754,9 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
     windowsAudioStatus.value = WindowsAudioStatus(
       reason: _isFallbackDevice ? 'fallback' : 'pending',
       mode: modeLabel,
-      device: effectiveDevice,
+      selectedDevice: wasapiDeviceId,
+      activeDevice: null,
+      bitPerfectReason: 'Not verified: Pending exclusive mode stream negotiation',
     );
 
     // Try to enable exclusive mode
@@ -768,13 +773,17 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
         windowsAudioStatus.value = WindowsAudioStatus(
           reason: 'fallback',
           mode: 'shared',
-          device: effectiveDevice,
+          selectedDevice: wasapiDeviceId,
+          activeDevice: null,
+          bitPerfectReason: 'Not verified: Exclusive mode rejected; fell back to Shared mode.',
         );
       } else {
         windowsAudioStatus.value = WindowsAudioStatus(
           reason: 'failed',
           mode: modeLabel,
-          device: effectiveDevice,
+          selectedDevice: wasapiDeviceId,
+          activeDevice: null,
+          bitPerfectReason: 'Not verified: Failed to acquire exclusive mode lock',
         );
       }
       return;
@@ -1055,13 +1064,12 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
         _log.w('Exclusive mode was requested but not achieved; falling back to shared mode');
         exclusiveOutput = false;
         await _engine.setProperty('audio-exclusive', 'no');
-        final effectiveDevice = _isFallbackDevice
-            ? 'auto (requested: $_requestedDeviceId)'
-            : (_activeDeviceId ?? wasapiDeviceId);
         windowsAudioStatus.value = WindowsAudioStatus(
           reason: 'fallback',
           mode: 'shared',
-          device: effectiveDevice,
+          selectedDevice: wasapiDeviceId,
+          activeDevice: null,
+          bitPerfectReason: 'Not verified: Exclusive mode rejected; fell back to Shared mode.',
         );
         // Don't throw - playback continues in shared mode, but status reflects actual mode
       }
@@ -1076,25 +1084,35 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       // 1. Source track parameters (decoder facts)
       final srcSampleRateStr = await _engine.getProperty('audio-params/samplerate');
       final srcFormatStr = await _engine.getProperty('audio-params/format');
-      final srcChannelsStr = await _engine.getProperty('audio-params/channels');
       final srcSampleRate = int.tryParse(srcSampleRateStr);
       final srcBitDepth = _parseBitDepth(srcFormatStr);
 
       // 2. Physical hardware sink output parameters (to DAC)
-      String outSampleRateStr = await _engine.getProperty('audio-out-params/samplerate');
-      String outFormatStr = await _engine.getProperty('audio-out-params/format');
-      String outChannelsStr = await _engine.getProperty('audio-out-params/channels');
-      String outChannelCountStr = await _engine.getProperty('audio-out-params/channel-count');
+      final outSampleRateStr = await _engine.getProperty('audio-out-params/samplerate');
+      final outFormatStr = await _engine.getProperty('audio-out-params/format');
+      final outChannelsStr = await _engine.getProperty('audio-out-params/channels');
+      final outChannelCountStr = await _engine.getProperty('audio-out-params/channel-count');
 
-      if (outSampleRateStr.isEmpty) outSampleRateStr = srcSampleRateStr;
-      if (outFormatStr.isEmpty) outFormatStr = srcFormatStr;
-      if (outChannelsStr.isEmpty) outChannelsStr = srcChannelsStr;
-
+      // Never replace missing output parameters with source parameters.
       final outSampleRate = int.tryParse(outSampleRateStr);
       final outBitDepth = _parseBitDepth(outFormatStr);
       final outChannelCount = int.tryParse(outChannelCountStr);
 
-      // 3. Determine actual exclusive mode
+      // 3. Resolve configured/selected endpoint
+      final String? selectedDevice = (wasapiDeviceId != null && wasapiDeviceId!.isNotEmpty && wasapiDeviceId != 'auto')
+          ? wasapiDeviceId
+          : 'System Default';
+
+      // Note: MPV's 'audio-device' property does NOT tell us which device is actually in use.
+      // We do not treat MPV's 'audio-device' property as proof of the active Windows device.
+      // Only populate activeDevice when independently verified through reliable Windows Core Audio information.
+      const String? verifiedActive = null;
+
+      // 4. Query mix format if available for shared mode
+      final ep = WindowsAudioDeviceService.instance.findEndpoint(selectedDevice) ??
+          WindowsAudioDeviceService.instance.endpoints.where((e) => e.isDefault).firstOrNull;
+
+      // 5. Determine actual exclusive mode
       String actualMode = 'shared';
       String reason = (_isFallbackDevice || _isFallbackMode) ? 'fallback' : 'active';
       if (exclusiveOutput) {
@@ -1118,7 +1136,7 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
         reason = (_isFallbackDevice || _isFallbackMode) ? 'fallback' : 'active';
       }
 
-      // 4. Bit-perfect analysis
+      // 6. Bit-perfect analysis
       final bool isVolume100 = playbackOutputVolume.value >= 0.999;
       final bool isNormBypassed = _gain >= 0.999;
       final bool isEqDisabled = !playbackEqualizer.value.enabled;
@@ -1131,7 +1149,9 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
           isVolume100 &&
           isNormBypassed &&
           isEqDisabled &&
-          isRateMatching;
+          isRateMatching &&
+          !_isFallbackDevice &&
+          !_isFallbackMode;
 
       String bitPerfectReason;
       if (isBitPerfect) {
@@ -1140,10 +1160,15 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
       } else {
         final List<String> degradations = [];
         if (!isExclusive) {
+          final mixInfo = ep?.mixSampleRate != null
+              ? ' (OS mix format: ${ep!.mixSampleRate} Hz, ${ep.mixBitDepth ?? 32}-bit)'
+              : '';
           degradations.add(
-              'WASAPI Shared mixer active (Windows audio engine may resample or limit bit depth)');
+              'WASAPI Shared mixer active$mixInfo: Windows audio engine may resample or limit bit depth');
         }
-        if (!isRateMatching && srcSampleRate != null && outSampleRate != null) {
+        if (outSampleRate == null) {
+          degradations.add('Hardware sink output format unavailable');
+        } else if (!isRateMatching && srcSampleRate != null) {
           degradations.add(
               'Sample rate conversion: ${srcSampleRate}Hz -> ${outSampleRate}Hz');
         }
@@ -1158,38 +1183,38 @@ class MediaKitPlaybackDeck implements PlaybackDeck {
           degradations.add('Equalizer DSP processing active');
         }
         bitPerfectReason = degradations.isEmpty
-            ? 'Processed output'
-            : degradations.join(' • ');
+            ? 'Not verified: Awaiting active playback stream verification'
+            : 'Not verified: ${degradations.join(' • ')}';
       }
-
-      final effectiveDevice = _isFallbackDevice
-          ? 'auto (requested: $_requestedDeviceId)'
-          : (_activeDeviceId ?? wasapiDeviceId);
 
       windowsAudioStatus.value = WindowsAudioStatus(
         reason: _isFallbackDevice ? 'fallback' : reason,
         mode: actualMode,
-        device: effectiveDevice,
+        device: verifiedActive,
+        selectedDevice: selectedDevice,
+        activeDevice: verifiedActive,
         sampleRate: outSampleRate,
         bitDepth: outBitDepth,
-        format: outFormatStr,
-        channels: outChannelsStr,
+        format: outFormatStr.isNotEmpty ? outFormatStr : null,
+        channels: outChannelsStr.isNotEmpty ? outChannelsStr : null,
         channelCount: outChannelCount,
         sourceSampleRate: srcSampleRate,
         sourceBitDepth: srcBitDepth,
-        sourceFormat: srcFormatStr,
+        sourceFormat: srcFormatStr.isNotEmpty ? srcFormatStr : null,
+        mixSampleRate: ep?.mixSampleRate,
+        mixBitDepth: ep?.mixBitDepth,
+        mixFormat: ep?.mixFormat,
         isBitPerfect: isBitPerfect,
         bitPerfectReason: bitPerfectReason,
       );
     } catch (e) {
       _log.w('Failed to query audio parameters: $e');
-      final effectiveDevice = _isFallbackDevice
-          ? 'auto (requested: $_requestedDeviceId)'
-          : (_activeDeviceId ?? wasapiDeviceId);
       windowsAudioStatus.value = WindowsAudioStatus(
         reason: _isFallbackDevice ? 'fallback' : 'active',
         mode: exclusiveOutput ? 'exclusive' : 'shared',
-        device: effectiveDevice,
+        selectedDevice: wasapiDeviceId,
+        activeDevice: null,
+        bitPerfectReason: 'Not verified: Failed to query audio parameters ($e)',
       );
     }
   }

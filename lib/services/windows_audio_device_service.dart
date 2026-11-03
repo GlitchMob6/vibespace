@@ -10,26 +10,80 @@ final _log = AppLogger('WindowsAudioDeviceService');
 class WindowsAudioEndpoint {
   const WindowsAudioEndpoint({
     required this.id,
+    this.endpointId = '',
     required this.guid,
     required this.mpvDeviceId,
     required this.name,
     required this.isDefault,
     required this.state,
+    this.mixSampleRate,
+    this.mixBitDepth,
+    this.mixChannels,
+    this.mixFormat,
   });
 
   factory WindowsAudioEndpoint.fromMap(Map<dynamic, dynamic> map) {
+    final rawEndpointId = (map['endpointId'] as String?)?.trim() ?? '';
+    final rawId = (map['id'] as String?)?.trim() ?? '';
+    final rawGuid = (map['guid'] as String?)?.trim() ?? '';
+    final rawMpvId = (map['mpvDeviceId'] as String?)?.trim() ?? '';
+
+    // Extract GUID if not explicitly provided
+    String guid = rawGuid;
+    if (guid.isEmpty) {
+      final guidMatch = RegExp(r'\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}')
+          .firstMatch(rawEndpointId.isNotEmpty ? rawEndpointId : rawId);
+      if (guidMatch != null) {
+        guid = guidMatch.group(0)!;
+      }
+    }
+
+    // Resolve endpoint ID
+    final endpointId = rawEndpointId.isNotEmpty
+        ? rawEndpointId
+        : (rawId.contains('{0.0.') ? rawId : (guid.isNotEmpty ? '{0.0.0.00000000}.$guid' : ''));
+
+    // Resolve mpvDeviceId (never default to 'auto' if an endpoint or guid is present!)
+    String mpvDeviceId = rawMpvId;
+    if (mpvDeviceId.isEmpty || mpvDeviceId == 'auto') {
+      if (rawId.startsWith('wasapi/')) {
+        mpvDeviceId = rawId;
+      } else if (guid.isNotEmpty) {
+        mpvDeviceId = 'wasapi/$guid';
+      } else if (endpointId.isNotEmpty) {
+        mpvDeviceId = 'wasapi/$endpointId';
+      } else {
+        mpvDeviceId = 'auto';
+      }
+    }
+
+    // Keep id as rawId if available, else endpointId, else rawMpvId, else ''
+    final id = rawId.isNotEmpty
+        ? rawId
+        : (endpointId.isNotEmpty
+            ? endpointId
+            : (rawMpvId.isNotEmpty ? rawMpvId : ''));
+
     return WindowsAudioEndpoint(
-      id: map['id'] as String? ?? '',
-      guid: map['guid'] as String? ?? '',
-      mpvDeviceId: map['mpvDeviceId'] as String? ?? 'auto',
+      id: id,
+      endpointId: endpointId,
+      guid: guid,
+      mpvDeviceId: mpvDeviceId,
       name: map['name'] as String? ?? 'Default Audio Device',
       isDefault: map['isDefault'] as bool? ?? false,
       state: (map['state'] as num?)?.toInt() ?? 1,
+      mixSampleRate: (map['mixSampleRate'] as num?)?.toInt(),
+      mixBitDepth: (map['mixBitDepth'] as num?)?.toInt(),
+      mixChannels: (map['mixChannels'] as num?)?.toInt(),
+      mixFormat: map['mixFormat'] as String?,
     );
   }
 
   /// The full Windows IMMDevice endpoint ID string.
   final String id;
+
+  /// The explicit Windows IMMDevice endpoint identifier.
+  final String endpointId;
 
   /// The extracted device GUID with braces, e.g. `{1e463064-4a08-414f-bd1b-6da70bd88c8a}`.
   final String guid;
@@ -46,19 +100,34 @@ class WindowsAudioEndpoint {
   /// Windows DEVICE_STATE (1 = ACTIVE).
   final int state;
 
+  /// Hardware mix sample rate (e.g. 48000, 96000, 192000).
+  final int? mixSampleRate;
+
+  /// Hardware mix bit depth (e.g. 24, 32).
+  final int? mixBitDepth;
+
+  /// Hardware mix channels (e.g. 2).
+  final int? mixChannels;
+
+  /// Hardware mix format ('pcm' or 'float').
+  final String? mixFormat;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is WindowsAudioEndpoint &&
           runtimeType == other.runtimeType &&
-          id == other.id;
+          (id == other.id ||
+              (mpvDeviceId.isNotEmpty &&
+                  mpvDeviceId != 'auto' &&
+                  mpvDeviceId == other.mpvDeviceId));
 
   @override
   int get hashCode => id.hashCode;
 
   @override
   String toString() =>
-      'WindowsAudioEndpoint(name: $name, guid: $guid, default: $isDefault)';
+      'WindowsAudioEndpoint(name: $name, guid: $guid, mpv: $mpvDeviceId, default: $isDefault)';
 }
 
 /// Hardware capabilities queried via IAudioClient::IsFormatSupported.
@@ -184,15 +253,22 @@ class WindowsMixFormat {
 
 /// Service providing Windows Core Audio endpoint discovery and hardware format capabilities.
 class WindowsAudioDeviceService extends ChangeNotifier {
-  WindowsAudioDeviceService._() {
-    if (Platform.isWindows) {
+  WindowsAudioDeviceService._({bool autoInit = true}) {
+    if (autoInit && Platform.isWindows) {
       _initEventChannel();
       refreshEndpoints();
     }
   }
 
-  static final WindowsAudioDeviceService instance =
-      WindowsAudioDeviceService._();
+  static WindowsAudioDeviceService _instance = WindowsAudioDeviceService._();
+  static WindowsAudioDeviceService get instance => _instance;
+
+  @visibleForTesting
+  static set instance(WindowsAudioDeviceService value) => _instance = value;
+
+  @visibleForTesting
+  factory WindowsAudioDeviceService.createForTesting() =>
+      WindowsAudioDeviceService._(autoInit: false);
 
   static const MethodChannel _methodChannel =
       MethodChannel('com.zarz.mornye/windows_audio');
@@ -207,6 +283,30 @@ class WindowsAudioDeviceService extends ChangeNotifier {
 
   List<WindowsAudioEndpoint> get endpoints => _endpoints;
   bool get isLoading => _isLoading;
+
+  /// Finds an endpoint matching [identifier] by endpointId, mpvDeviceId, guid, or legacy id.
+  WindowsAudioEndpoint? findEndpoint(String? identifier) {
+    if (identifier == null || identifier.isEmpty || identifier == 'auto') {
+      return null;
+    }
+    final clean = identifier.trim().toLowerCase();
+    for (final ep in _endpoints) {
+      if (ep.endpointId.toLowerCase() == clean ||
+          ep.mpvDeviceId.toLowerCase() == clean ||
+          ep.guid.toLowerCase() == clean ||
+          ep.id.toLowerCase() == clean) {
+        return ep;
+      }
+    }
+    return null;
+  }
+
+  /// Sets the cached endpoints for testing purposes.
+  @visibleForTesting
+  void debugSetEndpoints(List<WindowsAudioEndpoint> endpoints) {
+    _endpoints = List.unmodifiable(endpoints);
+    notifyListeners();
+  }
 
   void _initEventChannel() {
     try {

@@ -87,25 +87,20 @@ class _WindowsAudioOutputPageState
 
           // SECTION D: Live Output Monitor (Put prominently at the top for instant feedback)
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: _buildLiveMonitorCard(context),
+            child: LayoutBuilder(
+              builder: (context, constraints) => Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: settingsHorizontalInset(constraints.maxWidth),
+                  vertical: 8,
+                ),
+                child: _buildLiveMonitorCard(context),
+              ),
             ),
           ),
 
           // SECTION A: Output Device
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Text(
-                'OUTPUT DEVICE',
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.1,
-                ),
-              ),
-            ),
+          const SliverToBoxAdapter(
+            child: SettingsSectionHeader(title: 'OUTPUT DEVICE'),
           ),
           SliverToBoxAdapter(
             child: SettingsGroup(
@@ -115,7 +110,8 @@ class _WindowsAudioOutputPageState
                   icon: Icons.speaker_group_outlined,
                   title: 'System Default (Automatic)',
                   subtitle: 'Follows active Windows default console device',
-                  trailing: settings.windowsOutputDevice.isEmpty
+                  trailing: (settings.windowsOutputDevice.isEmpty ||
+                          settings.windowsOutputDevice == 'auto')
                       ? Icon(Icons.check_circle, color: colorScheme.primary)
                       : const Icon(Icons.radio_button_unchecked),
                   onTap: () {
@@ -152,9 +148,12 @@ class _WindowsAudioOutputPageState
                             ),
                           )
                         : null,
-                    trailing: (settings.windowsOutputDevice == ep.id ||
-                            settings.windowsOutputDevice == ep.mpvDeviceId ||
-                            settings.windowsOutputDevice == ep.guid)
+                    trailing: (settings.windowsOutputDevice.isNotEmpty &&
+                            settings.windowsOutputDevice != 'auto' &&
+                            (settings.windowsOutputDevice == ep.mpvDeviceId ||
+                                settings.windowsOutputDevice == ep.endpointId ||
+                                settings.windowsOutputDevice == ep.guid ||
+                                settings.windowsOutputDevice == ep.id))
                         ? Icon(Icons.check_circle, color: colorScheme.primary)
                         : const Icon(Icons.radio_button_unchecked),
                     onTap: () {
@@ -169,18 +168,8 @@ class _WindowsAudioOutputPageState
           ),
 
           // SECTION B: Audio Engine
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-              child: Text(
-                'AUDIO ENGINE & EXCLUSIVE MODE',
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.1,
-                ),
-              ),
-            ),
+          const SliverToBoxAdapter(
+            child: SettingsSectionHeader(title: 'AUDIO ENGINE & EXCLUSIVE MODE'),
           ),
           SliverToBoxAdapter(
             child: SettingsGroup(
@@ -258,18 +247,8 @@ class _WindowsAudioOutputPageState
           ),
 
           // SECTION C: Output Format & Hardware Capabilities
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-              child: Text(
-                'OUTPUT FORMAT & HARDWARE CAPABILITIES',
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.1,
-                ),
-              ),
-            ),
+          const SliverToBoxAdapter(
+            child: SettingsSectionHeader(title: 'OUTPUT FORMAT & HARDWARE CAPABILITIES'),
           ),
           SliverToBoxAdapter(
             child: SettingsGroup(

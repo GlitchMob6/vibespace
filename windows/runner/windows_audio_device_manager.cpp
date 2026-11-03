@@ -324,6 +324,7 @@ flutter::EncodableList WindowsAudioDeviceManager::EnumerateEndpoints() {
 
     flutter::EncodableMap item;
     item[flutter::EncodableValue("id")] = flutter::EncodableValue(mpv_id);
+    item[flutter::EncodableValue("mpvDeviceId")] = flutter::EncodableValue(mpv_id);
     item[flutter::EncodableValue("endpointId")] = flutter::EncodableValue(endpoint_id);
     item[flutter::EncodableValue("guid")] = flutter::EncodableValue(guid);
     item[flutter::EncodableValue("name")] = flutter::EncodableValue(friendly_name);
